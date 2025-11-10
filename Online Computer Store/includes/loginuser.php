@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $password = htmlspecialchars($_POST['UserPassword']);
             $email = htmlspecialchars($_POST['UserEmail']); // Assuming email is also submitted
 
-            $query = mysqli_query($conn, "SELECT * FROM users WHERE user_name = '$username' AND email = '$email'");
+            $query = mysqli_query($conn, "SELECT * FROM users WHERE user_name = '$username' AND (email = '$email' OR secondary_email = '$email')");
             $row = mysqli_fetch_assoc($query);
 
             if (mysqli_num_rows($query) == 0 || $row['pwd'] != $password) {

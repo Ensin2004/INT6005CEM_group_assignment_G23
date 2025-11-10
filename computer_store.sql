@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 29, 2024 at 06:45 AM
+-- Generation Time: Nov 10, 2025 at 08:44 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -53,45 +53,6 @@ CREATE TABLE `cart` (
   `item_id` int(11) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `cart`
---
-
-INSERT INTO `cart` (`id`, `qty`, `item_id`, `user_id`) VALUES
-(6, 1, 24, 2),
-(9, 1, 25, 2),
-(15, 1, 14, 4),
-(17, 1, 13, 4),
-(18, 1, 18, 4),
-(19, 1, 22, 4),
-(20, 1, 19, 4),
-(21, 1, 10, 4),
-(22, 1, 26, 4),
-(24, 11, 22, 5),
-(37, 1, 2, 8),
-(50, 1, 15, 10),
-(51, 1, 16, 10),
-(52, 1, 22, 10),
-(53, 1, 19, 10),
-(54, 1, 10, 10),
-(55, 1, 25, 10),
-(67, 1, 14, 9),
-(76, 1, 13, 12),
-(77, 1, 24, 12),
-(78, 1, 21, 12),
-(79, 1, 10, 12),
-(80, 1, 26, 12),
-(84, 1, 1, 12),
-(92, 1, 5, 10),
-(93, 1, 4, 10),
-(102, 1, 18, 14),
-(104, 1, 40, 14),
-(106, 1, 45, 14),
-(109, 2, 38, 15),
-(111, 1, 7, 16),
-(114, 1, 11, 17),
-(123, 1, 24, 17);
 
 -- --------------------------------------------------------
 
@@ -243,22 +204,6 @@ CREATE TABLE `mylist` (
   `total_price` decimal(10,2) NOT NULL DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `mylist`
---
-
-INSERT INTO `mylist` (`id`, `list_name`, `user_id`, `cpu_id`, `motherboard_id`, `memory_id`, `gpu_id`, `psu_id`, `storage_id`, `total_price`) VALUES
-(1, 'My first computer', 2, 14, 24, 16, 10, 25, 19, 2477.61),
-(2, 'Ghosttttt~', 4, 13, 22, 18, 10, 26, 19, 3558.90),
-(3, 'Budget', 8, 13, 23, 16, 10, 26, 19, 2045.70),
-(4, 'Testing Customize Edited', 10, 15, 22, 16, 10, 25, 19, 3033.00),
-(5, 'Dream', 12, 14, 22, 17, 12, 25, 19, 3925.00),
-(6, 'Economic', 12, 13, 24, 17, 10, 26, 21, 2495.31),
-(7, 'Cheap setup', 13, 36, 23, 16, 10, 26, 19, 1654.70),
-(8, 'Expensive Setup', 13, 37, 42, 18, 11, 27, 41, 21036.00),
-(9, 'Best Gaming', 14, 15, 42, 18, 11, 45, 40, 18841.00),
-(10, 'Best Version', 15, 36, 42, 38, 35, 27, 40, 7381.00);
-
 -- --------------------------------------------------------
 
 --
@@ -272,108 +217,6 @@ CREATE TABLE `orderitems` (
   `item_price` decimal(10,2) NOT NULL,
   `order_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `orderitems`
---
-
-INSERT INTO `orderitems` (`id`, `qty`, `item_id`, `item_price`, `order_id`) VALUES
-(1, 1, 1, 179.00, 1000),
-(2, 1, 5, 612.00, 1000),
-(3, 1, 8, 138.90, 1000),
-(4, 1, 10, 766.00, 1001),
-(5, 1, 1, 179.00, 1002),
-(6, 1, 2, 55.00, 1002),
-(7, 2, 4, 180.39, 1003),
-(8, 1, 25, 59.00, 1004),
-(9, 3, 20, 79.00, 1005),
-(10, 1, 11, 11789.00, 1006),
-(11, 2, 3, 229.00, 1007),
-(12, 1, 8, 138.90, 1008),
-(13, 1, 13, 989.00, 1009),
-(14, 1, 16, 145.00, 1009),
-(15, 1, 23, 74.80, 1009),
-(16, 1, 19, 25.00, 1009),
-(17, 1, 10, 766.00, 1009),
-(18, 1, 26, 45.90, 1009),
-(19, 4, 19, 25.00, 1010),
-(20, 1, 15, 1488.00, 1011),
-(21, 1, 3, 229.00, 1012),
-(22, 1, 1, 179.00, 1013),
-(23, 1, 5, 612.00, 1013),
-(24, 1, 9, 548.00, 1013),
-(25, 2, 17, 159.00, 1014),
-(26, 1, 6, 446.05, 1015),
-(27, 1, 1, 179.00, 1016),
-(28, 1, 17, 159.00, 1017),
-(29, 1, 20, 79.00, 1017),
-(30, 1, 27, 1205.00, 1018),
-(31, 1, 12, 1839.00, 1019),
-(32, 1, 3, 229.00, 1020),
-(33, 1, 6, 446.05, 1020),
-(34, 1, 7, 409.00, 1020),
-(35, 1, 14, 1293.00, 1021),
-(36, 1, 21, 345.80, 1022),
-(37, 1, 22, 550.00, 1022),
-(38, 1, 18, 1183.00, 1023),
-(39, 1, 1, 179.00, 1024),
-(40, 1, 9, 548.00, 1025),
-(41, 1, 8, 138.90, 1026),
-(42, 1, 19, 25.00, 1026),
-(43, 3, 1, 179.00, 1027),
-(44, 5, 2, 55.00, 1028),
-(45, 1, 14, 1293.00, 1029),
-(46, 1, 22, 550.00, 1029),
-(47, 1, 19, 25.00, 1029),
-(48, 1, 25, 59.00, 1029),
-(49, 1, 1, 179.00, 1030),
-(50, 2, 17, 159.00, 1031),
-(51, 1, 12, 1839.00, 1031),
-(52, 1, 27, 1205.00, 1032),
-(53, 1, 7, 409.00, 1033),
-(54, 1, 13, 989.00, 1034),
-(55, 2, 3, 229.00, 1035),
-(56, 1, 14, 1293.00, 1036),
-(57, 1, 19, 25.00, 1036),
-(58, 1, 2, 55.00, 1037),
-(59, 1, 5, 612.00, 1037),
-(60, 2, 16, 145.00, 1038),
-(61, 1, 11, 11789.00, 1039),
-(62, 1, 1, 179.00, 1040),
-(63, 1, 5, 612.00, 1041),
-(64, 2, 8, 138.90, 1042),
-(65, 1, 3, 229.00, 1043),
-(66, 1, 6, 446.05, 1044),
-(67, 1, 36, 598.00, 1045),
-(68, 1, 16, 145.00, 1045),
-(69, 1, 23, 74.80, 1045),
-(70, 1, 19, 25.00, 1045),
-(71, 1, 10, 766.00, 1045),
-(72, 1, 26, 45.90, 1045),
-(73, 1, 15, 1488.00, 1046),
-(74, 1, 42, 2935.00, 1046),
-(75, 1, 11, 11789.00, 1046),
-(76, 1, 2, 55.00, 1047),
-(77, 2, 6, 446.05, 1047),
-(78, 1, 24, 189.61, 1048),
-(79, 1, 25, 59.00, 1049),
-(80, 1, 41, 735.00, 1050),
-(81, 1, 32, 4950.00, 1051),
-(82, 1, 2, 55.00, 1051),
-(83, 2, 28, 208.00, 1051),
-(84, 2, 34, 1178.00, 1052),
-(85, 1, 45, 1128.00, 1052),
-(86, 1, 38, 176.00, 1053),
-(87, 1, 39, 439.00, 1054),
-(88, 1, 43, 329.00, 1054),
-(89, 1, 11, 11789.00, 1055),
-(90, 1, 22, 550.00, 1055),
-(91, 1, 7, 409.00, 1056),
-(92, 1, 7, 409.00, 1057),
-(93, 1, 23, 74.80, 1057),
-(94, 1, 24, 189.61, 1057),
-(95, 1, 18, 1183.00, 1058),
-(96, 1, 39, 439.00, 1058);
 
 -- --------------------------------------------------------
 
@@ -392,71 +235,6 @@ CREATE TABLE `orders` (
   `remarks` text DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `orders`
---
-
-INSERT INTO `orders` (`id`, `order_date`, `status_id`, `delivery_address`, `total_price`, `payment_type`, `screenshot`, `remarks`, `user_id`) VALUES
-(1000, '2024-05-24 23:59:30', 5, '123, Golden Triangle, Relau, 11900, Bayan Lepas, Pulau Pinang', 939.90, 'TNG', '6676f4e207fee2.22637478.png', NULL, 2),
-(1001, '2024-05-24 00:18:40', 5, '123, Golden Triangle, Relau, 11900, Bayan Lepas, Pulau Pinang', 776.00, 'COD', NULL, NULL, 2),
-(1002, '2024-05-25 00:21:34', 5, 'Stellaron hunter house, honkai star rail, mihoyo', 244.00, 'TNG', '6676fa0e277797.93347235.png', NULL, 3),
-(1003, '2024-05-26 00:22:01', 5, 'Stellaron hunter house, honkai star rail, mihoyo', 370.78, 'TNG', '6676fa298bfe71.70601446.png', NULL, 3),
-(1004, '2024-05-26 00:28:48', 6, 'PISA Home Centre, Level 1, Car Park Complex PISA, Pulau Pinang', 69.00, 'COD', NULL, 'Sorry, item is temporary unavailable.', 4),
-(1005, '2024-05-27 00:29:19', 5, 'PISA Home Centre, Level 1, Car Park Complex PISA, Pulau Pinang', 247.00, 'COD', NULL, NULL, 4),
-(1006, '2024-05-28 00:36:26', 5, 'Inti, Penang', 11799.00, 'TNG', '6676fd8a1b9404.78064815.png', NULL, 5),
-(1007, '2024-05-29 00:37:27', 5, 'A123, Regency Height, Sungai Ara, Penang', 468.00, 'TNG', '6676fdc743a2c1.72489861.png', NULL, 5),
-(1008, '2024-05-29 00:37:41', 5, 'A123, Regency Height, Sungai Ara, Penang', 148.90, 'COD', NULL, NULL, 5),
-(1009, '2024-05-30 01:01:17', 5, 'Taman Seri Sari, 11900, Bayan Lepas, Pulau Pinang', 2055.70, 'TNG', '6677035d7e4e15.02668926.png', NULL, 8),
-(1010, '2024-05-30 01:12:50', 5, 'Villa Kejora, Relau, 11900, Bayan Lepas, Pulau Pinang', 110.00, 'TNG', '66770612d97e68.91729416.png', NULL, 9),
-(1011, '2024-05-30 01:13:13', 5, 'Villa Kejora, Relau, 11900, Bayan Lepas, Pulau Pinang', 1498.00, 'TNG', '6677062902ee11.69529815.png', NULL, 9),
-(1012, '2024-05-31 17:04:27', 6, 'Villa Kejora, Relau, 11900, Bayan Lepas, Pulau Pinang', 239.00, 'COD', NULL, 'Wrong payment amount.', 9),
-(1013, '2024-05-31 17:05:56', 5, 'Taman Seri Sari, 11900, Bayan Lepas, Pulau Pinang', 1349.00, 'TNG', '6677e574a74879.90219507.png', NULL, 8),
-(1014, '2024-06-01 17:07:39', 5, 'Stellaron hunter house, honkai star rail, mihoyo', 328.00, 'TNG', '6677e5dbbad010.80043010.png', NULL, 3),
-(1015, '2024-06-02 17:08:19', 5, 'Stellaron hunter house, honkai star rail, mihoyo', 456.05, 'TNG', '6677e6032a0212.05599718.png', NULL, 3),
-(1016, '2024-06-02 17:09:34', 5, 'A123, Regency Height, Sungai Ara, Penang', 189.00, 'COD', NULL, NULL, 5),
-(1017, '2024-06-03 17:10:55', 5, 'SJKC Chong Cheng Sungai Ara Pulau Pinang', 248.00, 'COD', NULL, NULL, 6),
-(1018, '2024-06-03 17:11:33', 5, 'A123, Regency Height, Sungai Ara, Penang', 1215.00, 'TNG', '6677e6c516b9f3.92426819.png', NULL, 5),
-(1019, '2024-06-04 08:08:47', 5, 'Villa Kejora, Relau, 11900, Bayan Lepas, Pulau Pinang', 1849.00, 'TNG', '667a0a8f414cb9.26044199.png', NULL, 9),
-(1020, '2024-06-05 08:11:51', 5, 'SJKC Chong Cheng Sungai Ara Pulau Pinang', 1094.05, 'TNG', '667a0b47e47cd3.85102554.png', NULL, 6),
-(1021, '2024-06-06 08:12:56', 5, 'SJKC Chong Cheng Sungai Ara Pulau Pinang', 1303.00, 'TNG', '667a0b888f7660.07722428.png', NULL, 6),
-(1022, '2024-06-06 08:13:25', 5, 'Villa Kejora, Relau, 11900, Bayan Lepas, Pulau Pinang', 905.80, 'COD', NULL, NULL, 9),
-(1023, '2024-06-07 08:13:48', 5, 'Villa Kejora, Relau, 11900, Bayan Lepas, Pulau Pinang', 1193.00, 'TNG', '667a0bbc8e1152.22221760.png', NULL, 9),
-(1024, '2024-06-08 08:14:59', 7, 'Villa Kejora, Relau, 11900, Bayan Lepas, Pulau Pinang', 189.00, 'COD', NULL, 'Item damage', 9),
-(1025, '2024-06-08 08:16:22', 5, '456, Queensbay Mall, Penang', 558.00, 'TNG', '667a0c562a33d1.74714350.png', NULL, 7),
-(1026, '2024-06-08 08:16:32', 5, '456, Queensbay Mall, Penang', 173.90, 'COD', NULL, NULL, 7),
-(1027, '2024-06-09 09:07:48', 5, 'Villa Kejora, Relau, 11900, Bayan Lepas, Pulau Pinang', 547.00, 'TNG', '667a18647056c0.59943389.png', NULL, 9),
-(1028, '2024-06-10 09:14:34', 5, 'Villa Kejora, Relau, 11900, Bayan Lepas, Pulau Pinang', 285.00, 'COD', NULL, NULL, 9),
-(1029, '2024-06-10 09:25:00', 5, 'Taman Seri Sari, Penang', 1937.00, 'TNG', '667a1c6c281091.29006150.png', NULL, 12),
-(1030, '2024-06-11 09:25:26', 5, 'Castle', 189.00, 'COD', NULL, NULL, 11),
-(1031, '2024-06-11 09:25:37', 5, 'Taman Seri Sari, Penang', 2167.00, 'TNG', '667a1c915f6d95.70374545.png', NULL, 12),
-(1032, '2024-06-12 09:25:48', 5, 'Castle', 1215.00, 'COD', NULL, NULL, 11),
-(1033, '2024-06-12 09:27:08', 5, 'Castle', 419.00, 'COD', NULL, NULL, 11),
-(1034, '2024-06-13 09:29:48', 5, 'Stellaron hunter house, honkai star rail, mihoyo', 999.00, 'COD', NULL, NULL, 3),
-(1035, '2024-06-14 09:29:54', 5, 'Stellaron hunter house, honkai star rail, mihoyo', 468.00, 'COD', NULL, NULL, 3),
-(1036, '2024-06-15 09:35:18', 5, '123, Golden Triangle, Relau, 11900, Bayan Lepas, Pulau Pinang', 1328.00, 'TNG', '667a1ed62857b2.83935180.png', NULL, 2),
-(1037, '2024-06-16 09:40:10', 5, 'Taman Seri Sari, Penang', 677.00, 'TNG', '667a1ffad4a7a1.87351864.png', NULL, 12),
-(1038, '2024-06-17 09:40:29', 5, '123, Golden Triangle, Relau, 11900, Bayan Lepas, Pulau Pinang', 300.00, 'COD', NULL, NULL, 2),
-(1039, '2024-06-18 09:41:53', 5, 'Taman Seri Sari, 11900, Bayan Lepas, Pulau Pinang', 11799.00, 'TNG', '667a20611b42a4.59405426.png', NULL, 8),
-(1040, '2024-06-19 12:28:26', 5, '456, Queensbay Mall, Penang', 189.00, 'COD', NULL, NULL, 7),
-(1041, '2024-06-19 12:28:52', 5, '456, Queensbay Mall, Penang', 622.00, 'TNG', '667a478433cb13.79754899.png', NULL, 7),
-(1042, '2024-06-20 12:29:09', 5, '456, Queensbay Mall, Penang', 287.80, 'COD', NULL, NULL, 7),
-(1043, '2024-06-20 12:32:27', 5, '1-Z, Lebuh Bukit Jambul, Bukit Jambul, 11900 Bayan Lepas, Pulau Pinang', 239.00, 'COD', NULL, NULL, 10),
-(1044, '2024-06-21 12:33:01', 5, '1-Z, Lebuh Bukit Jambul, Bukit Jambul, 11900 Bayan Lepas, Pulau Pinang', 456.05, 'TNG', '667a487d86dd64.68485730.png', NULL, 10),
-(1045, '2024-06-22 12:21:00', 7, 'Sunshine Garden Penang', 1664.70, 'COD', NULL, 'Missing item (INTEL CORE I5)', 13),
-(1046, '2024-06-23 12:23:26', 5, 'Taman Adudu', 16222.00, 'TNG', '667f8c3ee39fd9.55175356.jpg', NULL, 14),
-(1047, '2024-06-23 12:25:52', 5, 'Taman Sungai Melati, 11900 Bayan Lepas', 957.10, 'TNG', '667f8cd0f0cc33.79859804.jpg', NULL, 15),
-(1048, '2024-06-24 12:26:02', 5, 'Taman Sungai Ara, 11900 Bayan Lepas', 199.61, 'COD', NULL, NULL, 15),
-(1049, '2024-06-24 12:27:01', 5, 'Seri Melati, George Town', 69.00, 'COD', NULL, NULL, 16),
-(1050, '2024-06-24 12:27:07', 5, 'Seri Melati, George Town', 745.00, 'COD', NULL, NULL, 16),
-(1051, '2024-06-25 12:28:34', 4, 'Air Itam Dam', 5431.00, 'TNG', '667f8d72db00f2.19845804.jpg', NULL, 17),
-(1052, '2024-06-25 12:29:27', 4, 'Air Itam Dam', 3494.00, 'TNG', '667f8da7c6e4c5.45705024.jpg', NULL, 17),
-(1053, '2024-06-27 12:29:53', 3, 'Air Itam Dam', 186.00, 'COD', NULL, NULL, 17),
-(1054, '2024-06-27 12:30:11', 3, 'Air Itam Dam', 778.00, 'TNG', '667f8dd30e91c9.12339884.jpg', NULL, 17),
-(1055, '2024-06-28 12:38:40', 2, 'Sunshine Garden Penang', 12349.00, 'TNG', '667f8fd0d3eb53.92559955.jpg', NULL, 13),
-(1056, '2024-06-28 12:38:57', 2, 'Sunshine Garden Penang', 419.00, 'COD', NULL, NULL, 13),
-(1057, '2024-06-29 12:40:05', 6, 'Taman Adudu', 683.41, 'TNG', '667f902566d197.81495762.jpg', 'Wrong payment amount', 14),
-(1058, '2024-06-29 12:41:08', 1, 'Taman Sungai Ara, 11900 Bayan Lepas', 1632.00, 'TNG', '667f90642f0776.54138756.jpg', NULL, 15);
 
 -- --------------------------------------------------------
 
@@ -492,6 +270,7 @@ CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `user_name` varchar(25) NOT NULL,
   `email` varchar(255) NOT NULL,
+  `secondary_email` varchar(255) DEFAULT NULL,
   `phone` varchar(15) NOT NULL,
   `user_address` varchar(255) NOT NULL,
   `pwd` varchar(20) NOT NULL,
@@ -502,24 +281,11 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `user_name`, `email`, `phone`, `user_address`, `pwd`, `user_image`) VALUES
-(1, 'First', 'aimarief0919@gmail.com', '0123456789', 'Taman Seri Sari ', 'arief12345@', 'no_profile_pic.png'),
-(2, 'Scorpio', 'khorcojean@gmail.com', '017-5807200', '123, Golden Triangle, Relau, 11900, Bayan Lepas, Pulau Pinang', 'Cojean1111@', 'no_profile_pic.png'),
-(3, 'Firefly', 'khorcojean@gmail.com', '012-345 6789', 'Stellaron hunter house, honkai star rail, mihoyo', 'firefly123@', 'no_profile_pic.png'),
-(4, 'Cojean', 'P22014471@student.newinti.edu.my', '017-5807201', 'PISA Home Centre, Level 1, Car Park Complex PISA, Pulau Pinang', 'Cojean123@', 'no_profile_pic.png'),
-(5, 'Cincai', 'hzhsia603@gmail.com', '012-8888888', 'A123, Regency Height, Sungai Ara, Penang', 'Cincai123@', 'no_profile_pic.png'),
-(6, 'Handsome', 'P22014471@student.newinti.edu.my', '017-5807202', 'SJKC Chong Cheng Sungai Ara Pulau Pinang', 'Handsome123@', 'no_profile_pic.png'),
-(7, 'Cocojean', 'khorcojean@gmail.com', '0123456789', '456, Queensbay Mall, Penang', 'Cocojean123@', 'no_profile_pic.png'),
-(8, 'Arief bin Abdul Latib', 'aimarief0919@gmail.com', '0123456666', 'Taman Seri Sari, 11900, Bayan Lepas, Pulau Pinang', 'Arief123@', 'no_profile_pic.png'),
-(9, 'Khor Cojean', 'khorcojean@gmail.com', '012-4340018', 'Villa Kejora, Relau, 11900, Bayan Lepas, Pulau Pinang', 'CJ20041111@', '667a48c7875cf6.26508105.jpg'),
-(10, 'Testing', 'P22014471@student.newinti.edu.my', '012-3456789', '1-Z, Lebuh Bukit Jambul, Bukit Jambul, 11900 Bayan Lepas, Pulau Pinang', 'Testing@123', 'no_profile_pic.png'),
-(11, 'N Sin', 'P22014594@student.newinti.edu.my', '012-3458893', 'Castle', 'ensin123@', 'no_profile_pic.png'),
-(12, 'Bryani', 'P22014285@student.newinti.edu.my', '012-345 7788', 'Taman Seri Sari, Penang', 'bryan123@', 'no_profile_pic.png'),
-(13, 'Jason', 'p22014743@student.newinti.edu.my', '019-3002934', 'Sunshine Garden Penang', 'Jason123@', 'no_profile_pic.png'),
-(14, 'Boboiboy', 'aimarief0919@gmail.com', '019-4196700', 'Taman Adudu', 'Boboiboy123@', 'no_profile_pic.png'),
-(15, 'SpongeBob', 'aimarief0919@gmail.com', '017-2321099', 'Taman Sungai Ara, 11900 Bayan Lepas', 'Spongebon123@', 'no_profile_pic.png'),
-(16, 'Kamen Rider', 'p22014743@student.newinti.edu.my', '019-8284731', 'Seri Melati, George Town', 'Kamen123@', 'no_profile_pic.png'),
-(17, 'Tan Mei Mei', 'p22014743@student.newinti.edu.my', '017-2374621', 'Air Itam Dam', 'Tanmeimei123@', 'no_profile_pic.png');
+INSERT INTO `users` (`id`, `user_name`, `email`, `secondary_email`, `phone`, `user_address`, `pwd`, `user_image`) VALUES
+(1, 'First', 'aimarief0919@gmail.com', NULL, '0123456789', 'Taman Seri Sari ', 'arief12345@', 'no_profile_pic.png'),
+(4, 'Cojean', 'P22014471@student.newinti.edu.my', NULL, '017-5807201', 'PISA Home Centre, Level 1, Car Park Complex PISA, Pulau Pinang', 'Cojean123@', 'no_profile_pic.png'),
+(5, 'Cincai', 'hzhsia603@gmail.com', NULL, '012-8888888', 'A123, Regency Height, Sungai Ara, Penang', 'Cincai123@', 'no_profile_pic.png'),
+(19, 'arief', 'qiqihutao919@gmail.com', '', '0123456789', '12345aaa', 'arief12345@', 'no_profile_pic.png');
 
 --
 -- Indexes for dumped tables
@@ -661,7 +427,7 @@ ALTER TABLE `orderstatus`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- Constraints for dumped tables

@@ -32,6 +32,8 @@
                     <input required type="email" id="Email" name="UserEmail" placeholder="Email">
                     <label for="Password">Password :</label>
                     <input required type="password" id="Password" name="UserPassword" placeholder="Password">
+                    <p class="forgetPass"><a class="forgetPassBtn" href="forgetPassword.php">Forget Password?</a></p>
+                    
                     <button class="logIn" type="submit" name="login" value="Login">Log In</button>
                     <!-- create account -->
                     <p class="noAcc">No account? <a class="signUp" href="signup.php">Sign Up</a> now.</p>

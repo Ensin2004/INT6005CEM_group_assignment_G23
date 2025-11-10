@@ -230,6 +230,9 @@
   border: 2px solid rgb(51, 153, 255);
 }
 
+.sendAgain{
+  cursor: pointer;
+}
 .sendAgain:hover {
   color: #0056b3;
 }

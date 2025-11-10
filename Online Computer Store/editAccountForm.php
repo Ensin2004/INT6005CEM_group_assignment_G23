@@ -49,6 +49,12 @@ require_once "includes/security.php";
                     <input required type="text" id="Username" name="newUsername" value="<?php echo $row['user_name'] ?>">
                     <label for="Email">Email :</label>
                     <input required type="email" id="Email" name="newEmail" value="<?php echo $row['email'] ?>" readonly>
+                    
+                    <label for="SecondaryEmail">Secondary Email (Optional) :</label>
+                    <div class="secondaryEmail">
+                        <input required type="email" id="SecondaryEmail" name="secondaryEmail" value="<?php echo $row['secondary_email'] ?>" readonly>
+                        <a href="secondaryEmailPage.php" class="editBtn" id="editSecondary">Edit</a>
+                    </div>
                     <label for=" Phone">Phone Number :</label>
                     <input required type="text" id="Phone" name="newPhone" value="<?php echo $row['phone'] ?>">
                     <label for="Address">Address :</label>
