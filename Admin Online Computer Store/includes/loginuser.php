@@ -1,29 +1,52 @@
 <?php
 session_start();
-require_once "dbh.inc.php";
+require_once "dbh.inc.php"; 
 
-// Check if the request method is POST
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (!$conn) {
         die("Database connection failed");
-    } else {
-        if (isset($_POST['login'])) {
-            // Collect form data
-            $username = $_POST['Username'];
-            $password = $_POST['UserPassword'];
-            $email = $_POST['UserEmail']; // Assuming email is also submitted
+    }
 
-            $query = mysqli_query($conn, "SELECT * FROM admins WHERE admin_name = '$username' AND admin_email = '$email'");
-            $row = mysqli_fetch_assoc($query);
+    if (isset($_POST['login'])) {
+        // Collect and sanitize input
+        $username = trim($_POST['Username']);
+        $email = trim($_POST['UserEmail']);
+        $password = trim($_POST['UserPassword']);
 
-            if (mysqli_num_rows($query) == 0 || $row['admin_pwd'] != $password) {
-                echo "<script> alert ('Wrong name, email or password'); window.history.go(-1);</script>";
-            } else {
-                $_SESSION['ID'] = $row['id'];
-                $_SESSION['AdminName'] = $row['admin_name'];
-                
-                echo "<script>alert ('Log in successfully'); window.location.href='../home.php'; </script>";
-            }
+        // Prepared statement (prevents SQL injection)
+        $stmt = $conn->prepare("SELECT * FROM admins WHERE admin_name = ? AND admin_email = ?");
+        $stmt->bind_param("ss", $username, $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        // Check if admin exists
+        if ($result->num_rows === 0) {
+            echo "<script>alert('No admin found with that name or email'); window.history.go(-1);</script>";
+            exit();
         }
+
+        $row = $result->fetch_assoc();
+
+        // Check if account is banned
+        if (isset($row['account_status']) && strtolower($row['account_status']) === 'banned') {
+            echo "<script>alert('Your account has been banned. Please contact the system administrator.'); window.history.go(-1);</script>";
+            exit();
+        }
+
+        // Verify password securely
+            if ($password !== $row['admin_pwd']) {
+            echo "<script>alert('Incorrect password'); window.history.go(-1);</script>";
+            exit();
+        }
+
+        // Store session data after login
+        $_SESSION['ID'] = $row['id'];
+        $_SESSION['AdminName'] = $row['admin_name'];
+        $_SESSION['role'] = $row['role'];
+        $_SESSION['status'] = $row['account_status']; 
+
+        echo "<script>alert('Login successful!'); window.location.href='../home.php';</script>";
+        exit();
     }
 }
+?>

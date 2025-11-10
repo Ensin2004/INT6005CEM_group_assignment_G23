@@ -1,0 +1,245 @@
+/* ------ category bar ----- */
+
+.category_bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: 80%;
+  margin: 20px 0px;
+  padding: 0px 20px;
+  flex-wrap: wrap;
+  overflow-x: hidden;
+}
+
+.category_button {
+  font-size: 1.5rem;
+  color: ghostwhite;
+  text-align: center;
+  align-content: center;
+  height: 30px;
+  width: fit-content;
+  padding: 0px 10px;
+  margin: 5px 5px;
+  border-radius: 15px;
+  background-color: rgb(51, 153, 255);
+  cursor: pointer;
+}
+
+.category_button:hover {
+  background-color: rgb(0, 102, 204);
+}
+
+.selected {
+  background-color: rgb(0, 102, 204);
+}
+
+/* ------ order body ----- */
+
+.order_body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80%;
+}
+
+.no_result {
+  font-size: 1.5rem;
+  font-weight: 400;
+  padding: 5px 25px 15px 25px;
+}
+
+.order_display {
+  width: 95%;
+  margin-bottom: 20px;
+  border: 2px solid rgba(211, 211, 211, 0.4);
+}
+
+.order_display tr {
+  height: 50px;
+  width: 100%;
+  border-top: 2px solid rgba(211, 211, 211, 0.4);
+  border-bottom: 2px solid rgba(211, 211, 211, 0.4);
+}
+
+.order_display td {
+  font-size: 1.5rem;
+  vertical-align: middle;
+  padding: 10px 15px;
+}
+
+.table_head {
+  font-weight: 700;
+  background-color: lightgray;
+}
+
+.table_body p {
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.status_col, .action_col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status_col p {
+  font-weight: 600;
+  text-align: center;
+  width: 120px;
+  padding: 2px 0px;
+  border-radius: 20px;
+}
+
+.blue {
+  color: rgb(51, 153, 255);
+  background-color: rgb(51, 153, 255, 0.25);
+}
+
+.yellow {
+  color: rgb(255, 165, 0);
+  background-color: rgb(255, 165, 0, 0.25);
+}
+
+.green {
+  color: rgb(60, 179, 113);
+  background-color: rgb(60, 179, 113, 0.25);
+}
+
+.red {
+  color: rgb(255, 52, 52, 0.75);
+  background-color: rgb(255, 52, 52, 0.25);
+}
+
+.action_col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.enabled i {
+  font-size: 2.5rem;
+  cursor: pointer;
+}
+
+.enabled i:hover {
+  text-shadow: 0 0 25px rgba(0, 0, 0, 0.75);
+}
+
+.disabled i {
+  font-size: 2.5rem;
+  color: lightgray;
+}
+
+/* ------ reject pop-up ----- */
+
+.reject_popup {
+  display: none;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}
+
+.reject_form {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  height: 350px;
+  width: 600px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #fefefe;
+}
+
+.reject_form p {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.reject_form label {
+  font-size: 1.5rem;
+  margin-bottom: 5px;
+}
+
+.reject_form textarea {
+  font-size: 1.5rem;
+  word-wrap: break-word;
+  height: 175px;
+  width: 100%;
+  border: 1px solid black;
+  border-radius: 2px;
+  padding: 0px 5px;
+}
+
+.buttons {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+}
+
+.cancel_button {
+  font-size: 1.5rem;
+  color: rgb(255, 52, 52);
+  text-align: center;
+  align-content: center;
+  height: 30px;
+  width: 100px;
+  padding: 0px 10px;
+  cursor: pointer;
+}
+
+.cancel_button:hover {
+  color: rgb(180, 56, 56);
+  text-decoration: underline;
+}
+
+.add_button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #000000; 
+    color: white;
+    padding: 12px 20px;
+    border-radius: 50px; 
+    font-size: 16px;
+    text-decoration: none;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    transition: background-color 0.3s, transform 0.3s;
+    z-index: 1000; 
+}
+
+.add_button:hover {
+    background-color: #222222;
+    transform: scale(1.05);
+}
+
+/* Faded or tinted look for banned managers */
+.banned_row {
+    background-color: #f8d7da; /* light red background */
+    color: #721c24;           /* dark red text */
+    opacity: 0.8;
+}
+
+/* Label beside banned names */
+.banned_tag {
+    font-size: 0.9em;
+    color: #b30000;
+    font-weight: bold;
+    margin-left: 5px;
+}

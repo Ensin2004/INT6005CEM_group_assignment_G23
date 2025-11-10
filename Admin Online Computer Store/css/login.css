@@ -26,8 +26,12 @@
 }
 
 @keyframes moveBackground {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-16%); }
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-16%);
+  }
 }
 
 .loginBox {
@@ -81,7 +85,7 @@
   justify-content: flex-start;
   height: 100%;
   width: 55%;
-  padding: 50px 25px;
+  padding: 50px 25px 25px 25px;
 }
 
 .loginInfo input {
@@ -93,7 +97,7 @@
   margin-bottom: 15px;
 }
 
-.submitButton {
+.logIn {
   color: ghostwhite;
   text-align: center;
   align-content: center;
@@ -101,14 +105,71 @@
   width: 100%;
   padding: 0px 10px;
   margin-top: 20px;
+  margin-bottom: 5px;
   border: 2px solid rgb(51, 153, 255);
   border-radius: 15px;
   background-color: rgb(51, 153, 255);
   cursor: pointer;
 }
 
-.submitButton:hover {
+.logIn:hover {
   color: black;
   background-color: ghostwhite;
   border: 2px solid rgb(51, 153, 255);
+}
+
+.noAcc {
+  font-size: 1.1rem;
+  font-weight: 400;
+  text-align: center;
+  align-content: center;
+  height: 20px;
+  width: 100%;
+}
+
+.forgetPass {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 1.1rem;
+}
+
+.forgetPassBtn {
+  color: rgb(51, 153, 255);
+  text-align: right;
+  align-content: right;
+  height: 20px;
+  width: fit-content;
+  cursor: pointer;
+}
+
+.forgetPassBtn:hover {
+    color: rgb(0, 102, 204);
+    text-decoration: underline;
+}
+
+.signUp {
+  color: rgb(51, 153, 255);
+  text-align: center;
+  align-content: center;
+  height: 20px;
+  width: fit-content;
+  cursor: pointer;
+}
+
+.signUp:hover {
+    color: rgb(0, 102, 204);
+    text-decoration: underline;
+}
+
+.forgetPassBtn,
+.forgetPassBtn:link,
+.forgetPassBtn:visited {
+  color: rgb(51, 153, 255);
+  text-decoration: none;
+}
+
+.forgetPassBtn:hover,
+.forgetPassBtn:focus {
+  color: rgb(0, 102, 204);
+  text-decoration: underline;
 }

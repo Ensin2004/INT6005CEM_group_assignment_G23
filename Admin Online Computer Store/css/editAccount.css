@@ -1,0 +1,211 @@
+.accDisplay {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 250px);
+  width: 100%;
+  overflow: hidden;
+}
+
+.accDisplay::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 120%;
+  height: 100%;
+  background-image: url("../../Image/background.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  opacity: 0.3;
+  animation: moveBackground 30s linear infinite alternate;
+}
+
+@keyframes moveBackground {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-16%);
+  }
+}
+
+.accBox {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 540px;
+  width: 700px;
+  margin: 100px 0px;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255);
+  box-shadow: 0px 3px 6px -1px rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+/* .signUpLogo p {
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    font-size: 2rem;
+    text-align: center;
+    height: 50px;
+    width: 100%;
+  } */
+
+/* .signUpLogo img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: block;
+    margin: 10px auto;
+    object-fit: cover;
+    height: 100px;
+    width: 240px;
+  } */
+
+.accInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
+  width: 55%;
+  padding: 50px 25px 25px 25px;
+}
+
+.accInfo input {
+  width: 100%;
+  padding: 0px 5px;
+  border: 1px solid black;
+  border-radius: 2px;
+  background-color: ghostwhite;
+  margin-bottom: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.acc {
+  color: ghostwhite;
+  text-align: center;
+  align-content: center;
+  height: 30px;
+  width: 100%;
+  padding: 0px 10px;
+  margin-top: 20px;
+  margin-bottom: 5px;
+  border: 2px solid rgb(51, 153, 255);
+  border-radius: 15px;
+  background-color: rgb(51, 153, 255);
+  cursor: pointer;
+}
+
+.acc:hover {
+  color: black;
+  background-color: ghostwhite;
+  border: 2px solid rgb(51, 153, 255);
+}
+
+/* ------ pop up ----- */
+
+/* .popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+  }
+  
+  .popup-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fefefe;
+    border: 1px solid #888;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    font-size: 24px;
+    width: 400px;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .close {
+    color: #aaa;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 40px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+ */
+
+.img_container {
+  position: relative;
+  width: 250px;
+  height: 250px;
+  display: flex;
+  align-self: center;
+  border-radius: 50%;
+}
+
+.img_preview {
+  display: block;
+  width: 250px;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  cursor: pointer;
+}
+
+.imageInput {
+  display: none; /* Hide the file input */
+}
+.signUpLogo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  height: 100%;
+  width: 45%;
+  /* padding: 50px 25px; */
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.imageInput {
+  display: none;
+}
+
+.profile {
+  font-size: 2rem;
+  text-align: center;
+}
