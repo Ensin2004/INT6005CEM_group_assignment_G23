@@ -24,7 +24,14 @@
         </div>
 
         <div>
-            <p class="admin">Admin</P>
+            <?php 
+            if (isset($_SESSION['role']) && $_SESSION['role'] === 'super_admin') {
+               echo '<p class="admin">Admin</P>';
+            } else {
+                echo '<p class="admin">Manager</p>';
+            }
+            ?>
+
         </div>
 
         <div>
@@ -35,11 +42,7 @@
             <!-- <a class="nav_button" href=""><i class="fa-solid fa-cart-shopping"></i></a> -->
 
             <!-- Account -->
-            <?php
-            if (isset($_SESSION['ID'])) {
-                echo '<a class="nav_button" href="includes/logoutAccount.php"><i class="fa-solid fa-right-from-bracket"></i></a>';
-            }
-            ?>
+            <a class="nav_button" href="adminAccount.php"><i class="fa-solid fa-circle-user"></i> Account</a>
         </div>
     </header>
 </body>

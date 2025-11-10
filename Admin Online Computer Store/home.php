@@ -109,6 +109,13 @@ include "includes/homeGraph.php";
                 <i class="fa-solid fa-chart-line"></i>
                 <p class="menu_text">STATISTIC</p>
             </a>
+
+            <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'super_admin') { ?>
+                <a class="menu_button" href="managers.php">
+                    <i class="fa-solid fa-users-gear"></i>
+                    <p class="menu_text">MANAGERS</p>
+                </a>
+            <?php } ?>
         </div>
         <hr>
         <div class="statistic_body">

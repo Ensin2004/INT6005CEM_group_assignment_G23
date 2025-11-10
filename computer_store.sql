@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 10, 2025 at 08:44 AM
+-- Generation Time: Nov 10, 2025 at 02:47 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -31,15 +31,19 @@ CREATE TABLE `admins` (
   `id` int(11) NOT NULL,
   `admin_name` varchar(30) NOT NULL,
   `admin_email` varchar(100) NOT NULL,
-  `admin_pwd` varchar(30) NOT NULL
+  `admin_pwd` varchar(30) NOT NULL,
+  `admin_image` varchar(255) DEFAULT 'no_profile_pic.png',
+  `role` enum('super_admin','manager') NOT NULL DEFAULT 'manager',
+  `account_status` enum('active','banned') NOT NULL DEFAULT 'active'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `admins`
 --
 
-INSERT INTO `admins` (`id`, `admin_name`, `admin_email`, `admin_pwd`) VALUES
-(1, 'admin', 'admin@gmail.com', 'admin12345');
+INSERT INTO `admins` (`id`, `admin_name`, `admin_email`, `admin_pwd`, `admin_image`, `role`, `account_status`) VALUES
+(1, 'admin', 'admin@gmail.com', 'admin12345', 'no_profile_pic.png', 'super_admin', 'active'),
+(2, 'admin2', 'admin2@gmail.com', 'admin12345', 'no_profile_pic.png', 'manager', 'active');
 
 -- --------------------------------------------------------
 
@@ -373,7 +377,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `admins`
 --
 ALTER TABLE `admins`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `cart`

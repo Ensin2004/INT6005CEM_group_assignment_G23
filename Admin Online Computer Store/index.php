@@ -16,35 +16,33 @@ session_start();
 
 <body>
 
-    <?php
-    include 'header.php';
-    ?>
+    <?php include 'header.php'; ?>
 
     <main>
-        <!-- Biggest box in body to set background -->
-        <div class=loginDisplay>
-            <!-- Set up login content -->
+        <div class="loginDisplay">
             <form class="loginBox" action="includes/loginuser.php" method="post">
-                <div class=loginLogo>
+                <div class="loginLogo">
                     <p>Welcome to</p>
                     <img src="../Image/logo.png" alt="KAH TECH Logo">
                 </div>
                 <div class="loginInfo">
                     <label for="Username">Name :</label>
                     <input required type="text" id="Username" name="Username" placeholder="Username">
+
                     <label for="Email">Email :</label>
                     <input required type="email" id="Email" name="UserEmail" placeholder="Email">
+
                     <label for="Password">Password :</label>
                     <input required type="password" id="Password" name="UserPassword" placeholder="Password">
-                    <button class="submitButton" type="submit" name="login" value="Login">Log In </button>
+
+                    <p class="forgetPass"><a class="forgetPassBtn" href="adminForgetPassword.php">Forget Password?</a></p>
+
+                    <button class="logIn" type="submit" name="login" value="Login">Log In</button>
                 </div>
             </form>
         </div>
     </main>
 
-    <?php
-    include 'footer.php';
-    ?>
+    <?php include 'footer.php'; ?>
 </body>
-
 </html>

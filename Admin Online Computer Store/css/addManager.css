@@ -1,0 +1,103 @@
+/* -------- General Form Layout -------- */
+
+.item_form {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 60%;
+  margin: 40px auto;
+  padding: 25px 40px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* -------- Input Section -------- */
+
+.item_details {
+  width: 100%;
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+.details {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.details label {
+  width: 130px;
+  font-weight: 600;
+  color: #333;
+}
+
+.details p {
+  margin: 0 10px;
+  font-weight: 600;
+  color: #333;
+}
+
+.details input {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid #000;
+  border-radius: 5px;
+  font-size: 13px;
+  transition: all 0.3s ease;
+}
+
+.details input:focus {
+  outline: none;
+  border-color: #3399ff;
+  box-shadow: 0 0 4px rgba(51, 153, 255, 0.5);
+}
+
+/* -------- Submit Button -------- */
+
+.submit_button {
+  align-self: flex-end;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #fff;
+  text-align: center;
+  height: 40px;
+  width: 150px;
+  border-radius: 20px;
+  background-color: #3399ff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.submit_button:hover {
+  background-color: #0066cc;
+  transform: scale(1.05);
+}
+
+/* -------- Responsive -------- */
+
+@media (max-width: 768px) {
+  .item_form {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .details {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .details label, .details p {
+    margin-bottom: 5px;
+  }
+
+  .submit_button {
+    width: 100%;
+    align-self: center;
+  }
+}
