@@ -127,6 +127,25 @@
   width: 100%;
 }
 
+.forgetPass {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 1.1rem;
+}
+.forgetPassBtn {
+  color: rgb(51, 153, 255);
+  text-align: right;
+  align-content: right;
+  height: 20px;
+  width: fit-content;
+  cursor: pointer;
+}
+
+.forgetPassBtn:hover {
+    color: rgb(0, 102, 204);
+    text-decoration: underline;
+}
+
 .signUp {
   color: rgb(51, 153, 255);
   text-align: center;
@@ -140,3 +159,4 @@
     color: rgb(0, 102, 204);
     text-decoration: underline;
 }
+
