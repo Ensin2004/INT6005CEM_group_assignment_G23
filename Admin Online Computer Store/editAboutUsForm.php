@@ -69,6 +69,8 @@ require_once "includes/security.php";
     <?php
     include 'footer.php';
     ?>
+
+    <script src="js/sessionTimeout.js"></script>
 </body>
 
 </html>

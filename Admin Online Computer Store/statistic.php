@@ -294,6 +294,8 @@ include "includes/statisticGraph.php";
             }
         }
     </script>
+
+    <script src="js/sessionTimeout.js"></script>
 </body>
 
 </html>

@@ -151,6 +151,8 @@ include "includes/homeGraph.php";
     <?php
     include 'footer.php';
     ?>
+
+    <script src="js/sessionTimeout.js"></script>
 </body>
 
 </html>

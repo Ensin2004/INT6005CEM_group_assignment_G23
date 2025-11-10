@@ -133,6 +133,8 @@ require_once "includes/security.php";
             checkPosition();
         });
     </script>
+
+    <script src="js/sessionTimeout.js"></script>
 </body>
 
 </html>

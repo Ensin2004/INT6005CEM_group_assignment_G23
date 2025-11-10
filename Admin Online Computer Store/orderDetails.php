@@ -219,6 +219,8 @@ require_once "includes/security.php";
             document.getElementById("reject_popup").style.display = "none";
         }
     </script>
+
+    <script src="js/sessionTimeout.js"></script>
 </body>
 
 </html>
