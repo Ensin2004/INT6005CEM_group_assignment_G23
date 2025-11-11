@@ -20,7 +20,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'super_admin') {
     <?php include 'header.php'; ?>
 
     <main>
-        <form class="item_form" action="includes/addManager.inc.php" method="POST">
+        <form class="item_form" action="includes/addManager.inc.php" method="POST" id="addManagerForm">
             <div class="item_details">
                 <div class="details">
                     <label for="admin_name">Name</label>
@@ -39,14 +39,72 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'super_admin') {
                     <p>:</p>
                     <input type="password" id="admin_pwd" name="admin_pwd" maxlength="255" required placeholder="Enter password">
                 </div>
+
+                <div class="pwd_validation_container" id="pwd_validation_container">
+                    <p>Password requirements: </p>
+                    <p class="pwd_validation" id="pwd_character">* 8-20 <b>characters</b></p>
+                    <p class="pwd_validation" id="pwd_letter">* at least one <b>letter (A-Z)</b></p>
+                    <p class="pwd_validation" id="pwd_number">* at least one <b>number (0-9)</b></p>
+                    <p class="pwd_validation" id="pwd_symbol">* at least one <b>special character (@$!%*?&)</b></p>
+                </div>
             </div>
 
-            <button class="submit_button" type="submit" name="addManager">ADD MANAGER</button>
+            <button class="submit_button" type="submit" name="addManager" id="submit_btn" disabled>ADD MANAGER</button>
         </form>
     </main>
 
     <?php include 'footer.php'; ?>
 
     <script src="js/sessionTimeout.js"></script>
+
+    <script>
+        document.getElementById('admin_pwd').addEventListener('input', validatePassword);
+
+        function validatePassword() {
+            var password = document.getElementById('admin_pwd').value;
+            var submit_btn = document.getElementById('submit_btn');
+
+            var pwd_validation_container = document.getElementById('pwd_validation_container');
+            var pwd_character = document.getElementById('pwd_character');
+            var pwd_letter = document.getElementById('pwd_letter');
+            var pwd_number = document.getElementById('pwd_number');
+            var pwd_symbol = document.getElementById('pwd_symbol');
+
+            const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/;
+
+            // Disable submit if don't match
+            if (!passwordRegex.test(password)) {
+                submit_btn.disabled = true;
+                pwd_validation_container.style.display = "block";
+
+                if (password.length < 8 || password.length > 20) {
+                    pwd_character.style.display = "block";
+                } else {
+                    pwd_character.style.display = "none";
+                }
+
+                if (!/[a-zA-Z]/.test(password)) {
+                    pwd_letter.style.display = "block";
+                } else {
+                    pwd_letter.style.display = "none";
+                }
+
+                if (!/\d/.test(password)) {
+                    pwd_number.style.display = "block";
+                } else {
+                    pwd_number.style.display = "none";
+                }
+
+                if (!/[@$!%*?&]/.test(password)) {
+                    pwd_symbol.style.display = "block";
+                } else {
+                    pwd_symbol.style.display = "none";
+                }
+            } else {
+                pwd_validation_container.style.display = "none";
+                submit_btn.disabled = false;
+            }
+        }
+    </script>
 </body>
 </html>
