@@ -1,10 +1,17 @@
 <?php
 require_once "dbh.inc.php";
+
+$ARGON_OPTS = [
+    'memory_cost' => 131072, // 128 MB
+    'time_cost'   => 3,      // 3 iterations
+    'threads'     => 1
+];
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Collect form data
     $email = htmlspecialchars($_POST["UserEmail"]);
-    $password = htmlspecialchars($_POST["confirmPassword"]);
+    $password = password_hash($_POST["newPassword"], PASSWORD_ARGON2ID, $ARGON_OPTS);
     $otp =  htmlspecialchars($_POST["otp"]);
     $otpVerify =  htmlspecialchars($_POST["otp_inp"]);
     $expiresAt  = (int)($_POST['otp_expires_at']);

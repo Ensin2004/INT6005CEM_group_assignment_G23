@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
             // Check whether password is correct or not
-            if ($row['pwd'] != $password) {
+            if (!password_verify($password, $row['pwd'])) {
                 $wrong_pwd_count = $row['wrong_pwd_count'] + 1;
                 $lock_until = null;
                 $lock_message = "";

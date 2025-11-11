@@ -9,9 +9,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if (isset($_POST['login'])) {
         // Collect and sanitize input
-        $username = trim($_POST['Username']);
-        $email = trim($_POST['UserEmail']);
-        $password = trim($_POST['UserPassword']);
+        $username = htmlspecialchars($_POST['Username']);
+        $email = htmlspecialchars($_POST['UserEmail']);
+        $password = $_POST['UserPassword'];
 
         // Prepared statement (prevents SQL injection)
         $stmt = $conn->prepare("SELECT * FROM admins WHERE admin_name = ? AND admin_email = ?");
@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
 
         // Check whether password is correct or not
-        if ($row['admin_pwd'] != $password) {
+        if (!password_verify($password, $row['admin_pwd'])) {
             $wrong_pwd_count = $row['wrong_pwd_count'] + 1;
             $lock_until = null;
             $lock_message = "";

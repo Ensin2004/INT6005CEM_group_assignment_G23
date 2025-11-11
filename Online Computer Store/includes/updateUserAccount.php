@@ -2,28 +2,67 @@
 session_start();
 require_once "dbh.inc.php";
 
+$ARGON_OPTS = [
+    'memory_cost' => 131072, // 128 MB
+    'time_cost'   => 3,      // 3 iterations
+    'threads'     => 1
+];
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Collect form data
     $name = htmlspecialchars($_POST["newUsername"]);
     $email = htmlspecialchars($_POST["newEmail"]);
     $phone = htmlspecialchars($_POST["newPhone"]);
     $address = htmlspecialchars($_POST["newAddress"]);
-    $password = htmlspecialchars($_POST["newPassword"]);
-    $confirmPassword = htmlspecialchars($_POST["confirmPassword"]);
+    $password = $_POST["newPassword"] ?? '';
+    $confirmPassword = $_POST["confirmPassword"] ?? '';
     $img1 = $_FILES["accountimg"];
 
     // Database connection
     if (!$conn) {
         die("Database connection failed");
     }
+
     if ($confirmPassword != $password) {
         echo "<script>alert('Confirm password error'); window.history.back();</script>";
-    }else{
+    }
+    
+    else{
 
     // Prepare SQL statement to prevent SQL injection
     $id = $_SESSION['ID'];
+
+    // If user typed a new password, validate + hash (Argon2id)
+    if (strlen($password) > 0 || strlen($confirmPassword) > 0) {
+
+        if ($password !== $confirmPassword) {
+            echo "<script>alert('Confirm password does not match'); window.history.back();</script>";
+            exit;
+        }
+
+        // Password Requirements:
+        // 8–20 chars, at least one digit, at least one special char (@$!%*?&)
+        $pattern = "/^(?=.*[0-9])(?=.*[@$!%*?&])[A-Za-z0-9@$!%*?&]{8,20}$/";
+
+        if (!preg_match($pattern, $password)) {
+            echo "<script>
+                alert('Password must be 8–20 characters, contain at least one number and one special character (@$!%*?&)');
+                window.history.back();
+            </script>";
+            exit;
+        }
+
+        // Hash new password using Argon2id
+        $passwordHash = password_hash($password, PASSWORD_ARGON2ID, $ARGON_OPTS);
+    }
+
     $oriImgPath = mysqli_fetch_assoc(mysqli_query($conn, "SELECT user_image FROM users WHERE id = $id;"));
-    $query = "UPDATE users SET user_name='$name', email='$email', phone='$phone', user_Address='$address', pwd='$password' WHERE id = '$id'";
+    $query = "UPDATE users SET user_name='$name', email='$email', phone='$phone', user_Address='$address' WHERE id = '$id'";
+
+    // Only update password if user actually typed one
+    if (!empty($password)) {
+        mysqli_query($conn, "UPDATE users SET pwd='$passwordHash' WHERE id='$id'");
+    }
 
     if (mysqli_query($conn, $query)) {
         // Update image if there are changes

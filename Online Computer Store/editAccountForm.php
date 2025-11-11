@@ -47,6 +47,7 @@ require_once "includes/security.php";
                 <div class="accInfo">
                     <label for="Username">Name :</label>
                     <input required type="text" id="Username" name="newUsername" value="<?php echo $row['user_name'] ?>">
+                    
                     <label for="Email">Email :</label>
                     <input required type="email" id="Email" name="newEmail" value="<?php echo $row['email'] ?>" readonly>
                     
@@ -55,14 +56,19 @@ require_once "includes/security.php";
                         <input required type="email" id="SecondaryEmail" name="secondaryEmail" value="<?php echo $row['secondary_email'] ?>" readonly>
                         <a href="secondaryEmailPage.php" class="editBtn" id="editSecondary">Edit</a>
                     </div>
+                    
                     <label for=" Phone">Phone Number :</label>
                     <input required type="text" id="Phone" name="newPhone" value="<?php echo $row['phone'] ?>">
+                    
                     <label for="Address">Address :</label>
                     <input required type="text" id="Address" name="newAddress" value="<?php echo $row['user_address'] ?>" >
+                    
                     <label for="newPassword">New Password :</label>
-                    <input required type="password" id="newPassword" name="newPassword" value="<?php echo $row['pwd'] ?>">
+                    <input type="password" id="newPassword" name="newPassword" placeholder="Enter new password">
+                    
                     <label for="confirmPassword"> Confirm Password</label>
-                    <input required type="password" id="confirmPassword" name="confirmPassword" value="<?php echo $row['pwd'] ?>">
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Re-enter new password">
+                    
                     <button class="acc" type="submit">Update</button>
 
 

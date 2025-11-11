@@ -1,11 +1,17 @@
 <?php
 require_once "dbh.inc.php";
 
+$ARGON_OPTS = [
+    'memory_cost' => 131072, // 128 MB
+    'time_cost'   => 3,      // 3 iterations
+    'threads'     => 1
+];
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Collect form data
     $email = htmlspecialchars($_POST["AdminEmail"]);
-    $password = htmlspecialchars($_POST["confirmPassword"]);
+    $password = password_hash($_POST["newPassword"], PASSWORD_ARGON2ID, $ARGON_OPTS);
     $otp = htmlspecialchars($_POST["otp"]);
     $otpVerify = htmlspecialchars($_POST["otp_inp"]);
 
@@ -14,11 +20,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "<script>alert('Wrong OTP'); window.history.back();</script>";
         exit;
     } else {
-        // ✅ Securely hash the new password before saving
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
         // Update admin password
-        $query = "UPDATE admins SET admin_pwd = '$hashedPassword' WHERE admin_email = '$email'";
+        $query = "UPDATE admins SET admin_pwd = '$password' WHERE admin_email = '$email'";
         $result = mysqli_query($conn, $query);
 
         if ($result) {

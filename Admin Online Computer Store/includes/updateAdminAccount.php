@@ -2,6 +2,12 @@
 session_start();
 require_once "dbh.inc.php";
 
+$ARGON_OPTS = [
+    'memory_cost' => 131072, // 128 MB
+    'time_cost'   => 3,      // 3 iterations
+    'threads'     => 1
+];
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = htmlspecialchars($_POST["newAdminName"]);
     $email = htmlspecialchars($_POST["newAdminEmail"]);
@@ -15,8 +21,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     $id = $_SESSION['ID'];
+
+    // If admin typed a new password, validate + hash (Argon2id)
+    if (strlen($password) > 0 || strlen($confirmPassword) > 0) {
+
+        if ($password !== $confirmPassword) {
+            echo "<script>alert('Confirm password does not match'); window.history.back();</script>";
+            exit;
+        }
+
+        // Password Requirements:
+        // 8–20 chars, at least one digit, at least one special char (@$!%*?&)
+        $pattern = "/^(?=.*[0-9])(?=.*[@$!%*?&])[A-Za-z0-9@$!%*?&]{8,20}$/";
+
+        if (!preg_match($pattern, $password)) {
+            echo "<script>
+                alert('Password must be 8–20 characters, contain at least one number and one special character (@$!%*?&)');
+                window.history.back();
+            </script>";
+            exit;
+        }
+
+        // Hash new password using Argon2id
+        $passwordHash = password_hash($password, PASSWORD_ARGON2ID, $ARGON_OPTS);
+    }
+
+
     $oriImgPath = mysqli_fetch_assoc(mysqli_query($conn, "SELECT admin_image FROM admins WHERE id = $id;"));
-    $query = "UPDATE admins SET admin_name='$name', admin_email='$email', admin_pwd='$password' WHERE id = '$id'";
+    $query = "UPDATE admins SET admin_name='$name', admin_email='$email' WHERE id = '$id'";
+
+    // Only update password if user actually typed one
+    if (!empty($password)) {
+        mysqli_query($conn, "UPDATE admins SET admin_pwd='$passwordHash' WHERE id='$id'");
+    }
 
     if (mysqli_query($conn, $query)) {
         if (!empty($img["name"])) {
