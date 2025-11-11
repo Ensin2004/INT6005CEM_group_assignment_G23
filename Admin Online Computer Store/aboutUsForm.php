@@ -37,19 +37,15 @@ require_once "includes/security.php";
                     <button class="submitButton" type="submit" name="submit">Confirm </button>
 
                 </form>
-
             </div>
-
-
         </div>
-
-
-
     </main>
 
     <?php
     include 'footer.php';
     ?>
+
+    <script src="js/sessionTimeout.js"></script>
 </body>
 
 </html>

@@ -46,5 +46,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'super_admin') {
     </main>
 
     <?php include 'footer.php'; ?>
+
+    <script src="js/sessionTimeout.js"></script>
 </body>
 </html>
