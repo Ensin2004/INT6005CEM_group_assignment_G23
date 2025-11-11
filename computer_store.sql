@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 10, 2025 at 02:47 PM
+-- Generation Time: Nov 10, 2025 at 05:16 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -34,16 +34,18 @@ CREATE TABLE `admins` (
   `admin_pwd` varchar(30) NOT NULL,
   `admin_image` varchar(255) DEFAULT 'no_profile_pic.png',
   `role` enum('super_admin','manager') NOT NULL DEFAULT 'manager',
-  `account_status` enum('active','banned') NOT NULL DEFAULT 'active'
+  `account_status` enum('active','banned') NOT NULL DEFAULT 'active',
+  `wrong_pwd_count` int(11) DEFAULT 0,
+  `lock_until` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `admins`
 --
 
-INSERT INTO `admins` (`id`, `admin_name`, `admin_email`, `admin_pwd`, `admin_image`, `role`, `account_status`) VALUES
-(1, 'admin', 'admin@gmail.com', 'admin12345', 'no_profile_pic.png', 'super_admin', 'active'),
-(2, 'admin2', 'admin2@gmail.com', 'admin12345', 'no_profile_pic.png', 'manager', 'active');
+INSERT INTO `admins` (`id`, `admin_name`, `admin_email`, `admin_pwd`, `admin_image`, `role`, `account_status`, `wrong_pwd_count`, `lock_until`) VALUES
+(1, 'admin', 'admin@gmail.com', 'admin12345', 'no_profile_pic.png', 'super_admin', 'active', 0, NULL),
+(2, 'manager', 'manager@gmail.com', 'manager12345', 'no_profile_pic.png', 'manager', 'active', 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -278,18 +280,20 @@ CREATE TABLE `users` (
   `phone` varchar(15) NOT NULL,
   `user_address` varchar(255) NOT NULL,
   `pwd` varchar(20) NOT NULL,
-  `user_image` varchar(255) DEFAULT 'no_profile_pic.png'
+  `user_image` varchar(255) DEFAULT 'no_profile_pic.png',
+  `wrong_pwd_count` int(11) DEFAULT 0,
+  `lock_until` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `user_name`, `email`, `secondary_email`, `phone`, `user_address`, `pwd`, `user_image`) VALUES
-(1, 'First', 'aimarief0919@gmail.com', NULL, '0123456789', 'Taman Seri Sari ', 'arief12345@', 'no_profile_pic.png'),
-(4, 'Cojean', 'P22014471@student.newinti.edu.my', NULL, '017-5807201', 'PISA Home Centre, Level 1, Car Park Complex PISA, Pulau Pinang', 'Cojean123@', 'no_profile_pic.png'),
-(5, 'Cincai', 'hzhsia603@gmail.com', NULL, '012-8888888', 'A123, Regency Height, Sungai Ara, Penang', 'Cincai123@', 'no_profile_pic.png'),
-(19, 'arief', 'qiqihutao919@gmail.com', '', '0123456789', '12345aaa', 'arief12345@', 'no_profile_pic.png');
+INSERT INTO `users` (`id`, `user_name`, `email`, `secondary_email`, `phone`, `user_address`, `pwd`, `user_image`, `wrong_pwd_count`, `lock_until`) VALUES
+(1, 'First', 'aimarief0919@gmail.com', NULL, '0123456789', 'Taman Seri Sari ', 'arief12345@', 'no_profile_pic.png', 0, NULL),
+(4, 'Cojean', 'P22014471@student.newinti.edu.my', NULL, '017-5807201', 'PISA Home Centre, Level 1, Car Park Complex PISA, Pulau Pinang', 'Cojean123@', 'no_profile_pic.png', 0, NULL),
+(5, 'Cincai', 'hzhsia603@gmail.com', NULL, '012-8888888', 'A123, Regency Height, Sungai Ara, Penang', 'Cincai123@', 'no_profile_pic.png', 0, NULL),
+(19, 'arief', 'qiqihutao919@gmail.com', '', '0123456789', '12345aaa', 'arief12345@', 'no_profile_pic.png', 0, NULL);
 
 --
 -- Indexes for dumped tables

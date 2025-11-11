@@ -135,5 +135,7 @@ require_once 'includes/dbh.inc.php';
     </script>
 
     <?php include 'footer.php'; ?>
+
+    <script src="js/sessionTimeout.js"></script>
 </body>
 </html>
