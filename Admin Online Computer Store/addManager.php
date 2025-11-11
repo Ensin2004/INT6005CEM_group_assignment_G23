@@ -20,7 +20,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'super_admin') {
     <?php include 'header.php'; ?>
 
     <main>
-        <form class="item_form" action="includes/addManager.inc.php" method="POST">
+        <form class="item_form" action="includes/addManager.inc.php" method="POST" id="addManagerForm">
             <div class="item_details">
                 <div class="details">
                     <label for="admin_name">Name</label>
@@ -39,9 +39,17 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'super_admin') {
                     <p>:</p>
                     <input type="password" id="admin_pwd" name="admin_pwd" maxlength="255" required placeholder="Enter password">
                 </div>
+
+                <div class="pwd_validation_container" id="pwd_validation_container">
+                    <p>Password requirements: </p>
+                    <p class="pwd_validation" id="pwd_character">* 8-20 <b>characters</b></p>
+                    <p class="pwd_validation" id="pwd_letter">* at least one <b>letter (A-Z)</b></p>
+                    <p class="pwd_validation" id="pwd_number">* at least one <b>number (0-9)</b></p>
+                    <p class="pwd_validation" id="pwd_symbol">* at least one <b>special character (@$!%*?&)</b></p>
+                </div>
             </div>
 
-            <button class="submit_button" type="submit" name="addManager">ADD MANAGER</button>
+            <button class="submit_button" type="submit" name="addManager" id="submit_btn" disabled>ADD MANAGER</button>
         </form>
     </main>
 
