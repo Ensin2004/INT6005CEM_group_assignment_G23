@@ -1,10 +1,16 @@
 <?php
 require_once "dbh.inc.php";
 
+$ARGON_OPTS = [
+    'memory_cost' => 131072, // 128 MB
+    'time_cost'   => 3,      // 3 iterations
+    'threads'     => 1
+];
+
 if (isset($_POST['addManager'])) {
     $name = $_POST['admin_name'];
     $email = $_POST['admin_email'];
-    $password = $_POST['admin_pwd'];
+    $password = password_hash($_POST['admin_pwd'], PASSWORD_ARGON2ID, $ARGON_OPTS);
 
     // Default profile image
     $defaultImg = "no_profile_pic.png";

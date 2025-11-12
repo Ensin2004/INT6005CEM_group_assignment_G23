@@ -13,7 +13,7 @@ if (!$conn) {
     $query = mysqli_query($conn, "SELECT * FROM users WHERE email = '$firstEmail'");
     $row = mysqli_fetch_assoc($query);
 
-    if (mysqli_num_rows($query) == 0 || $row['pwd'] != $confirmPassword) {
+    if (mysqli_num_rows($query) == 0 || !password_verify($confirmPassword, $row['pwd'])) {
         echo "<script> alert('Wrong password'); window.history.go(-1); </script>";
         exit;
     }

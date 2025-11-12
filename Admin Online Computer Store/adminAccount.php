@@ -51,10 +51,6 @@ require_once "includes/security.php";
                             <label for="adminEmail">Email :</label>
                             <input required type="email" id="adminEmail" value="<?php echo $row['admin_email'] ?>" readonly>
                         </div>
-                        <div style="margin-bottom: 25px;">
-                            <label for="adminPwd">Password :</label>
-                            <input required type="password" id="adminPwd" value="<?php echo $row['admin_pwd'] ?>" readonly>
-                        </div>
                         <div class="buttons">
                             <a class="editButton" href="editAdminAccount.php">EDIT</a>
                             <a class="logOutButton" href="includes/logoutAccount.php">LOG OUT</a>

@@ -47,10 +47,10 @@ require_once "includes/security.php";
                     <input required type="email" id="adminEmail" name="newAdminEmail" value="<?php echo $row['admin_email'] ?>" readonly>
 
                     <label for="adminPassword">Password :</label>
-                    <input required type="password" id="adminPassword" name="newAdminPassword" value="<?php echo $row['admin_pwd'] ?>">
+                    <input type="password" id="adminPassword" name="newAdminPassword" placeholder="Enter new password">
 
                     <label for="confirmPassword">Confirm Password :</label>
-                    <input required type="password" id="confirmPassword" name="confirmPassword" value="<?php echo $row['admin_pwd'] ?>">
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Re-enter new password">
 
                     <button class="acc" type="submit">Update</button>
                 </div>
