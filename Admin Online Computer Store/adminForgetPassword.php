@@ -23,17 +23,19 @@
 
                 <div class="loginInfo">
                     <label for="Email">Admin Email:</label>
-                    <input required type="email" id="Email" name="AdminEmail" placeholder="Enter your email">
+                    <input required type="email" id="Email" name="AdminEmail" maxlength="100" placeholder="Enter your email">
+                    <p class="limit-warning" id="nameLimit">Character limit reached (100)</p>
 
                     <label for="newPassword">New Password:</label>
-                    <input required type="password" id="newPassword" name="newPassword" placeholder="Enter New Password">
-
+                    <input required type="password" id="newPassword" name="newPassword" maxlength="20" placeholder="Enter New Password">
+                    <p class="limit-warning" id="nameLimit">Character limit reached (20)</p>
                     <div class="pwd_validation_container" id="pwd_validation_container">
                         <p>Password requirements: </p>
                         <p class="pwd_validation" id="pwd_character">* 8-20 <b>characters</b></p>
                         <p class="pwd_validation" id="pwd_letter">* at least one <b>letter (A-Z)</b></p>
                         <p class="pwd_validation" id="pwd_number">* at least one <b>number (0-9)</b></p>
                         <p class="pwd_validation" id="pwd_symbol">* at least one <b>special character (@$!%*?&)</b></p>
+                        <p class="pwd_validation" id="pwd_space">* no <b>spaces allowed</b></p>
                     </div>
 
                     <label for="confirmPassword">Confirm Password:</label>
@@ -62,9 +64,10 @@
             var pwd_letter = document.getElementById('pwd_letter');
             var pwd_number = document.getElementById('pwd_number');
             var pwd_symbol = document.getElementById('pwd_symbol');
+            var pwd_space = document.getElementById('pwd_space');
             var submit_btn = document.getElementById('submit_btn');
 
-            const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/;
+            const passwordRegex = /^(?!.*\s)(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/;
 
             if (!passwordRegex.test(password) || confirmPassword !== password) {
                 submit_btn.disabled = true;
@@ -77,6 +80,10 @@
                     pwd_letter.style.display = /[a-zA-Z]/.test(password) ? "none" : "block";
                     pwd_number.style.display = /\d/.test(password) ? "none" : "block";
                     pwd_symbol.style.display = /[@$!%*?&]/.test(password) ? "none" : "block";
+
+                    const hasSpace = /\s/.test(password);
+                    pwd_space.style.display = "block";
+                    pwd_space.style.color = hasSpace ? "red" : "inherit";
                 } else {
                     pwd_validation_container.style.display = "none";
                     pwd_confirmation.style.display = "block";

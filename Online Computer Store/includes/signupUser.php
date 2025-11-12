@@ -10,24 +10,18 @@ $ARGON_OPTS = [
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Collect form data
-    //Original
-    // $name = htmlspecialchars($_POST["newUsername"]);
-    // $email = htmlspecialchars($_POST["newEmail"]);
-    // $phone = htmlspecialchars($_POST["newPhone"]);
-    // $address = htmlspecialchars($_POST["newAddress"]);
-
-    $name = trim($_POST["newUsername"]);
-    $email = trim($_POST["newEmail"]);
-    $phone = trim($_POST["newPhone"]);
-    $address = trim($_POST["newAddress"]);
+    $name = htmlspecialchars(trim($_POST["newUsername"]));
+    $email = htmlspecialchars(trim($_POST["newEmail"]));
+    $phone = htmlspecialchars(trim($_POST["newPhone"]));
+    $address = htmlspecialchars(trim($_POST["newAddress"]));
     $password = password_hash($_POST["newPassword"], PASSWORD_ARGON2ID, $ARGON_OPTS);
-    $confirmPassword = htmlspecialchars($_POST["confirmPassword"]);
-    $otp =  htmlspecialchars($_POST["otp"]);
-    $otpVerify =  htmlspecialchars($_POST["otp_inp"]);
+    $confirmPassword = $_POST["confirmPassword"];
+    $otp =  htmlspecialchars(trim($_POST["otp"]));
+    $otpVerify =  htmlspecialchars(trim($_POST["otp_inp"]));
     $expiresAt  = (int)($_POST['otp_expires_at']);
 
     if (!$expiresAt || time() > $expiresAt) {
-        echo "<script>alert('OTP expired (5 minutes). Please resend a new OTP.'); window.history.back();</script>";
+        echo "<script>alert('OTP expired (1 minutes). Please resend a new OTP.'); window.history.back();</script>";
         exit;
     }
     if ($otpVerify != $otp) {
