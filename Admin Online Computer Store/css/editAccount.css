@@ -39,13 +39,19 @@
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  height: 540px;
+  height: auto;
+  min-height: 540px;
   width: 700px;
   margin: 100px 0px;
   border-radius: 5px;
   background-color: rgba(255, 255, 255);
   box-shadow: 0px 3px 6px -1px rgba(0, 0, 0, 0.5);
   z-index: 1;
+}
+
+.signUpLogo,
+.accInfo {
+  height: auto;       
 }
 
 /* .signUpLogo p {
@@ -208,4 +214,33 @@
 .profile {
   font-size: 2rem;
   text-align: center;
+}
+
+/* ------ field counter ----- */
+.limit-warning {
+  display: none;
+  color: rgb(255, 52, 52);
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-top: -8px;
+  margin-bottom: 10px;
+}
+
+/* ------ pwd validation / confirmation ----- */
+
+.pwd_validation_container,
+.pwd_confirmation {
+  display: none;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: rgb(255, 52, 52);
+  margin-bottom: 15px;
+}
+
+.pwd_validation_container b {
+  font-weight: bold;
+}
+
+.pwd_validation {
+  display: none;
 }

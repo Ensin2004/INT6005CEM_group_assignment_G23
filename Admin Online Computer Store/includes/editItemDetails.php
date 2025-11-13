@@ -8,11 +8,11 @@ if (!$conn) {
     if (isset($_POST["submit"])) {
         //Collect form data
         $itemID = htmlspecialchars($_POST["itemID"]);
-        $category = htmlspecialchars($_POST["category"]);
-        $name = htmlspecialchars($_POST["name"]);
-        $price = htmlspecialchars($_POST["price"]);
-        $stock = htmlspecialchars($_POST["stock"]);
-        $description = htmlspecialchars($_POST["description"]);
+        $category = htmlspecialchars(trim($_POST["category"]));
+        $name = htmlspecialchars(trim($_POST["name"]));
+        $price = htmlspecialchars(trim($_POST["price"]));
+        $stock = htmlspecialchars(trim($_POST["stock"]));
+        $description = htmlspecialchars(trim($_POST["description"]));
         $img1 = $_FILES["image1"];
         $img2 = $_FILES["image2"];
         $img3 = $_FILES["image3"];

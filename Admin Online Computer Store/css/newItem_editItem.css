@@ -184,3 +184,32 @@ input[type="number"]::-webkit-inner-spin-button {
 .submit_button:hover {
   background-color: #0066cc;
 }
+
+/* ------ field counter ----- */
+/* .details p.limit-warning {
+  display: none;
+  color: rgb(255, 52, 52);
+  font-size: 1.2rem;
+  font-weight: 500;
+} */
+
+.input_wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.input_wrapper input,
+.input_wrapper textarea {
+  width: 100%;
+}
+
+.input_wrapper .limit-warning {
+  display: none;
+  color: rgb(255, 52, 52);
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-top: 3px;
+  white-space: nowrap;   /* prevent text wrapping */
+}

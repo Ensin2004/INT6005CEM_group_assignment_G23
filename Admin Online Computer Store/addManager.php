@@ -25,27 +25,36 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'super_admin') {
                 <div class="details">
                     <label for="admin_name">Name</label>
                     <p>:</p>
-                    <input type="text" id="admin_name" name="admin_name" maxlength="255" required placeholder="Manager Username">
+                    <div class="input_wrapper">
+                        <input type="text" id="admin_name" name="admin_name" maxlength="50" required placeholder="Manager Username">
+                        <p class="limit-warning" id="nameLimit">Character limit reached (50)</p>
+                    </div>
                 </div>
-
+            
                 <div class="details">
                     <label for="admin_email">Email</label>
                     <p>:</p>
-                    <input type="email" id="admin_email" name="admin_email" maxlength="255" required placeholder="Manager Email">
+                    <div class="input_wrapper">
+                        <input type="email" id="admin_email" name="admin_email" maxlength="100" required placeholder="Manager Email">
+                        <p class="limit-warning" id="emailLimit">Character limit reached (100)</p>
+                    </div>
                 </div>
 
                 <div class="details">
                     <label for="admin_pwd">Password</label>
                     <p>:</p>
-                    <input type="password" id="admin_pwd" name="admin_pwd" maxlength="255" required placeholder="Enter password">
+                    <div class="input_wrapper">
+                        <input type="password" id="admin_pwd" name="admin_pwd" maxlength="20" required placeholder="Enter password">
+                        <p class="limit-warning" id="newPwdLimit">Character limit reached (20)</p>
+                    </div>
                 </div>
-
                 <div class="pwd_validation_container" id="pwd_validation_container">
                     <p>Password requirements: </p>
                     <p class="pwd_validation" id="pwd_character">* 8-20 <b>characters</b></p>
                     <p class="pwd_validation" id="pwd_letter">* at least one <b>letter (A-Z)</b></p>
                     <p class="pwd_validation" id="pwd_number">* at least one <b>number (0-9)</b></p>
                     <p class="pwd_validation" id="pwd_symbol">* at least one <b>special character (@$!%*?&)</b></p>
+                    <p class="pwd_validation" id="pwd_space">* no <b>spaces allowed</b></p>
                 </div>
             </div>
 
@@ -62,15 +71,15 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'super_admin') {
 
         function validatePassword() {
             var password = document.getElementById('admin_pwd').value;
-            var submit_btn = document.getElementById('submit_btn');
-
             var pwd_validation_container = document.getElementById('pwd_validation_container');
             var pwd_character = document.getElementById('pwd_character');
             var pwd_letter = document.getElementById('pwd_letter');
             var pwd_number = document.getElementById('pwd_number');
             var pwd_symbol = document.getElementById('pwd_symbol');
+            var pwd_space = document.getElementById('pwd_space');
+            var submit_btn = document.getElementById('submit_btn');
 
-            const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/;
+            const passwordRegex = /^(?!.*\s)(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/;
 
             // Disable submit if don't match
             if (!passwordRegex.test(password)) {
@@ -100,11 +109,34 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'super_admin') {
                 } else {
                     pwd_symbol.style.display = "none";
                 }
+
+                const hasSpace = /\s/.test(password);
+                    pwd_space.style.display = "block";
+                    pwd_space.style.color = hasSpace ? "red" : "inherit";
             } else {
                 pwd_validation_container.style.display = "none";
                 submit_btn.disabled = false;
             }
         }
+
+        // Field Limit Warning
+        function setupLimitWarning(inputId, warningId, max) {
+            const input = document.getElementById(inputId);
+            const warning = document.getElementById(warningId);
+
+            input.addEventListener('input', () => {
+            if (input.value.length === max) {
+                warning.style.display = "block";
+            } else {
+                warning.style.display = "none";
+            }
+            });
+        }
+
+        // Initialize limit warnings for all fields
+        setupLimitWarning('admin_name', 'nameLimit', 50);
+        setupLimitWarning('admin_email', 'emailLimit', 100);
+        setupLimitWarning('admin_pwd', 'newPwdLimit', 20);
     </script>
 </body>
 </html>

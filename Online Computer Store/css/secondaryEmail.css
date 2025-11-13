@@ -248,3 +248,13 @@
   color: #0056b3; 
  
 }
+
+/* ------ field counter ----- */
+.limit-warning {
+  display: none;
+  color: rgb(255, 52, 52);
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-top: -8px;
+  margin-bottom: 10px;
+}

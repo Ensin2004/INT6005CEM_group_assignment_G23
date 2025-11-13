@@ -79,6 +79,53 @@
   transform: scale(1.05);
 }
 
+/* ------ field counter ----- */
+/* .details p.limit-warning {
+  display: none;
+  color: rgb(255, 52, 52);
+  font-size: 1.2rem;
+  font-weight: 500;
+} */
+
+.input_wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.input_wrapper input {
+  width: 100%;
+}
+
+.input_wrapper .limit-warning {
+  display: none;
+  color: rgb(255, 52, 52);
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-top: 3px;
+  white-space: nowrap;   /* prevent text wrapping */
+}
+
+/* ------ pwd validation / confirmation ----- */
+
+.pwd_validation_container,
+.pwd_confirmation {
+  display: none;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: rgb(255, 52, 52);
+  margin-bottom: 15px;
+}
+
+.pwd_validation_container b {
+  font-weight: bold;
+}
+
+.pwd_validation {
+  display: none;
+}
+
 /* -------- Responsive -------- */
 
 @media (max-width: 768px) {
