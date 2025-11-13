@@ -9,9 +9,16 @@ session_set_cookie_params([
 
 session_start();
 require_once "dbh.inc.php";
+require_once "csrf.php";
 
 // Check if the request method is POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    // Check CSRF token
+    if (!isset($_POST['csrfToken']) || !checkCSRFToken($_POST['csrfToken'])) {
+        die("<script> alert('Invalid or expired CSRF token. Please refresh the page and try again.'); window.history.go(-1); </script>");
+    }
+  
     if (!$conn) {
         die("Database connection failed");
     } else {
@@ -26,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Check whether user exists or not
             if (mysqli_num_rows($query) == 0) {
-                echo "<script> alert('Incorrect name or email.'); window.history.go(-1); </script>";
+                echo "<script> alert('Incorrect name or email.'); window.location.href='../login.php'; </script>";
                 exit;
             }
 
@@ -35,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Check whether account is locked or not
             if (!is_null($row['lock_until']) && $row['lock_until'] > $current_time) {
                 $remaining = strtotime($row['lock_until']) - time();
-                echo "<script> alert('Account is locked. Please try again after {$remaining} seconds.'); window.history.go(-1); </script>";
+                echo "<script> alert('Account is locked. Please try again after {$remaining} seconds.'); window.location.href='../login.php'; </script>";
                 exit;
             }
 
@@ -73,7 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 );
 
                 // Display messages
-                echo "<script> alert('$lock_message'); window.history.go(-1); </script>";
+                echo "<script> alert('$lock_message'); window.location.href='../login.php'; </script>";
 
             } else {
 
@@ -82,6 +89,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $conn, 
                     "UPDATE users SET wrong_pwd_count = 0, lock_until = NULL WHERE id = '{$row['id']}'"
                 );
+
+                // Regenerate session ID (prevent session fixation)
+                session_regenerate_id(true);
                 
                 // Update session
                 $_SESSION['ID'] = $row['id'];

@@ -8,6 +8,7 @@ session_set_cookie_params([
 ]);
 
 session_start(); 
+require_once "includes/csrf.php";
 ?>
 
 <!DOCTYPE html>
@@ -37,6 +38,7 @@ session_start();
 
         <div class="wholeFormContainer">
             <form action="includes/editHomePage.php" method="post" enctype="multipart/form-data">
+                <?php createCSRFInput(); ?>
                 <div class="imageCardContainer">
                     <div>
                         <p class="welcomeHome">Home Motto</p>

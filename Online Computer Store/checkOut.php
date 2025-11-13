@@ -8,6 +8,7 @@ session_set_cookie_params([
 ]);
 
 session_start();
+require_once "includes/csrf.php";
 ?>
 
 <!DOCTYPE html>
@@ -38,6 +39,7 @@ session_start();
             ?>
             <div class="wholeContainer">
                 <form id="checkoutForm" action="payment.php" method="POST">
+                    <?php createCSRFInput(); ?>
                     <div class="addOrder">
                         <?php
                         $id = $_SESSION['ID'];

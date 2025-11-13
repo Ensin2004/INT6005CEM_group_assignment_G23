@@ -9,6 +9,7 @@ session_set_cookie_params([
 
 session_start();
 include "includes/dbh.inc.php";
+require_once "includes/csrf.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -96,6 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <p class="uploadText">Please upload your payment Screenshot here:</p>
                     </div>
                     <form id="orderForm" action="includes/placeOrder.php" method="post" enctype="multipart/form-data">
+                        <?php createCSRFInput(); ?>
                         <div class="inputButton">
                             <?php foreach ($selected_items as $item) { ?>
                                 <input type="hidden" name="item_id[]" value="<?php echo $item; ?>">

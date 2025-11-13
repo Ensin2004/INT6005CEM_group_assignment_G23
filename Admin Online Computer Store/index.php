@@ -8,6 +8,7 @@ session_set_cookie_params([
 ]);
 
 session_start();
+require_once "includes/csrf.php";
 ?>
 
 <!DOCTYPE html>
@@ -29,6 +30,7 @@ session_start();
     <main>
         <div class="loginDisplay">
             <form class="loginBox" action="includes/loginuser.php" method="post">
+                <?php createCSRFInput(); ?>
                 <div class="loginLogo">
                     <p>Welcome to</p>
                     <img src="../Image/logo.png" alt="KAH TECH Logo">

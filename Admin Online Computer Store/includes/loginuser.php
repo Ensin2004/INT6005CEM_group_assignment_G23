@@ -9,8 +9,15 @@ session_set_cookie_params([
 
 session_start();
 require_once "dbh.inc.php"; 
+require_once "csrf.php";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+    // Check CSRF token
+    if (!isset($_POST['csrfToken']) || !checkCSRFToken($_POST['csrfToken'])) {
+        die("<script> alert('Invalid or expired CSRF token. Please refresh the page and try again.'); window.history.go(-1); </script>");
+    }
+
     if (!$conn) {
         die("Database connection failed");
     }
@@ -29,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         // Check if admin exists
         if ($result->num_rows === 0) {
-            echo "<script>alert('No admin found with that name or email'); window.history.go(-1);</script>";
+            echo "<script>alert('No admin found with that name or email'); window.location.href='../index.php';</script>";
             exit();
         }
 
@@ -37,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         // Check if account is banned
         if (isset($row['account_status']) && strtolower($row['account_status']) === 'banned') {
-            echo "<script>alert('Your account has been banned. Please contact the system administrator.'); window.history.go(-1);</script>";
+            echo "<script>alert('Your account has been banned. Please contact the system administrator.'); window.location.href='../index.php';</script>";
             exit();
         }
 
@@ -46,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         // Check whether account is locked or not
         if (!is_null($row['lock_until']) && $row['lock_until'] > $current_time) {
             $remaining = strtotime($row['lock_until']) - time();
-            echo "<script> alert('Account is locked. Please try again after {$remaining} seconds.'); window.history.go(-1); </script>";
+            echo "<script> alert('Account is locked. Please try again after {$remaining} seconds.'); window.location.href='../index.php'; </script>";
             exit;
         }
 
@@ -84,7 +91,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             );
 
             // Display messages
-            echo "<script> alert('$lock_message'); window.history.go(-1); </script>";
+            echo "<script> alert('$lock_message'); window.location.href='../index.php'; </script>";
 
         } else {
 
@@ -93,6 +100,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $conn, 
                 "UPDATE admins SET wrong_pwd_count = 0, lock_until = NULL WHERE id = '{$row['id']}'"
             );
+
+            // Regenerate session ID (prevent session fixation)
+            session_regenerate_id(true);
             
             // Update session
             $_SESSION['ID'] = $row['id'];

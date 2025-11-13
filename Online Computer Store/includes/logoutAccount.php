@@ -27,9 +27,14 @@ if (ini_get("session.use_cookies")) {
 }
 
 // 3. Destroy the session on the server
+session_unset();
 session_destroy();
 
-// 4. Redirect with alert
+// 4. Start new empty session with new session id
+session_start();
+session_regenerate_id(true);
+
+// 5. Redirect with alert
 echo "<script>alert('Log out successfully'); window.location.href='../index.php';</script>";
 exit;
 ?>
