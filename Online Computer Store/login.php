@@ -1,3 +1,7 @@
+<?php
+require_once "includes/csrf.php";
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -21,6 +25,7 @@
         <div class="loginDisplay">
             <!-- Set up login content -->
             <form class="loginBox" action="includes/loginuser.php" method="post">
+                <?php createCSRFInput(); ?>
                 <div class="loginLogo">
                     <p>Welcome to</p>
                     <img src="../Image/logo.png" alt="KAH TECH Logo">

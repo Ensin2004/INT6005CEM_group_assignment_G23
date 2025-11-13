@@ -1,11 +1,17 @@
 <?php
 require_once "dbh.inc.php";
+require_once "csrf.php";
 
 $ARGON_OPTS = [
     'memory_cost' => 131072, // 128 MB
     'time_cost'   => 3,      // 3 iterations
     'threads'     => 1
 ];
+
+// Check CSRF token
+if (!isset($_POST['csrfToken']) || !checkCSRFToken($_POST['csrfToken'])) {
+    die("<script> alert('Invalid or expired CSRF token. Please refresh the page and try again.'); window.history.go(-1); </script>");
+}
 
 if (isset($_POST['addManager'])) {
     $name = $_POST['admin_name'];

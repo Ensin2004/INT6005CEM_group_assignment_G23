@@ -1,5 +1,6 @@
 <?php
 require_once "includes/security.php";
+require_once "includes/csrf.php";
 ?>
 
 <!DOCTYPE html>
@@ -30,6 +31,7 @@ require_once "includes/security.php";
 
     <main>
         <form class="item_form" action="includes/editItemDetails.php" method="POST" enctype="multipart/form-data" onsubmit="return validateForm();">
+            <?php createCSRFInput(); ?>
             <input type="hidden" name="itemID" value="<?php echo $itemEditing['id']; ?>">
             <div class="item_image">
                 <div class="first_image">

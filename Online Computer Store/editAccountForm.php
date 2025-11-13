@@ -1,5 +1,6 @@
 <?php
 require_once "includes/security.php";
+require_once "includes/csrf.php";
 ?>
 
 <!DOCTYPE html>
@@ -36,6 +37,7 @@ require_once "includes/security.php";
         <div class="accDisplay">
             <!-- Set up sign up content -->
             <form class="accBox" action="includes/updateUserAccount.php" method="post" enctype="multipart/form-data">
+                <?php createCSRFInput(); ?>
                 <div class="signUpLogo">
                     
                     <div class="img_container">

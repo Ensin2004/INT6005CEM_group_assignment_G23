@@ -1,3 +1,8 @@
+<?php
+session_start();
+require_once "includes/csrf.php";
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,7 +17,6 @@
 
 <body>
     <?php
-    session_start();
     require_once "includes/dbh.inc.php";
 
     // Collect form data
@@ -39,6 +43,7 @@
     <main>
         <div class="loginDisplay">
             <form class="changePasswordBox" action="includes/adminForgetPasswordOtpCheck.php" method="post">
+                <?php createCSRFInput(); ?>
                 <div class="loginLogo">
                     <p>Admin Password Reset</p>
                     <img src="../Image/logo.png" alt="KAH TECH Logo">

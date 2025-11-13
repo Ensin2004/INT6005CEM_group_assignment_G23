@@ -1,8 +1,14 @@
 <?php
 session_start();
 require_once "dbh.inc.php";
+require_once "csrf.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    // Check CSRF token
+    if (!isset($_POST['csrfToken']) || !checkCSRFToken($_POST['csrfToken'])) {
+        die("<script> alert('Invalid or expired CSRF token. Please refresh the page and try again.'); window.history.go(-1); </script>");
+    }
 
     // Collect form data
     $ListName = htmlspecialchars($_POST["myListName"]);
