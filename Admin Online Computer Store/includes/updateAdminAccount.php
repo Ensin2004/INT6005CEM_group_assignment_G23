@@ -16,16 +16,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("<script> alert('Invalid or expired CSRF token. Please refresh the page and try again.'); window.history.go(-1); </script>");
     }
 
-    $name = htmlspecialchars($_POST["newAdminName"]);
-    $email = htmlspecialchars($_POST["newAdminEmail"]);
-    $password = htmlspecialchars($_POST["newAdminPassword"]);
-    $confirmPassword = htmlspecialchars($_POST["confirmPassword"]);
+    $name = htmlspecialchars(trim($_POST["newAdminName"]));
+    $email = htmlspecialchars(trim($_POST["newAdminEmail"]));
+    $password = $_POST["newAdminPassword"];
+    $confirmPassword = $_POST["confirmPassword"];
     $img = $_FILES["adminimg"];
-
-    if ($confirmPassword != $password) {
-        echo "<script>alert('Confirm password does not match'); window.history.back();</script>";
-        exit();
-    }
 
     $id = $_SESSION['ID'];
 
@@ -34,18 +29,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($password !== $confirmPassword) {
             echo "<script>alert('Confirm password does not match'); window.history.back();</script>";
-            exit;
-        }
-
-        // Password Requirements:
-        // 8–20 chars, at least one digit, at least one special char (@$!%*?&)
-        $pattern = "/^(?=.*[0-9])(?=.*[@$!%*?&])[A-Za-z0-9@$!%*?&]{8,20}$/";
-
-        if (!preg_match($pattern, $password)) {
-            echo "<script>
-                alert('Password must be 8–20 characters, contain at least one number and one special character (@$!%*?&)');
-                window.history.back();
-            </script>";
             exit;
         }
 

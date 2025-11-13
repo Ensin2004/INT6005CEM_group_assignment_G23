@@ -17,10 +17,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Collect form data
-    $name = htmlspecialchars($_POST["newUsername"]);
-    $email = htmlspecialchars($_POST["newEmail"]);
-    $phone = htmlspecialchars($_POST["newPhone"]);
-    $address = htmlspecialchars($_POST["newAddress"]);
+    $name = htmlspecialchars(trim($_POST["newUsername"]));
+    $email = htmlspecialchars(trim($_POST["newEmail"]));
+    $phone = htmlspecialchars(trim($_POST["newPhone"]));
+    $address = htmlspecialchars(trim($_POST["newAddress"]));
     $password = $_POST["newPassword"] ?? '';
     $confirmPassword = $_POST["confirmPassword"] ?? '';
     $img1 = $_FILES["accountimg"];
@@ -30,10 +30,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("Database connection failed");
     }
 
-    if ($confirmPassword != $password) {
-        echo "<script>alert('Confirm password error'); window.history.back();</script>";
-    }
-    
     else{
 
     // Prepare SQL statement to prevent SQL injection
@@ -44,18 +40,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($password !== $confirmPassword) {
             echo "<script>alert('Confirm password does not match'); window.history.back();</script>";
-            exit;
-        }
-
-        // Password Requirements:
-        // 8–20 chars, at least one digit, at least one special char (@$!%*?&)
-        $pattern = "/^(?=.*[0-9])(?=.*[@$!%*?&])[A-Za-z0-9@$!%*?&]{8,20}$/";
-
-        if (!preg_match($pattern, $password)) {
-            echo "<script>
-                alert('Password must be 8–20 characters, contain at least one number and one special character (@$!%*?&)');
-                window.history.back();
-            </script>";
             exit;
         }
 

@@ -48,22 +48,38 @@ require_once "includes/security.php";
 
                     <label for="SecondaryEmail">Secondary Email (Optional) :</label>
                     <div class="secondaryEmail">
-                        <input required type="email" id="SecondaryEmail" name="secondaryEmail" value="<?php echo $row['secondary_email'] ?>">
-
+                        <input required type="email" id="SecondaryEmail" name="secondaryEmail" maxlength="100" value="<?php echo $row['secondary_email'] ?>">
                     </div>
+                    <p class="limit-warning" id="emailLimit">Character limit reached (100)</p>
+                    
                     <label for="confirmPassword"> Confirm Password</label>
                     <input required type="password" id="confirmPassword" name="confirmPassword" placeholder="enter your password">
                     <button class="acc" type="submit">Update</button>
-
-
                 </div>
             </form>
         </div>
     </main>
 
-    <?php
-    include 'footer.php';
-    ?>
+    <?php include 'footer.php';?>
+
+    <script>
+        // Field Limit Warning
+        function setupLimitWarning(inputId, warningId, max) {
+            const input = document.getElementById(inputId);
+            const warning = document.getElementById(warningId);
+
+            input.addEventListener('input', () => {
+            if (input.value.length === max) {
+                warning.style.display = "block";
+            } else {
+                warning.style.display = "none";
+            }
+            });
+        }
+
+        // Initialize limit warnings for all fields
+        setupLimitWarning('SecondaryEmail', 'emailLimit', 100);
+    </script>
 
 
 </body>

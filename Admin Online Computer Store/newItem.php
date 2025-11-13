@@ -68,13 +68,21 @@ require_once "includes/csrf.php";
                 <div class="details">
                     <label for="name">Item Name</label>
                     <p>:</p>
-                    <input required type="text" id="name" name="name" maxlength="255" placeholder="e.g. Logitech Mouse...">
+                    <div class="input_wrapper">
+                        <input required type="text" id="name" name="name" maxlength="255" placeholder="e.g. Logitech Mouse...">
+                        <p class="limit-warning" id="nameLimit">Character limit reached (255)</p>
+                    </div>
                 </div>
+
                 <div class="details">
                     <label for="description">Description</label>
                     <p>:</p>
-                    <textarea required id="description" name="description" placeholder="e.g. Logitech Mouse is a mouse..."></textarea>
+                    <div class="input_wrapper">
+                        <textarea required id="description" name="description" maxlength="999" placeholder="e.g. Logitech Mouse is a mouse..."></textarea>
+                        <p class="limit-warning" id="descriptionLimit">Character limit reached (999)</p>
+                    </div>
                 </div>
+
                 <div class="details">
                     <label for="category">Category</label>
                     <p>:</p>
@@ -90,12 +98,21 @@ require_once "includes/csrf.php";
                 <div class="details">
                     <label for="price">Price (RM)</label>
                     <p>:</p>
-                    <input required type="number" id="price" name="price" step="0.01" min="0" placeholder="e.g. 99.90">
+                    <div class="input_wrapper">
+                        <input required type="number" id="price" name="price" step="0.01" min="0" max="999999999"
+                            placeholder="e.g. 99.90" oninput="validatePrice(this)">
+                        <p class="limit-warning" id="priceWarning">Maximum value is 999999999</p>
+                    </div>
                 </div>
+
                 <div class="details">
                     <label for="stock">Stock</label>
                     <p>:</p>
-                    <input required type="number" id="stock" name="stock" step="1" min="0" placeholder="e.g. 99">
+                    <div class="input_wrapper">
+                        <input required type="number" id="stock" name="stock" step="1" min="0" max="9999"
+                            placeholder="e.g. 99" oninput="validateStock(this)">
+                        <p class="limit-warning" id="stockWarning">Maximum value is 9999</p>
+                    </div>
                 </div>
             </div>
             <button class="submit_button" type="submit" name="submit">ADD ITEM</button>
@@ -173,6 +190,44 @@ require_once "includes/csrf.php";
                 return true;
             }
         }
+
+        function validatePrice(input) {
+            const warning = document.getElementById("priceWarning");
+            if (parseFloat(input.value) > parseFloat(input.max)) {
+                input.value = input.max;
+                warning.style.display = "block";
+            } else {
+                warning.style.display = "none";
+            }
+        }
+
+        function validateStock(input) {
+            const warning = document.getElementById("stockWarning");
+            if (parseInt(input.value) > parseInt(input.max)) {
+                input.value = input.max;
+                warning.style.display = "block";
+            } else {
+                warning.style.display = "none";
+            }
+        }
+
+        // Field Limit Warning
+        function setupLimitWarning(inputId, warningId, max) {
+            const input = document.getElementById(inputId);
+            const warning = document.getElementById(warningId);
+
+            input.addEventListener('input', () => {
+            if (input.value.length === max) {
+                warning.style.display = "block";
+            } else {
+                warning.style.display = "none";
+            }
+            });
+        }
+
+        // Initialize limit warnings for all fields
+        setupLimitWarning('name', 'nameLimit', 255);
+        setupLimitWarning('description', 'descriptionLimit', 999);
     </script>
 
     <script src="js/sessionTimeout.js"></script>

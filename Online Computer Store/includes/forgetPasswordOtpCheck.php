@@ -16,14 +16,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Collect form data
-    $email = htmlspecialchars($_POST["UserEmail"]);
+    $email = htmlspecialchars(trim($_POST["UserEmail"]));
     $password = password_hash($_POST["newPassword"], PASSWORD_ARGON2ID, $ARGON_OPTS);
-    $otp =  htmlspecialchars($_POST["otp"]);
-    $otpVerify =  htmlspecialchars($_POST["otp_inp"]);
+    $otp =  htmlspecialchars(trim($_POST["otp"]));
+    $otpVerify =  htmlspecialchars(trim($_POST["otp_inp"]));
     $expiresAt  = (int)($_POST['otp_expires_at']);
 
     if (!$expiresAt || time() > $expiresAt) {
-        echo "<script>alert('OTP expired (5 minutes). Please resend a new OTP.'); window.history.back();</script>";
+        echo "<script>alert('OTP expired (1 minutes). Please resend a new OTP.'); window.history.back();</script>";
         exit;
     }
 

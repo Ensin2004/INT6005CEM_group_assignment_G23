@@ -14,8 +14,8 @@ if (!isset($_POST['csrfToken']) || !checkCSRFToken($_POST['csrfToken'])) {
 }
 
 if (isset($_POST['addManager'])) {
-    $name = $_POST['admin_name'];
-    $email = $_POST['admin_email'];
+    $name = htmlspecialchars(trim($_POST['admin_name']));
+    $email = htmlspecialchars(trim($_POST['admin_email']));
     $password = password_hash($_POST['admin_pwd'], PASSWORD_ARGON2ID, $ARGON_OPTS);
 
     // Default profile image

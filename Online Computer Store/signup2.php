@@ -58,10 +58,7 @@
                     <input type="hidden" id="otp" name="otp" value="<?php echo $otp; ?>">
                     
                     <input type="hidden" name="otp_expires_at" value="<?php echo $otpExpiresAt; ?>">
-
-                      <a id="resendBtn" class="sendAgain" href="#">
-  Send OTP Again <span id="resendCountdown" style="margin-left:8px;"></span>
-</a>
+                      <a id="resendBtn" class="sendAgain" href="#"> Send OTP Again <span id="resendCountdown" style="margin-left:8px;"></span></a>
                     <button class="otpverifyButton" type="submit">Verify OTP</button>
 
                     <p class="haveAcc">Already have an account? <a class="logIn" href="login.php">Log In</a>.</p>

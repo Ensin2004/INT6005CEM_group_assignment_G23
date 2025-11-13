@@ -16,10 +16,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Collect form data
-    $email = htmlspecialchars($_POST["AdminEmail"]);
+    $email = htmlspecialchars(trim($_POST["AdminEmail"]));
     $password = password_hash($_POST["newPassword"], PASSWORD_ARGON2ID, $ARGON_OPTS);
-    $otp = htmlspecialchars($_POST["otp"]);
-    $otpVerify = htmlspecialchars($_POST["otp_inp"]);
+    $otp = htmlspecialchars(trim($_POST["otp"]));
+    $otpVerify = htmlspecialchars(trim($_POST["otp_inp"]));
 
     // Compare OTP
     if ($otpVerify != $otp) {
