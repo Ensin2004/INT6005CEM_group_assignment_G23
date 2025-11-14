@@ -1,6 +1,7 @@
 <?php
 require_once "dbh.inc.php";
 require_once "csrf.php";
+require_once "audit.php";
 
 // Debugging: Check if the database connection is successful
 if (!$conn) {
@@ -52,6 +53,17 @@ if (!$conn) {
             move_uploaded_file($img3["tmp_name"], "../../Image/" . $img3_file_name);
             move_uploaded_file($img4["tmp_name"], "../../Image/" . $img4_file_name);
             move_uploaded_file($img5["tmp_name"], "../../Image/" . $img5_file_name);
+
+            $after = [
+            'category_id'=>$category,'item_name'=>$name,'price'=>$price,'stock_qty'=>$stock,
+            'description'=>$description,
+            'images'=>[$img1_file_name ?? null,$img2_file_name ?? null,$img3_file_name ?? null,$img4_file_name ?? null,$img5_file_name ?? null]
+            ];
+
+            audit_log($conn, $_SESSION['ID'] ?? null, $_SESSION['role'] ?? null,
+              'item_create','items',$conn->insert_id,
+              "Created item '{$name}'", null, $after);
+
             echo "<script>alert('Item added successfully'); window.location.href='../store.php';</script>";
         } else {
             echo "<script>alert('Item added unsuccessful'); window.location.href='../newItem.php';</script>";
