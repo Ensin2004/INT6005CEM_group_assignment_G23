@@ -9,6 +9,7 @@ session_set_cookie_params([
 
 session_start();
 require_once "dbh.inc.php";
+require_once "audit.php";
 
 if (!$conn) {
     die("Database connection failed");
@@ -16,52 +17,63 @@ if (!$conn) {
     $orderID = $_GET["orderID"];
     $action = $_GET["action"];
 
-    switch ($action) {
-         case "rejectOrder":
-            //get remarks from the form
-            $remarks = $_GET["remarks"];
+    $before = mysqli_fetch_assoc(mysqli_query($conn, "SELECT id, status_id, remarks FROM orders WHERE id = {$orderID}"));
+    if (!$before) {
+        echo "<script>alert('Order not found'); window.location.href='../order.php';</script>";
+        exit;
+    }
 
-            //change status to rejected and save remarks
-            $change_status_query = "UPDATE orders SET status_id = 6, remarks = '$remarks' WHERE id = $orderID;";
-            if (!mysqli_query($conn, $change_status_query)) {
+    switch ($action) {
+        case "rejectOrder":
+            $remarks = $_GET["remarks"] ?? '';
+            $ok1 = mysqli_query($conn, "UPDATE orders SET status_id = 6, remarks = '".mysqli_real_escape_string($conn,$remarks)."' WHERE id = {$orderID};");
+            if (!$ok1) {
+                audit_log($conn, $_SESSION['ID'] ?? null, $_SESSION['role'] ?? null,
+                        'order_status_change','orders',$orderID,
+                        'Reject failed', $before, null, 'failure');
                 echo "<script>alert('Status updated unsuccessful'); window.location.href='../order.php';</script>";
                 exit();
             }
 
-            //add stock_qty back
-            $order_items = mysqli_query($conn, "SELECT * FROM orderitems INNER JOIN orders ON orderitems.order_id = orders.id WHERE orders.id = $orderID;");
+            // restock
+            $ok2 = true;
+            $order_items = mysqli_query($conn, "SELECT orderitems.qty, orderitems.item_id FROM orderitems INNER JOIN orders ON orderitems.order_id = orders.id WHERE orders.id = {$orderID};");
             while ($row = mysqli_fetch_assoc($order_items)) {
-                $qty = $row["qty"];
-                $itemID = $row["item_id"];
-                $reduce_stock_query = "UPDATE items SET stock_qty = stock_qty + $qty WHERE id = $itemID;";
-                if (!mysqli_query($conn, $reduce_stock_query)) {
-                    echo "<script>alert('Item stock updated unsuccessful'); window.location.href='../order.php';</script>";
-                    exit();
+                $qty = (int)$row["qty"];
+                $itemID = (int)$row["item_id"];
+                if (!mysqli_query($conn, "UPDATE items SET stock_qty = stock_qty + {$qty} WHERE id = {$itemID};")) {
+                    $ok2 = false; break;
                 }
             }
+
+            $after = mysqli_fetch_assoc(mysqli_query($conn, "SELECT id, status_id, remarks FROM orders WHERE id = {$orderID}"));
+            audit_log($conn, $_SESSION['ID'] ?? null, $_SESSION['role'] ?? null,
+                    'order_status_change','orders',$orderID,
+                    $ok2 ? 'Order rejected (restocked items)' : 'Order rejected (restock failed for some items)',
+                    $before, $after, $ok2 ? 'success' : 'partial');
 
             echo "<script>window.history.go(-1);</script>";
             break;
 
         case "nextProcess":
-            //change status to next process
-            $change_status_query = "UPDATE orders SET status_id = status_id + 1 WHERE id = $orderID;";
-            if (!mysqli_query($conn, $change_status_query)) {
-                echo "<script>alert('Status updated unsuccessful'); window.location.href='../order.php';</script>";
-                exit();
-            }
-
+            $ok = mysqli_query($conn, "UPDATE orders SET status_id = status_id + 1 WHERE id = {$orderID};");
+            $after = mysqli_fetch_assoc(mysqli_query($conn, "SELECT id, status_id, remarks FROM orders WHERE id = {$orderID}"));
+            audit_log($conn, $_SESSION['ID'] ?? null, $_SESSION['role'] ?? null,
+                    'order_status_change','orders',$orderID,
+                    $ok ? 'Advanced order process' : 'Advance order process failed',
+                    $before, $after, $ok ? 'success' : 'failure');
+            if (!$ok) { echo "<script>alert('Status updated unsuccessful'); window.location.href='../order.php';</script>"; exit(); }
             echo "<script>window.history.go(-1);</script>";
             break;
 
         case "previousProcess":
-            //change status to previous process
-            $change_status_query = "UPDATE orders SET status_id = status_id - 1 WHERE id = $orderID;";
-            if (!mysqli_query($conn, $change_status_query)) {
-                echo "<script>alert('Status updated unsuccessful'); window.location.href='../order.php';</script>";
-                exit();
-            }
-
+            $ok = mysqli_query($conn, "UPDATE orders SET status_id = status_id - 1 WHERE id = {$orderID};");
+            $after = mysqli_fetch_assoc(mysqli_query($conn, "SELECT id, status_id, remarks FROM orders WHERE id = {$orderID}"));
+            audit_log($conn, $_SESSION['ID'] ?? null, $_SESSION['role'] ?? null,
+                    'order_status_change','orders',$orderID,
+                    $ok ? 'Reverted order process' : 'Revert order process failed',
+                    $before, $after, $ok ? 'success' : 'failure');
+            if (!$ok) { echo "<script>alert('Status updated unsuccessful'); window.location.href='../order.php';</script>"; exit(); }
             echo "<script>window.history.go(-1);</script>";
             break;
 
@@ -69,4 +81,5 @@ if (!$conn) {
             echo "<script>alert('Status updated unsuccessful'); window.location.href='../order.php';</script>";
             break;
     }
+
 }

@@ -1,6 +1,7 @@
 <?php
 require_once "dbh.inc.php";
 require_once "csrf.php";
+require_once "audit.php";
 
 $ARGON_OPTS = [
     'memory_cost' => 131072, // 128 MB
@@ -67,9 +68,22 @@ try {
         // unexpected DB error → go to 500 page
         handleErrorAndExit("Failed to insert manager into database.");
     }
+  
+    if (mysqli_query($conn, $sql)) {
+        audit_log(
+        $conn,
+        $_SESSION['ID'], $_SESSION['role'] ?? null,
+        'admin_create', 'admins', $conn->insert_id,
+        "Created manager '{$name}' <{$email}>",
+        null,
+        ['admin_name'=>$name,'admin_email'=>$email,'role'=>'manager']
+        );
 
-    // Success → normal alert
-    echo "<script>alert('Manager added successfully!'); window.location.href='../managers.php';</script>";
+        echo "<script>alert('Manager added successfully!'); window.location.href='../managers.php';</script>";
+    } else {
+        echo "<script>alert('Error adding manager: " . mysqli_error($conn) . "'); window.history.go(-1);</script>";
+    }
+  
     exit;
 
 } catch (Throwable $e) {

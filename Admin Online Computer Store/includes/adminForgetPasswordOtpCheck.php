@@ -1,6 +1,7 @@
 <?php
 require_once "dbh.inc.php";
 require_once "csrf.php";
+require_once "audit.php";
 
 $ARGON_OPTS = [
     'memory_cost' => 131072, // 128 MB
@@ -31,10 +32,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $result = mysqli_query($conn, $query);
 
         if ($result) {
+            $adminRow = mysqli_fetch_assoc(mysqli_query($conn, "SELECT id, role FROM admins WHERE admin_email = '".mysqli_real_escape_string($conn,$email)."' LIMIT 1"));
+            audit_log($conn,
+                      $adminRow['id'] ?? null, $adminRow['role'] ?? null,
+                      'password_reset','admins', $adminRow['id'] ?? null,
+                      "Password reset via OTP for {$email}");
             echo "<script>alert('Admin password changed successfully!'); window.location.href='../index.php';</script>";
         } else {
             echo "<script>alert('Error updating password'); window.history.back();</script>";
         }
+
     }
 }
 ?>

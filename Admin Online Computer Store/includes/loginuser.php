@@ -10,6 +10,8 @@ session_set_cookie_params([
 session_start();
 require_once "dbh.inc.php"; 
 require_once "csrf.php";
+require_once "audit.php";
+
 
 /**
  * Generic error handler for this page
@@ -46,7 +48,7 @@ try {
             $email    = htmlspecialchars($_POST['UserEmail']);
             $password = $_POST['UserPassword'];
 
-            // Prepared statement
+            // Prepared statement (prevents SQL injection)
             $stmt = $conn->prepare("SELECT * FROM admins WHERE admin_name = ? AND admin_email = ?");
             if (!$stmt) {
                 handleErrorAndExit("Failed to prepare login query.");
@@ -62,14 +64,41 @@ try {
 
             // Check if admin exists
             if ($result->num_rows === 0) {
+                audit_log(
+                    $conn,
+                    null,
+                    null,
+                    'login_failure',
+                    null,
+                    null,
+                    'Admin login failed: name=' . $username . ', email=' . $email,
+                    null,
+                    null,
+                    'failure'
+                );
+
                 echo "<script>alert('No admin found with that name or email'); window.location.href='../index.php';</script>";
                 exit;
             }
 
             $row = $result->fetch_assoc();
+            $stmt->close();
 
             // Check if account is banned
             if (isset($row['account_status']) && strtolower($row['account_status']) === 'banned') {
+                audit_log(
+                    $conn,
+                    $row['id'],
+                    $row['role'] ?? null,
+                    'login_blocked',
+                    'admins',
+                    $row['id'],
+                    'Login attempt on banned account',
+                    null,
+                    null,
+                    'failure'
+                );
+
                 echo "<script>alert('Your account has been banned. Please contact the system administrator.'); window.location.href='../index.php';</script>";
                 exit;
             }
@@ -112,12 +141,28 @@ try {
                 // Update DB
                 $update = mysqli_query(
                     $conn, 
-                    "UPDATE admins SET wrong_pwd_count = '$wrong_pwd_count', lock_until = " . ($lock_until ? "'$lock_until'" : "NULL") . " WHERE id = '{$row['id']}'"
+                    "UPDATE admins 
+                     SET wrong_pwd_count = '$wrong_pwd_count', 
+                         lock_until = " . ($lock_until ? "'$lock_until'" : "NULL") . " 
+                     WHERE id = '{$row['id']}'"
                 );
 
                 if (!$update) {
                     handleErrorAndExit("Failed to update wrong password count.");
                 }
+
+                audit_log(
+                    $conn,
+                    $row['id'],
+                    $row['role'] ?? null,
+                    'login_failure',
+                    null,
+                    null,
+                    'Wrong password for admin #' . $row['id'],
+                    null,
+                    null,
+                    'failure'
+                );
 
                 // Show alert
                 echo "<script> alert('$lock_message'); window.location.href='../index.php'; </script>";
@@ -128,7 +173,9 @@ try {
                 // Reset lock + wrong count
                 $reset = mysqli_query(
                     $conn, 
-                    "UPDATE admins SET wrong_pwd_count = 0, lock_until = NULL WHERE id = '{$row['id']}'"
+                    "UPDATE admins 
+                     SET wrong_pwd_count = 0, lock_until = NULL 
+                     WHERE id = '{$row['id']}'"
                 );
 
                 if (!$reset) {
@@ -139,10 +186,23 @@ try {
                 session_regenerate_id(true);
 
                 // Set sessions
-                $_SESSION['ID']     = $row['id'];
+                $_SESSION['ID']        = $row['id'];
                 $_SESSION['AdminName'] = $row['admin_name'];
-                $_SESSION['role']   = $row['role'];
-                $_SESSION['status'] = $row['account_status'];
+                $_SESSION['role']      = $row['role'];
+                $_SESSION['status']    = $row['account_status'];
+
+                audit_log(
+                    $conn,
+                    $row['id'],
+                    $row['role'] ?? null,
+                    'login_success',
+                    null,
+                    null,
+                    'Admin logged in',
+                    null,
+                    null,
+                    'success'
+                );
 
                 echo "<script> alert('Log in successfully'); window.location.href='../home.php'; </script>";
                 exit;

@@ -1,14 +1,20 @@
 <?php
+session_start();
 require_once "dbh.inc.php";
+require_once "audit.php";
 
-$itemID = $_GET["item"];
+$itemID = (int)($_GET["item"] ?? 0);
+$before = mysqli_fetch_assoc(mysqli_query($conn, "SELECT id, item_name, item_status FROM items WHERE id = {$itemID}"));
 
-//Query
-$query = "UPDATE items SET item_status = 'Deleted' WHERE id = $itemID;";
+$ok = mysqli_query($conn, "UPDATE items SET item_status = 'Deleted' WHERE id = {$itemID}");
+$after = $before ?: []; $after['item_status'] = 'Deleted';
 
-//Delete item from database by changing the status
-if (mysqli_query($conn, $query)) {
-    echo "<script>alert('Item deleted successfully'); window.location.href='../store.php';</script>";
-} else {
-    echo "<script>alert('Item deleted unsuccessful'); window.location.href='../store.php';</script>";
-}
+audit_log(
+    $conn,
+    $_SESSION['ID'] ?? null, $_SESSION['role'] ?? null,
+    'item_soft_delete','items',$itemID,
+    $ok ? "Soft-deleted item #{$itemID}" : "Soft delete failed for item #{$itemID}",
+    $before, $after, $ok ? 'success' : 'failure'
+);
+
+echo "<script>alert('Item " . ($ok ? "deleted successfully" : "deleted unsuccessful") . "'); window.location.href='../store.php';</script>";
