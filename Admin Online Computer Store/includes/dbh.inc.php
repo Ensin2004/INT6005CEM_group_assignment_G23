@@ -9,6 +9,9 @@ $dbname = "computer_store";
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
+// Enable MySQLi exceptions globally
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
 // Check connection
 if (mysqli_connect_errno()) {
   echo "Connection to database failed";
