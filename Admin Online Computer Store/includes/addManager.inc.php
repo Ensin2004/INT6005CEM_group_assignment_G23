@@ -8,26 +8,71 @@ $ARGON_OPTS = [
     'threads'     => 1
 ];
 
-// Check CSRF token
-if (!isset($_POST['csrfToken']) || !checkCSRFToken($_POST['csrfToken'])) {
-    die("<script> alert('Invalid or expired CSRF token. Please refresh the page and try again.'); window.history.go(-1); </script>");
+/**
+ * Generic error handler for this page
+ * - Logs the error
+ * - Sends ERROR 500 status
+ * - Redirects to unified ERROR 500 page (no sensitive info to user)
+ */
+function handleErrorAndExit($message = 'Unexpected error during account update.') {
+    error_log('[ACCOUNT UPDATE ERROR] ' . $message);
+    http_response_code(500);
+    header("Location: ../errors/500.php");
+    exit;
 }
 
-if (isset($_POST['addManager'])) {
-    $name = htmlspecialchars(trim($_POST['admin_name']));
+try {
+
+    // Must be POST
+    if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+        handleErrorAndExit("Invalid request method.");
+    }
+
+    // CSRF token check (user-level error)
+    if (!isset($_POST['csrfToken']) || !checkCSRFToken($_POST['csrfToken'])) {
+        echo "<script>alert('Invalid or expired CSRF token. Please refresh the page and try again.'); window.history.go(-1);</script>";
+        exit;
+    }
+
+    if (!isset($_POST['addManager'])) {
+        handleErrorAndExit("addManager not set in form.");
+    }
+
+    // DB connection check
+    if (!$conn) {
+        handleErrorAndExit("Database connection failed.");
+    }
+
+    // Collect and sanitize data
+    $name  = htmlspecialchars(trim($_POST['admin_name']));
     $email = htmlspecialchars(trim($_POST['admin_email']));
-    $password = password_hash($_POST['admin_pwd'], PASSWORD_ARGON2ID, $ARGON_OPTS);
+    $pwd   = $_POST['admin_pwd'];
+
+    // Hash password
+    $passwordHash = password_hash($pwd, PASSWORD_ARGON2ID, $ARGON_OPTS);
+    if ($passwordHash === false) {
+        handleErrorAndExit("Password hashing failed.");
+    }
 
     // Default profile image
     $defaultImg = "no_profile_pic.png";
 
+    // Insert query
     $sql = "INSERT INTO admins (admin_name, admin_email, admin_pwd, role, admin_image)
-            VALUES ('$name', '$email', '$password', 'manager', '$defaultImg')";
+            VALUES ('$name', '$email', '$passwordHash', 'manager', '$defaultImg')";
 
-    if (mysqli_query($conn, $sql)) {
-        echo "<script>alert('Manager added successfully!'); window.location.href='../managers.php';</script>";
-    } else {
-        echo "<script>alert('Error adding manager: " . mysqli_error($conn) . "'); window.history.go(-1);</script>";
+    $insert = mysqli_query($conn, $sql);
+
+    if (!$insert) {
+        // unexpected DB error → go to 500 page
+        handleErrorAndExit("Failed to insert manager into database.");
     }
+
+    // Success → normal alert
+    echo "<script>alert('Manager added successfully!'); window.location.href='../managers.php';</script>";
+    exit;
+
+} catch (Throwable $e) {
+    handleErrorAndExit($e->getMessage());
 }
 ?>
