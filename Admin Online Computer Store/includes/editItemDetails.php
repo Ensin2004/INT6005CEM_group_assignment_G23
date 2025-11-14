@@ -1,11 +1,18 @@
 <?php
 require_once "dbh.inc.php";
+require_once "csrf.php";
 
 //Debugging: Check if the database connection is successful
 if (!$conn) {
     die("Database connection failed");
 } else {
     if (isset($_POST["submit"])) {
+
+        // Check CSRF token
+        if (!isset($_POST['csrfToken']) || !checkCSRFToken($_POST['csrfToken'])) {
+            die("<script> alert('Invalid or expired CSRF token. Please refresh the page and try again.'); window.history.go(-1); </script>");
+        }
+
         //Collect form data
         $itemID = htmlspecialchars($_POST["itemID"]);
         $category = htmlspecialchars(trim($_POST["category"]));

@@ -1,3 +1,8 @@
+<?php
+session_start();
+require_once "includes/csrf.php";
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,6 +17,14 @@
 
 <body>
     <?php
+    session_set_cookie_params([
+    'lifetime' => 0,       // expires when browser closes
+    'path' => '/',
+    'secure' => true,      // only over HTTPS
+    'httponly' => true,    // JS cannot access it
+    'samesite' => 'Strict' // strong CSRF protection
+    ]);
+
     session_start();
     require_once "includes/dbh.inc.php";
 
@@ -39,6 +52,7 @@
     <main>
         <div class="loginDisplay">
             <form class="changePasswordBox" action="includes/adminForgetPasswordOtpCheck.php" method="post">
+                <?php createCSRFInput(); ?>
                 <div class="loginLogo">
                     <p>Admin Password Reset</p>
                     <img src="../Image/logo.png" alt="KAH TECH Logo">

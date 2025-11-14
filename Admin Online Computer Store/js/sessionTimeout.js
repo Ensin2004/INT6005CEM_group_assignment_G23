@@ -1,5 +1,5 @@
 // Timeout minutes
-const timeoutMinutes = 3;
+const timeoutMinutes = 5;
 
 // Timeout seconds
 const timeoutSeconds = timeoutMinutes * 60;

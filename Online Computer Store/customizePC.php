@@ -1,5 +1,6 @@
 <?php
 require_once "includes/security.php";
+require_once "includes/csrf.php";
 ?>
 
 
@@ -37,6 +38,7 @@ require_once "includes/security.php";
 
             <div class="formDisplay">
                 <form action="includes/addMylist.php" method="POST">
+                    <?php createCSRFInput(); ?>
                     <label style="color: black;" for="MyListName">List Name : </label>
                     <input required class="name_input" type="text" id="MyListName" name="myListName" placeholder="Enter List Name">
                     <br><br>

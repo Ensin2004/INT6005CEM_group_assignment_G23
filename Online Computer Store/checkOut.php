@@ -1,5 +1,14 @@
 <?php
+session_set_cookie_params([
+    'lifetime' => 0,       // expires when browser closes
+    'path' => '/',
+    'secure' => true,      // only over HTTPS
+    'httponly' => true,    // JS cannot access it
+    'samesite' => 'Strict' // strong CSRF protection
+]);
+
 session_start();
+require_once "includes/csrf.php";
 ?>
 
 <!DOCTYPE html>
@@ -30,6 +39,7 @@ session_start();
             ?>
             <div class="wholeContainer">
                 <form id="checkoutForm" action="payment.php" method="POST">
+                    <?php createCSRFInput(); ?>
                     <div class="addOrder">
                         <?php
                         $id = $_SESSION['ID'];

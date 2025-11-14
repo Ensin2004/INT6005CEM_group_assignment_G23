@@ -1,5 +1,6 @@
 <?php
 require_once "includes/security.php";
+require_once "includes/csrf.php";
 
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'super_admin') {
     echo "<script>alert('Access denied. Super Admins only.'); window.location.href='home.php';</script>";
@@ -21,6 +22,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'super_admin') {
 
     <main>
         <form class="item_form" action="includes/addManager.inc.php" method="POST" id="addManagerForm">
+            <?php createCSRFInput(); ?>
             <div class="item_details">
                 <div class="details">
                     <label for="admin_name">Name</label>
