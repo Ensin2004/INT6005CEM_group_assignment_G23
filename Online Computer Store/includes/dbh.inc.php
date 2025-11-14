@@ -15,5 +15,7 @@ if (mysqli_connect_errno()) {
     exit();
   }
 
+// Always use utf8mb4 for safety
+$conn->set_charset('utf8mb4');
 
 ?>
