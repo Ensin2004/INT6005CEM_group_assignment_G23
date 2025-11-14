@@ -1,5 +1,5 @@
 <?php
-require_once "includes/security.php";   // contains sanitize_basic(), escape_sql()
+require_once "includes/security.php";   // contains sanitize_basic(), e(), q(), qp()
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,7 +30,7 @@ require_once "includes/security.php";   // contains sanitize_basic(), escape_sql
                     type="text"
                     name="search"
                     placeholder="Search"
-                    value="<?php echo isset($_GET['search']) ? sanitize_basic($_GET['search']) : ''; ?>"
+                    value="<?php echo isset($_GET['search']) ? e($_GET['search']) : ''; ?>"
                 >
                 <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
             </div>
@@ -39,27 +39,27 @@ require_once "includes/security.php";   // contains sanitize_basic(), escape_sql
         <!-- category bar -->
         <div class="category_bar">
             <?php
-            // read selected category
+            // read selected category (sanitized just for display/logic)
             $selectedCat = isset($_GET['category']) ? sanitize_basic($_GET['category']) : null;
 
-            if (empty($selectedCat)) { // no chosen category
+            if (!isset($selectedCat) || $selectedCat === '') { // no chosen category
                 echo '<a class="category_button selected" href="store.php">ALL</a>';
                 while ($row = mysqli_fetch_assoc($categoryResult)) {
-                    $catName = sanitize_basic($row["category_name"]);
-                    $catHref = "store.php?category=" . $catName;
+                    $catName = $row["category_name"];
+                    $catHref = "store.php?category=" . q($catName);
                     echo '<a class="category_button" href="'.$catHref.'">' .
-                         strtoupper($catName) . '</a>';
+                         strtoupper(e($catName)) . '</a>';
                 }
             } else { // chosen category
                 echo '<a class="category_button" href="store.php">ALL</a>';
                 mysqli_data_seek($categoryResult, 0); // reset pointer
                 while ($row = mysqli_fetch_assoc($categoryResult)) {
-                    $catName = sanitize_basic($row["category_name"]);
+                    $catName = $row["category_name"];
                     $isSelected = (mb_strtolower($catName) === mb_strtolower($selectedCat));
-                    $catHref = "store.php?category=" . $catName;
+                    $catHref = "store.php?category=" . q($catName);
                     $cls = $isSelected ? 'category_button selected' : 'category_button';
                     echo '<a class="'.$cls.'" href="'.$catHref.'">' .
-                         strtoupper($catName) . '</a>';
+                         strtoupper(e($catName)) . '</a>';
                 }
             }
             ?>
@@ -68,39 +68,44 @@ require_once "includes/security.php";   // contains sanitize_basic(), escape_sql
 
     <div class="store_body">
         <?php
+            // figure out context from querystring (sanitized for display)
             $term = isset($_GET['search']) ? sanitize_basic($_GET['search']) : '';
             $cat  = isset($_GET['category']) ? sanitize_basic($_GET['category']) : '';
 
+            // count results without consuming the cursor
             $count = ($itemResult instanceof mysqli_result) ? $itemResult->num_rows : 0;
 
-            // summary label
+            // build the summary label
             if ($term !== '') {
-                $label = "Results for ‘" . $term . "’ — {$count} " . ($count === 1 ? "item" : "items");
+                $label = "Results for ‘" . e($term) . "’ — {$count} " . ($count === 1 ? "item" : "items");
             } elseif ($cat !== '') {
-                $label = "Category: " . $cat . " — {$count} " . ($count === 1 ? "item" : "items");
+                $label = "Category: " . e($cat) . " — {$count} " . ($count === 1 ? "item" : "items");
             } else {
                 $label = "All items — {$count} " . ($count === 1 ? "item" : "items");
             }
 
+            // print summary (always show it)
             echo '<p class="result_summary" style="margin: 8px 0 16px; color:#555;">' . $label . '</p>';
 
             if (!$itemResult || $count === 0) {
+                // show a friendlier empty state that respects context
                 if ($term !== '') {
-                    echo '<p class="no_result">No results for ‘' . $term . '’</p>';
+                    echo '<p class="no_result">No results for ‘' . e($term) . '’</p>';
                 } elseif ($cat !== '') {
-                    echo '<p class="no_result">No items in category ‘' . $cat . '’</p>';
+                    echo '<p class="no_result">No items in category ‘' . e($cat) . '’</p>';
                 } else {
                     echo '<p class="no_result">No Result</p>';
                 }
             } else {
                 echo '<table class="item_display">';
                 while ($row = mysqli_fetch_assoc($itemResult)) {
-                    $id    = (int)$row['id'];
-                    $name  = sanitize_basic($row['item_name']);
-                    $desc  = sanitize_basic($row['description']);
-                    $price = sanitize_basic($row['price']);
-                    $img1f = sanitize_basic($row['image1'] ?? '');
-                    $imgSrc = "../Image/" . $img1f;
+                    $id    = (int)$row['id']; // numeric only
+                    $name  = e($row['item_name']);
+                    $desc  = e($row['description']);
+                    $price = e($row['price']);
+                    // guard filename, then URL-encode for path usage
+                    $img1f = basename($row['image1'] ?? '');
+                    $imgSrc = "../Image/" . qp($img1f);
                     $stock = (int)$row['stock_qty'];
                     $detailsHref = "itemDetails.php?item={$id}";
                     ?>
@@ -156,7 +161,7 @@ require_once "includes/security.php";   // contains sanitize_basic(), escape_sql
 document.addEventListener('DOMContentLoaded', function() {
     const addButton = document.querySelector('.add_button');
     const footer = document.querySelector('footer');
-    const offset = 0;
+    const offset = 0; // Offset from the bottom
 
     function checkPosition() {
         const footerRect = footer.getBoundingClientRect();
