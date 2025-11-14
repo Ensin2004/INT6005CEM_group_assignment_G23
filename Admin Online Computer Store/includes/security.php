@@ -14,6 +14,16 @@ if(!isset($_SESSION['ID'])) {
     exit();
 }
 
+// Session Timeout Check
+$timeoutSeconds = 300;
+
+if (isset($_SESSION['LastActivity']) && (time() - $_SESSION['LastActivity']) >= $timeoutSeconds) {
+    echo "<script> window.location.href='includes/logoutAccount.php?timeout=1'; </script>";
+    exit;
+}
+
+$_SESSION['LastActivity'] = time();
+
 /**
  * Basic sanitization only (no validation here):
  * - trim
@@ -36,12 +46,20 @@ function sanitize_basic(?string $s): string {
 function escape_sql(mysqli $conn, string $s): string {
     return mysqli_real_escape_string($conn, $s);
 }
-// Session Timeout Check
-$timeoutSeconds = 300;
 
-if (isset($_SESSION['LastActivity']) && (time() - $_SESSION['LastActivity']) >= $timeoutSeconds) {
-    echo "<script> window.location.href='includes/logoutAccount.php?timeout=1'; </script>";
-    exit;
+/**
+ * Output-encoding helpers (XSS mitigation by context)
+ */
+
+function e(?string $s): string {            // HTML text/attribute
+    return htmlspecialchars($s ?? '', ENT_QUOTES, 'UTF-8');
 }
 
-$_SESSION['LastActivity'] = time();
+function q(string $s): string {             // URL query parameter
+    return urlencode($s);
+}
+
+function qp(string $s): string {            // URL path segment
+    return rawurlencode($s);
+}
+
