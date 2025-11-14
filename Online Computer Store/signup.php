@@ -55,6 +55,22 @@
                     <p class="limit-warning" id="confirmPwdLimit">Character limit reached (20)</p>
                     <p class="pwd_confirmation" id="pwd_confirmation">Password not match</p>
 
+                    <!-- Consent checkbox -->
+                    <div class="consent" style="margin-top:10px;">
+                        <label style="display:flex; gap:8px; align-items:flex-start; line-height:1.4;">
+                            <input type="checkbox" id="agree_terms" name="agree_terms" value="1" style="margin-top:3px;">
+                            <span>
+                            I confirm that I have read and agree to KAH TECH
+                            <a href="user-agreement.php" target="_blank" rel="noopener">User Agreement</a>
+                            and
+                            <a href="privacy-education.php" target="_blank" rel="noopener">Privacy &amp; User Education Policy</a>.
+                            </span>
+                        </label>
+                        <p id="agree_error" style="display:none; color:#c0392b; margin-top:6px;">
+                            Please tick the checkbox to agree before signing up.
+                        </p>
+                    </div>
+
                     <button class="signUp" type="submit" id="submit_btn" disabled>Sign up</button>
                     <p class="haveAcc">Already have an account? <a class="logIn" href="login.php">Log In</a>.</p>
                 </div>
@@ -150,6 +166,35 @@
         setupLimitWarning('newPassword', 'newPwdLimit', 20);
         setupLimitWarning('confirmPassword', 'confirmPwdLimit', 20);
     </script>
+
+    <script>
+        (function () {
+        var form = document.getElementById('signupForm');
+        var checkbox = document.getElementById('agree_terms');
+        var errorEl = document.getElementById('agree_error');
+
+        function hideError() {
+            if (errorEl) errorEl.style.display = 'none';
+        }
+
+        // Clear the red message when user interacts
+        if (form) form.addEventListener('input', hideError);
+        if (checkbox) checkbox.addEventListener('change', function () {
+            hideError();
+            if (typeof validatePassword === 'function') validatePassword();
+        });
+
+        // Hard block submit if not checked 
+        if (form) form.addEventListener('submit', function (e) {
+            if (!checkbox || !checkbox.checked) {
+            e.preventDefault();
+            if (errorEl) errorEl.style.display = 'block';
+            if (checkbox) checkbox.focus();
+            }
+        });
+        })();
+    </script>
+
 
 </body>
 
