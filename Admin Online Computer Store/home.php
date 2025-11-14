@@ -115,6 +115,11 @@ include "includes/homeGraph.php";
                     <i class="fa-solid fa-users-gear"></i>
                     <p class="menu_text">MANAGERS</p>
                 </a>
+
+                <a class="menu_button" href="logging.php">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    <p class="menu_text">AUDIT LOGS</p>
+                </a>
             <?php } ?>
         </div>
         <hr>

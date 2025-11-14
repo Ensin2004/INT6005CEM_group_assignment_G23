@@ -1,5 +1,6 @@
 <?php
 require_once "dbh.inc.php";
+require_once "audit.php"; 
 
 if (isset($_POST["submit"])) {
     $file_name = $_FILES['image']['name'];
@@ -35,10 +36,29 @@ if (isset($_POST["submit"])) {
         if ($result) {
             // Move the uploaded file to the specified folder
             if (move_uploaded_file($tempname, $folder)) {
+                audit_log(
+                  $conn,
+                  $_SESSION['ID'] ?? null, $_SESSION['role'] ?? null,
+                  'content_create', 'aboutus', $newId,
+                  "Created About Us entry",
+                  null,
+                  ['about_us_image'=>$file_name, 'about_us_description'=>$description]
+                );
+
                 echo 
                 "<script>alert('File uploaded successfully'); window.location.href='../homeEdit.php?';</script>";
                 
             } else {
+                audit_log(
+                  $conn,
+                  $_SESSION['ID'] ?? null, $_SESSION['role'] ?? null,
+                  'content_create', 'aboutus', $newId,
+                  "About Us DB row created but file move failed",
+                  null,
+                  ['about_us_image'=>$file_name, 'about_us_description'=>$description],
+                  'partial'
+                );
+
                 echo 
                 "<script>alert('File uploaded successfully but failed to move to destination folder'); window.location.href='../aboutUsForm.php?';</script>";
                
