@@ -1,10 +1,8 @@
 <?php
-require_once "includes/security.php";
+require_once "includes/security.php";   // contains sanitize_basic(), escape_sql()
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,76 +12,118 @@ require_once "includes/security.php";
     <link rel="stylesheet" href="css/store.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
-
 <body>
-    <?php
+<?php
     include 'header.php';
-    include 'includes/storeGetVar.php';
-    ?>
+    include 'includes/storeGetVar.php'; // provides $itemResult and $categoryResult
+?>
 
-    <main>
-        <!-- add new item button -->
-        <a class="add_button" href="newItem.php"><i class="fa-solid fa-circle-plus"></i></a>
+<main>
+    <!-- add new item button -->
+    <a class="add_button" href="newItem.php"><i class="fa-solid fa-circle-plus"></i></a>
 
-        <div class="store_head">
-            <!-- search bar -->
-            <form class="search_bar" action="store.php" method="$_GET">
-                <div class="search_box">
-                    <input type="text" name="search" placeholder="Search">
-                    <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-                </div>
-            </form>
-
-            <!-- category bar -->
-            <div class="category_bar">
-                <?php
-                if (!isset($category)) { //no chosen category
-                    echo '<a class="category_button selected" href="store.php">ALL</a>';
-                    while ($row = mysqli_fetch_assoc($categoryResult)) {
-                        echo '<a class="category_button" href="store.php?category=' . $row["category_name"] . '">' . strtoupper($row["category_name"]) . '</a>';
-                    }
-                } else { //got chosen category
-                    echo '<a class="category_button" href="store.php">ALL</a>';
-                    while ($row = mysqli_fetch_assoc($categoryResult)) {
-                        if (strtolower($row["category_name"]) === strtolower($category)) {
-                            echo '<a class="category_button selected" href="store.php?category=' . $row["category_name"] . '">' . strtoupper($row["category_name"]) . '</a>';
-                        } else {
-                            echo '<a class="category_button" href="store.php?category=' . $row["category_name"] . '">' . strtoupper($row["category_name"]) . '</a>';
-                        }
-                    }
-                }
-                ?>
+    <div class="store_head">
+        <!-- search bar -->
+        <form class="search_bar" action="store.php" method="get">
+            <div class="search_box">
+                <input
+                    type="text"
+                    name="search"
+                    placeholder="Search"
+                    value="<?php echo isset($_GET['search']) ? sanitize_basic($_GET['search']) : ''; ?>"
+                >
+                <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
             </div>
-        </div>
+        </form>
 
-        <div class="store_body">
-            <?php //no result
-            if (mysqli_num_rows($itemResult) == 0) {
-                echo '<p class="no_result">No Result</p>';
-            } else { //got result
+        <!-- category bar -->
+        <div class="category_bar">
+            <?php
+            // read selected category
+            $selectedCat = isset($_GET['category']) ? sanitize_basic($_GET['category']) : null;
+
+            if (empty($selectedCat)) { // no chosen category
+                echo '<a class="category_button selected" href="store.php">ALL</a>';
+                while ($row = mysqli_fetch_assoc($categoryResult)) {
+                    $catName = sanitize_basic($row["category_name"]);
+                    $catHref = "store.php?category=" . $catName;
+                    echo '<a class="category_button" href="'.$catHref.'">' .
+                         strtoupper($catName) . '</a>';
+                }
+            } else { // chosen category
+                echo '<a class="category_button" href="store.php">ALL</a>';
+                mysqli_data_seek($categoryResult, 0); // reset pointer
+                while ($row = mysqli_fetch_assoc($categoryResult)) {
+                    $catName = sanitize_basic($row["category_name"]);
+                    $isSelected = (mb_strtolower($catName) === mb_strtolower($selectedCat));
+                    $catHref = "store.php?category=" . $catName;
+                    $cls = $isSelected ? 'category_button selected' : 'category_button';
+                    echo '<a class="'.$cls.'" href="'.$catHref.'">' .
+                         strtoupper($catName) . '</a>';
+                }
+            }
+            ?>
+        </div>
+    </div>
+
+    <div class="store_body">
+        <?php
+            $term = isset($_GET['search']) ? sanitize_basic($_GET['search']) : '';
+            $cat  = isset($_GET['category']) ? sanitize_basic($_GET['category']) : '';
+
+            $count = ($itemResult instanceof mysqli_result) ? $itemResult->num_rows : 0;
+
+            // summary label
+            if ($term !== '') {
+                $label = "Results for ‘" . $term . "’ — {$count} " . ($count === 1 ? "item" : "items");
+            } elseif ($cat !== '') {
+                $label = "Category: " . $cat . " — {$count} " . ($count === 1 ? "item" : "items");
+            } else {
+                $label = "All items — {$count} " . ($count === 1 ? "item" : "items");
+            }
+
+            echo '<p class="result_summary" style="margin: 8px 0 16px; color:#555;">' . $label . '</p>';
+
+            if (!$itemResult || $count === 0) {
+                if ($term !== '') {
+                    echo '<p class="no_result">No results for ‘' . $term . '’</p>';
+                } elseif ($cat !== '') {
+                    echo '<p class="no_result">No items in category ‘' . $cat . '’</p>';
+                } else {
+                    echo '<p class="no_result">No Result</p>';
+                }
+            } else {
                 echo '<table class="item_display">';
                 while ($row = mysqli_fetch_assoc($itemResult)) {
-            ?>
+                    $id    = (int)$row['id'];
+                    $name  = sanitize_basic($row['item_name']);
+                    $desc  = sanitize_basic($row['description']);
+                    $price = sanitize_basic($row['price']);
+                    $img1f = sanitize_basic($row['image1'] ?? '');
+                    $imgSrc = "../Image/" . $img1f;
+                    $stock = (int)$row['stock_qty'];
+                    $detailsHref = "itemDetails.php?item={$id}";
+                    ?>
                     <tr>
                         <!-- image -->
                         <td style="width: 20%;">
-                            <a href="itemDetails.php?item=<?php echo $row['id']; ?>">
-                                <img class="item_image" src="../Image/<?php echo $row['image1']; ?>" alt="<?php echo $row['item_name']; ?>">
+                            <a href="<?php echo $detailsHref; ?>">
+                                <img class="item_image" src="<?php echo $imgSrc; ?>" alt="<?php echo $name; ?>">
                             </a>
                         </td>
 
                         <!-- details -->
                         <td style="width: 70%;">
-                            <a class="item_details" href="itemDetails.php?item=<?php echo $row['id']; ?>">
-                                <p class="item_name"><?php echo $row["item_name"]; ?></p>
-                                <p class="item_desc"><?php echo $row["description"]; ?></p>
+                            <a class="item_details" href="<?php echo $detailsHref; ?>">
+                                <p class="item_name"><?php echo $name; ?></p>
+                                <p class="item_desc"><?php echo $desc; ?></p>
                                 <br><br><br>
-                                <p class="item_price"><?php echo 'RM ' . $row["price"]; ?></p>
+                                <p class="item_price"><?php echo 'RM ' . $price; ?></p>
                                 <?php
-                                if ($row["stock_qty"] == 0) {
-                                    echo '<p class="item_stock" style="color: rgb(255, 52, 52);">Stock: ' . $row["stock_qty"] . '</p>';
+                                if ($stock === 0) {
+                                    echo '<p class="item_stock" style="color: rgb(255, 52, 52);">Stock: ' . $stock . '</p>';
                                 } else {
-                                    echo '<p class="item_stock" style="color: rgb(60, 179, 113);">Stock: ' . $row["stock_qty"] . '</p>';
+                                    echo '<p class="item_stock" style="color: rgb(60, 179, 113);">Stock: ' . $stock . '</p>';
                                 }
                                 ?>
                             </a>
@@ -92,49 +132,49 @@ require_once "includes/security.php";
                         <!-- edit and delete button -->
                         <td style="width: 10%; border-left: 2px solid lightgray;">
                             <div class="manage_item">
-                                <a class="edit_button" href="editItem.php?item=<?php echo $row['id']; ?>"><i class="fa-solid fa-pen-to-square"></i> EDIT</a>
-                                <a class="delete_button" href="includes/deleteItem.php?item=<?php echo $row['id']; ?>"><i class="fa-solid fa-trash-can"></i> DELETE</a>
+                                <a class="edit_button" href="editItem.php?item=<?php echo $id; ?>">
+                                    <i class="fa-solid fa-pen-to-square"></i> EDIT
+                                </a>
+                                <a class="delete_button" href="includes/deleteItem.php?item=<?php echo $id; ?>">
+                                    <i class="fa-solid fa-trash-can"></i> DELETE
+                                </a>
                             </div>
                         </td>
                     </tr>
-            <?php
+                    <?php
                 }
                 echo '</table>';
             }
-            ?>
-        </div>
-    </main>
+        ?>
+    </div>
 
-    <?php
-    include 'footer.php';
-    ?>
+</main>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const addButton = document.querySelector('.add_button');
-            const footer = document.querySelector('footer');
-            const offset = 0; // Offset from the bottom
+<?php include 'footer.php'; ?>
 
-            function checkPosition() {
-                const footerRect = footer.getBoundingClientRect();
-                const windowHeight = window.innerHeight;
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const addButton = document.querySelector('.add_button');
+    const footer = document.querySelector('footer');
+    const offset = 0;
 
-                if (footerRect.top < windowHeight) {
-                    // Footer is in view, move button above footer
-                    addButton.style.transform = `translateY(${footerRect.top - windowHeight + offset}px)`;
-                } else {
-                    // Footer is not in view, fix button at bottom
-                    addButton.style.transform = 'translateY(0)';
-                }
-            }
+    function checkPosition() {
+        const footerRect = footer.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
 
-            window.addEventListener('scroll', checkPosition);
-            window.addEventListener('resize', checkPosition);
-            checkPosition();
-        });
-    </script>
+        if (footerRect.top < windowHeight) {
+            addButton.style.transform = `translateY(${footerRect.top - windowHeight + offset}px)`;
+        } else {
+            addButton.style.transform = 'translateY(0)';
+        }
+    }
 
-    <script src="js/sessionTimeout.js"></script>
+    window.addEventListener('scroll', checkPosition);
+    window.addEventListener('resize', checkPosition);
+    checkPosition();
+});
+</script>
+
+<script src="js/sessionTimeout.js"></script>
 </body>
-
 </html>

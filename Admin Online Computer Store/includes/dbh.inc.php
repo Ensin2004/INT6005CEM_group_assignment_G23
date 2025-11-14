@@ -14,3 +14,6 @@ if (mysqli_connect_errno()) {
   echo "Connection to database failed";
   exit();
 }
+
+// utf8mb4 for safety
+$conn->set_charset('utf8mb4');
