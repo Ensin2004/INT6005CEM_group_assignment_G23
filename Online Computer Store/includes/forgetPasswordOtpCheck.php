@@ -1,6 +1,7 @@
 <?php
 require_once "dbh.inc.php";
 require_once "csrf.php";
+require_once "crypto.php";
 
 $ARGON_OPTS = [
     'memory_cost' => 131072, // 128 MB
@@ -29,10 +30,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($otpVerify != $otp) {
         echo "<script>alert('Wrong OTP'); window.history.back();</script>";
-    } else {
-        // Prepare SQL statement to prevent SQL injection
-        $query = "UPDATE users SET pwd = '$password' WHERE email = '$email' OR secondary_email = '$email'";
-        mysqli_query($conn, $query);
+    } 
+    else {
+        // Find user id by decrypted email / secondary email
+        $userId = null;
+        $res = mysqli_query($conn, "SELECT id, email, secondary_email FROM users");
+        if ($res) {
+            while ($row = mysqli_fetch_assoc($res)) {
+                $e1 = decrypt_field($row['email']);
+                $e2 = decrypt_field($row['secondary_email']);
+                if (strcasecmp($e1, $email) === 0 || strcasecmp($e2, $email) === 0) {
+                    $userId = (int)$row['id'];
+                    break;
+                }
+            }
+        }
+
+        if ($userId === null) {
+            echo "<script>alert('Account not found for this email'); window.location.href='../login.php';</script>";
+            exit;
+        }
+
+        $stmt = $conn->prepare("UPDATE users SET pwd = ? WHERE id = ?");
+        if ($stmt) {
+            $stmt->bind_param("si", $password, $userId);
+            $stmt->execute();
+            $stmt->close();
+        }
 
         echo "<script>alert('Password Changed successfully'); window.location.href='../login.php';</script>";
     }

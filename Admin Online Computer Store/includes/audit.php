@@ -14,7 +14,7 @@ function audit_log(
     // Scrub sensitive keys if someone passes them accidentally
     $scrub = function($arr) {
         if ($arr === null) return null;
-        $blocked = ['pwd','admin_pwd','password','token','secret','screenshot']; // extend as needed
+        $blocked = ['pwd','admin_pwd','password','token','secret','screenshot'];
         foreach ($blocked as $k) {
             if (array_key_exists($k, $arr)) $arr[$k] = '[REDACTED]';
         }

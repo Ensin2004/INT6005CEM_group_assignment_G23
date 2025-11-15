@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 15, 2025 at 10:11 AM
+-- Generation Time: Nov 15, 2025 at 10:36 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -315,10 +315,10 @@ INSERT INTO `orderstatus` (`id`, `status_name`) VALUES
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
-  `user_name` varchar(25) NOT NULL,
+  `user_name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `secondary_email` varchar(255) DEFAULT NULL,
-  `phone` varchar(15) NOT NULL,
+  `phone` varchar(255) NOT NULL,
   `user_address` varchar(255) NOT NULL,
   `pwd` varchar(255) NOT NULL,
   `user_image` varchar(255) DEFAULT 'no_profile_pic.png',
@@ -331,7 +331,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `user_name`, `email`, `secondary_email`, `phone`, `user_address`, `pwd`, `user_image`, `wrong_pwd_count`, `lock_until`) VALUES
-(1, 'First', 'aimarief0919@gmail.com', 'peggywork812@gmail.com', '0123456789', 'Taman Seri Sari ', '$argon2id$v=19$m=131072,t=3,p=1$THJQNFBYSm4yanB6LmhZdQ$lJZmRTTKkiVJyrGzj8kh+kqSwel5cmKYcOfafah2tyE', 'no_profile_pic.png', 0, NULL),
+(1, 'First', 'aimarief0919@gmail.com', 'peggywork812@gmail.com', '0123456789', 'Taman Seri Sari ', '$argon2id$v=19$m=131072,t=3,p=1$THJQNFBYSm4yanB6LmhZdQ$lJZmRTTKkiVJyrGzj8kh+kqSwel5cmKYcOfafah2tyE', 'no_profile_pic.png', 6, '2025-11-11 16:43:01'),
 (4, 'Cojean', 'P22014471@student.newinti.edu.my', NULL, '017-5807201', 'PISA Home Centre, Level 1, Car Park Complex PISA, Pulau Pinang', 'Cojean123@', 'no_profile_pic.png', 0, NULL),
 (5, 'Cincai', 'hzhsia603@gmail.com', NULL, '012-8888888', 'A123, Regency Height, Sungai Ara, Penang', 'Cincai123@', 'no_profile_pic.png', 0, NULL),
 (19, 'arief', 'qiqihutao919@gmail.com', '', '0123456789', '12345aaa', 'arief12345@', 'no_profile_pic.png', 0, NULL),

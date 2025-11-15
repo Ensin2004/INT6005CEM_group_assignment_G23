@@ -10,6 +10,7 @@ session_set_cookie_params([
 session_start();
 require_once "dbh.inc.php";
 require_once "csrf.php";
+require_once "crypto.php";
 
 $ARGON_OPTS = [
     'memory_cost' => 131072, // 128 MB
@@ -77,13 +78,22 @@ try {
             }
             $oriImgPath = mysqli_fetch_assoc($oriResult);
 
-            // Update basic info
-            $query = "UPDATE users SET user_name='$name', email='$email', phone='$phone', user_Address='$address' WHERE id = '$id'";
+            // Encrypt PII
+            $enc_name    = encrypt_field($name);
+            $enc_phone   = encrypt_field($phone);
+            $enc_address = encrypt_field($address);
 
-            $updateInfo = mysqli_query($conn, $query);
-            if (!$updateInfo) {
+            // Update basic info (no email change here)
+            $stmt = $conn->prepare("UPDATE users SET user_name = ?, phone = ?, user_address = ? WHERE id = ?");
+            if (!$stmt) {
+                handleErrorAndExit('Prepare failed: ' . $conn->error);
+            }
+            $stmt->bind_param("sssi", $enc_name, $enc_phone, $enc_address, $id);
+
+            if (!$stmt->execute()) {
                 handleErrorAndExit('Failed to update user profile details.');
             }
+            $stmt->close();
 
             // Only update password if user actually typed one
             if (!empty($password)) {
