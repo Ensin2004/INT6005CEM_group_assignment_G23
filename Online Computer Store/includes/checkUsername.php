@@ -1,19 +1,43 @@
 <?php
 require_once 'dbh.inc.php';
+require_once 'crypto.php';
+
 if (!$conn) {
     die("Database connection failed");
-} else {
-    //get variables
-    $name = htmlspecialchars($_POST["newUsername"]);
-    $email = htmlspecialchars($_POST["newEmail"]);
-    $phone = htmlspecialchars($_POST["newPhone"]);
-    $address = htmlspecialchars($_POST["newAddress"]);
-    $password = htmlspecialchars($_POST["newPassword"]);
-    $confirmPassword = htmlspecialchars($_POST["confirmPassword"]);
+}
 
-    $checkResult = mysqli_num_rows(mysqli_query($conn, "SELECT user_name FROM users WHERE LOWER(user_name) = LOWER('$name');"));
-    $checkEmail = mysqli_num_rows(mysqli_query($conn, "SELECT email FROM users WHERE LOWER(email) = LOWER('$email');"));
-    $checkSecondaryEmail = mysqli_num_rows(mysqli_query($conn, "SELECT secondary_email FROM users WHERE LOWER(secondary_email) = LOWER('$email');"));
+$name     = htmlspecialchars($_POST["newUsername"]);
+$email    = htmlspecialchars($_POST["newEmail"]);
+$phone    = htmlspecialchars($_POST["newPhone"]);
+$address  = htmlspecialchars($_POST["newAddress"]);
+$password = htmlspecialchars($_POST["newPassword"]);
+$confirmPassword = htmlspecialchars($_POST["confirmPassword"]);
+
+// Username check
+$checkResult = 0;
+$res = mysqli_query($conn, "SELECT user_name FROM users");
+while ($row = mysqli_fetch_assoc($res)) {
+    $u = decrypt_field($row['user_name']);
+    if (strcasecmp($u, $name) === 0) {
+        $checkResult = 1;
+        break;
+    }
+}
+
+// Email checks (primary + secondary)
+$checkEmail = 0;
+$checkSecondaryEmail = 0;
+$res2 = mysqli_query($conn, "SELECT email, secondary_email FROM users");
+while ($row = mysqli_fetch_assoc($res2)) {
+    $e1 = decrypt_field($row['email']);
+    $e2 = decrypt_field($row['secondary_email']);
+    if (strcasecmp($e1, $email) === 0) {
+        $checkEmail = 1;
+    }
+    if (strcasecmp($e2, $email) === 0) {
+        $checkSecondaryEmail = 1;
+    }
+    if ($checkEmail || $checkSecondaryEmail) break;
 }
 ?>
 

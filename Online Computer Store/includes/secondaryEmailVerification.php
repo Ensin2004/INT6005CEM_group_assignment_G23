@@ -1,5 +1,7 @@
 <?php
 require_once "dbh.inc.php";
+require_once "crypto.php";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Collect form data
@@ -10,8 +12,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $otpVerify       = $_POST["otp_inp"]          ?? '';
     $expiresAt       = (int)($_POST["otp_expires_at"] ?? 0);
 
-if (!$expiresAt || time() > $expiresAt) {
-    echo '
+    // ---- OTP expired ----
+    if (!$expiresAt || time() > $expiresAt) {
+        echo '
 <form id="back" method="post" action="../secondaryEmailPage2.php">
   <input type="hidden" name="primaryEmail"    value="'.htmlspecialchars($firstEmail, ENT_QUOTES).'">
   <input type="hidden" name="secondaryEmail"  value="'.htmlspecialchars($email, ENT_QUOTES).'">
@@ -19,14 +22,12 @@ if (!$expiresAt || time() > $expiresAt) {
   <input type="hidden" name="no_autosend"     value="1"> 
 </form>
 <script>document.getElementById("back").submit();</script>';
-    exit;
-}
+        exit;
+    }
 
-    // includes/secondary_email_verification.php
+    // ---- Wrong OTP -> auto-post back, keep values ----
     if ($otpVerify !== $otp) {
-      // RIGHT: auto-POST back so OTP is not in the URL bar
-if ($otpVerify !== $otp) {
-    echo '
+        echo '
 <form id="back" method="post" action="../secondaryEmailPage2.php">
   <input type="hidden" name="primaryEmail"     value="'.htmlspecialchars($firstEmail, ENT_QUOTES).'">
   <input type="hidden" name="secondaryEmail"   value="'.htmlspecialchars($email, ENT_QUOTES).'">
@@ -35,16 +36,50 @@ if ($otpVerify !== $otp) {
   <input type="hidden" name="alert"            value="Wrong verify OTP">
 </form>
 <script>document.getElementById("back").submit();</script>';
-    exit;
-}
+        exit;
+    }
 
+    // -----------------------------------------------------------------
+    // OTP correct  -> update encrypted secondary_email
+    // -----------------------------------------------------------------
 
+    if (!$conn) {
+        die("Database connection failed");
+    }
 
-          
-        
-    } else {
-        // Prepare SQL statement to prevent SQL injection
-        mysqli_query($conn, "UPDATE users SET secondary_email = '$email' WHERE email = '$firstEmail'");
+    // 1) Find user id by decrypted PRIMARY email ($firstEmail)
+    $userId = null;
+    $res = mysqli_query($conn, "SELECT id, email FROM users");
+    if ($res) {
+        while ($row = mysqli_fetch_assoc($res)) {
+            $dec_email = decrypt_field($row['email']);
+            if (strcasecmp($dec_email, $firstEmail) === 0) {
+                $userId = (int)$row['id'];
+                break;
+            }
+        }
+    }
+
+    if ($userId === null) {
+        echo "<script>alert('Account not found for this email'); window.location.href='../accountPage.php';</script>";
+        exit;
+    }
+
+    // 2) Encrypt the new secondary email
+    $enc_secondary = encrypt_field($email);
+
+    // 3) Update DB using prepared statement
+    $stmt = $conn->prepare("UPDATE users SET secondary_email = ? WHERE id = ?");
+    if ($stmt) {
+        $stmt->bind_param("si", $enc_secondary, $userId);
+        $stmt->execute();
+        $stmt->close();
+
         echo "<script>alert('Secondary Email edit successfully'); window.location.href='../accountPage.php';</script>";
+        exit;
+    } else {
+        echo "<script>alert('Failed to update secondary email'); window.location.href='../accountPage.php';</script>";
+        exit;
     }
 }
+?>

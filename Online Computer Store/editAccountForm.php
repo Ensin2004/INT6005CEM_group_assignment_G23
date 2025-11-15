@@ -1,6 +1,8 @@
 <?php
 require_once "includes/security.php";
 require_once "includes/csrf.php";
+require_once "includes/crypto.php";
+
 ?>
 
 <!DOCTYPE html>
@@ -25,11 +27,19 @@ require_once "includes/csrf.php";
         <?php
         include 'includes/dbh.inc.php';
         $id = $_SESSION['ID'];
+
         $result = mysqli_query($conn, "SELECT * FROM users WHERE id='$id'");
-        $row = mysqli_fetch_assoc($result);
-        $image = '../Image/no_img_customer.png'; 
+        $row    = mysqli_fetch_assoc($result);
+
+        $plain_name       = decrypt_field($row['user_name']);
+        $plain_email      = decrypt_field($row['email']);
+        $plain_secondary  = decrypt_field($row['secondary_email']);
+        $plain_phone      = decrypt_field($row['phone']);
+        $plain_address    = decrypt_field($row['user_address']); 
+
+        $image = '../Image/no_img_customer.png';
         if (!empty($row['user_image'])) {
-            $image = 'image/'.$row['user_image']; 
+            $image = 'image/' . $row['user_image'];
         }
         ?>
 
@@ -43,31 +53,36 @@ require_once "includes/csrf.php";
                     <div class="img_container">
                         <img class="img_preview" src="<?php echo $image; ?>" id="acc_preview">
                         <label class="label" for="accountimg"></label>
-                        <input class="imageInput" type="file" id="accountimg" name="accountimg" accept=".jpg, .jpeg, .png, image/jpeg, image/png" onchange="showPreview(event, 'acc_preview', '<?php echo $image; ?>');">
+                        <input class="imageInput" type="file" id="accountimg" name="accountimg"
+                            accept=".jpg,.jpeg,.png,image/jpeg,image/png"
+                            onchange="showPreview(event, 'acc_preview', '<?php echo $image; ?>');">
                     </div>
                 </div>
                 <div class="accInfo">
                     <label for="Username">Name :</label>
-                    <input required type="text" id="Username" name="newUsername" maxlength="50" value="<?php echo $row['user_name'] ?>">
-                    <p class="limit-warning" id="nameLimit">Character limit reached (50)</p>
+                    <input required type="text" id="Username" name="newUsername" maxlength="50"
+                       value="<?php echo htmlspecialchars($plain_name, ENT_QUOTES, 'UTF-8'); ?>">                  <p class="limit-warning" id="nameLimit">Character limit reached (50)</p>
                     <p class="validation-error" id="nameError">Please enter a valid name (letters only).</p>
                     
                     <label for="Email">Email :</label>
-                    <input required type="email" id="Email" name="newEmail" value="<?php echo $row['email'] ?>" readonly>
+                    <input required type="email" id="Email" name="newEmail"
+                       value="<?php echo htmlspecialchars($plain_email, ENT_QUOTES, 'UTF-8'); ?>" readonly>                    
                     
                     <label for="SecondaryEmail">Secondary Email (Optional) :</label>
                     <div class="secondaryEmail">
-                        <input required type="email" id="SecondaryEmail" name="secondaryEmail" value="<?php echo $row['secondary_email'] ?>" readonly>
+                        <input required type="email" id="SecondaryEmail" name="secondaryEmail"
+                            value="<?php echo htmlspecialchars($plain_secondary, ENT_QUOTES, 'UTF-8'); ?>" readonly>
                         <a href="secondaryEmailPage.php" class="editBtn" id="editSecondary">Edit</a>
                     </div>
                     
                     <label for=" Phone">Phone Number :</label>
-                    <input required type="text" id="Phone" name="newPhone" maxlength="11" value="<?php echo $row['phone'] ?>">
-                    <p class="limit-warning" id="phoneLimit">Character limit reached (11)</p>
+                    <input required type="text" id="Phone" name="newPhone" maxlength="11"
+                       value="<?php echo htmlspecialchars($plain_phone, ENT_QUOTES, 'UTF-8'); ?>">                    <p class="limit-warning" id="phoneLimit">Character limit reached (11)</p>
                     <p class="validation-error" id="phoneError">Please enter a valid Malaysian phone number (starting with 01).</p>
                     
                     <label for="Address">Address :</label>
-                    <input required type="text" id="Address" name="newAddress" maxlength="200" value="<?php echo $row['user_address'] ?>" >
+                    <input required type="text" id="Address" name="newAddress" maxlength="200"
+                       value="<?php echo htmlspecialchars($plain_address, ENT_QUOTES, 'UTF-8'); ?>">
                     <p class="limit-warning" id="addressLimit">Character limit reached (200)</p>
                     
                     <label for="newPassword">New Password :</label>

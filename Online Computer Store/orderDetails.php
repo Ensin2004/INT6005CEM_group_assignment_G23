@@ -1,5 +1,7 @@
 <?php
 require_once "includes/security.php";
+require_once "includes/crypto.php";
+
 ?>
 
 <!DOCTYPE html>
@@ -23,7 +25,13 @@ require_once "includes/security.php";
         die("Database connection failed");
     } else {
         $orderID = $_GET["order"];
-        $orderDetails = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM orders INNER JOIN users ON orders.user_id = users.id WHERE orders.id = $orderID;"));
+        $orderDetails = mysqli_fetch_assoc(mysqli_query($conn,
+            "SELECT * FROM orders INNER JOIN users ON orders.user_id = users.id WHERE orders.id = $orderID;"
+        ));
+
+        $plain_user_name = decrypt_field($orderDetails['user_name']);
+        $plain_phone     = decrypt_field($orderDetails['phone']);        
+
         $statusName = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM orderstatus WHERE id =" . $orderDetails['status_id'] . ";"))["status_name"];
         $itemDetails = mysqli_query($conn, "SELECT * FROM orderitems LEFT JOIN items ON orderitems.item_id = items.id WHERE orderitems.order_id = $orderID;");
         list($date, $time) = explode(" ", $orderDetails["order_date"]);
@@ -134,8 +142,9 @@ require_once "includes/security.php";
                 <div class="customer_details">
                     <img src="../Online Computer Store/image/<?php echo $orderDetails['user_image']; ?>" alt="<?php echo $orderDetails['user_name']; ?>">
                     <div>
-                        <p class="cust_name"><?php echo $orderDetails['user_name']; ?></p>
-                        <p><?php echo $orderDetails['phone']; ?></p>
+                        <p class="cust_name"><?php echo htmlspecialchars($plain_user_name, ENT_QUOTES, 'UTF-8'); ?></p>
+                        <p><?php echo htmlspecialchars($plain_phone, ENT_QUOTES, 'UTF-8'); ?></p>
+
                     </div>
                 </div>
                 <br>

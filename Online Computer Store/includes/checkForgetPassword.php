@@ -1,15 +1,26 @@
 <?php
 require_once 'dbh.inc.php';
+require_once 'crypto.php';
+
 if (!$conn) {
     die("Database connection failed");
 } else {
-    //get variables
-    $email = htmlspecialchars($_POST["UserEmail"]);
-    $newPassword = htmlspecialchars($_POST["newPassword"]);
+    $email         = htmlspecialchars($_POST["UserEmail"]);
+    $newPassword   = htmlspecialchars($_POST["newPassword"]);
     $confirmPassword = htmlspecialchars($_POST["confirmPassword"]);
 
-    $checkEmail = mysqli_num_rows(mysqli_query($conn, "SELECT email FROM users 
-    WHERE LOWER(email) = LOWER('$email') OR LOWER(secondary_email) = LOWER('$email');"));
+    $checkEmail = 0;
+    $res = mysqli_query($conn, "SELECT email, secondary_email FROM users");
+    if ($res) {
+        while ($row = mysqli_fetch_assoc($res)) {
+            $e1 = decrypt_field($row['email']);
+            $e2 = decrypt_field($row['secondary_email']);
+            if (strcasecmp($e1, $email) === 0 || strcasecmp($e2, $email) === 0) {
+                $checkEmail = 1;
+                break;
+            }
+        }
+    }
 }
 ?>
 
