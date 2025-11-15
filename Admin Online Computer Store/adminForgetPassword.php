@@ -25,6 +25,7 @@
                     <label for="Email">Admin Email:</label>
                     <input required type="email" id="Email" name="AdminEmail" maxlength="100" placeholder="Enter your email">
                     <p class="limit-warning" id="nameLimit">Character limit reached (100)</p>
+                    <p class="validation-error" id="emailError">Please enter a valid email address.</p>
 
                     <label for="newPassword">New Password:</label>
                     <input required type="password" id="newPassword" name="newPassword" maxlength="20" placeholder="Enter New Password">
@@ -39,7 +40,8 @@
                     </div>
 
                     <label for="confirmPassword">Confirm Password:</label>
-                    <input required type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password">
+                    <input required type="password" id="confirmPassword" name="confirmPassword" maxlength="20" placeholder="Confirm Password">
+                    <p class="limit-warning" id="confirmPwdLimit">Character limit reached (20)</p>
                     <p class="pwd_confirmation" id="pwd_confirmation">Passwords do not match</p>
 
                     <button class="logIn" id="submit_btn" type="submit">Submit</button>
@@ -51,6 +53,41 @@
     <?php include 'footer.php'; ?>
 
     <script>
+        // ------------- Global validity flags -------------
+        let isEmailValid = false;
+        let isPasswordValid = false;
+
+        const submit_btn = document.getElementById('submit_btn');
+        const emailInput = document.getElementById('Email');
+
+        // ------------- Helper to control submit button -------------
+        function updateSubmitButton() {
+            if (isEmailValid && isPasswordValid) {
+                submit_btn.disabled = false;
+            } else {
+                submit_btn.disabled = true;
+            }
+        }
+
+        // ------------- Email validation -------------
+        function validateEmail() {
+            const error = document.getElementById('emailError');
+            const email = emailInput.value.trim();
+
+            if (email.length === 0) {
+                error.style.display = "none";
+                isEmailValid = false;
+            } else if (emailInput.validity.valid) {
+                error.style.display = "none";
+                isEmailValid = true;
+            } else {
+                error.style.display = "block";
+                isEmailValid = false;
+            }
+
+            updateSubmitButton();
+        }
+
         // Password validation (same logic as user version)
         document.getElementById('newPassword').addEventListener('input', validatePassword);
         document.getElementById('confirmPassword').addEventListener('input', validatePassword);
@@ -88,12 +125,39 @@
                     pwd_validation_container.style.display = "none";
                     pwd_confirmation.style.display = "block";
                 }
+
+                isPasswordValid = false;
+
             } else {
                 pwd_validation_container.style.display = "none";
                 pwd_confirmation.style.display = "none";
                 submit_btn.disabled = false;
             }
+
+            updateSubmitButton();
         }
+
+        // ------------- Field Limit Warning (your existing code) -------------
+        function setupLimitWarning(inputId, warningId, max) {
+            const input = document.getElementById(inputId);
+            const warning = document.getElementById(warningId);
+
+            input.addEventListener('input', () => {
+                if (input.value.length === max) {
+                    warning.style.display = "block";
+                } else {
+                    warning.style.display = "none";
+                }
+            });
+        }
+
+        // Initialize limit warnings for all fields
+        setupLimitWarning('Email', 'emailLimit', 100);
+        setupLimitWarning('newPassword', 'newPwdLimit', 20);
+        setupLimitWarning('confirmPassword', 'confirmPwdLimit', 20);
+
+        // ------------- Attach validation listeners -------------
+        emailInput.addEventListener('input', validateEmail);
     </script>
 </body>
 

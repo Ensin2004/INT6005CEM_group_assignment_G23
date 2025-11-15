@@ -49,7 +49,7 @@ try {
             }
 
             // Your original query
-            $query = "INSERT INTO users (user_name, email, phone, user_add, pwd) VALUES ('$name', '$email', '$phone', '$address', '$password');";
+            $query = "INSERT INTO users (user_name, email, phone, user_address, pwd) VALUES ('$name', '$email', '$phone', '$address', '$password');";
 
             $result = mysqli_query($conn, $query);
 
