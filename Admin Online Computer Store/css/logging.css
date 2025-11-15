@@ -1,6 +1,5 @@
 /* css/logging.css – scoped styles for the logging page only */
 .logs .page-root {
-  /* lets the footer sit at the bottom using the site's flex layout */
   display: block;
 }
 
