@@ -50,6 +50,7 @@ require_once "includes/csrf.php";
                     <label for="Username">Name :</label>
                     <input required type="text" id="Username" name="newUsername" maxlength="50" value="<?php echo $row['user_name'] ?>">
                     <p class="limit-warning" id="nameLimit">Character limit reached (50)</p>
+                    <p class="validation-error" id="nameError">Please enter a valid name (letters only).</p>
                     
                     <label for="Email">Email :</label>
                     <input required type="email" id="Email" name="newEmail" value="<?php echo $row['email'] ?>" readonly>
@@ -63,6 +64,7 @@ require_once "includes/csrf.php";
                     <label for=" Phone">Phone Number :</label>
                     <input required type="text" id="Phone" name="newPhone" maxlength="11" value="<?php echo $row['phone'] ?>">
                     <p class="limit-warning" id="phoneLimit">Character limit reached (11)</p>
+                    <p class="validation-error" id="phoneError">Please enter a valid Malaysian phone number (starting with 01).</p>
                     
                     <label for="Address">Address :</label>
                     <input required type="text" id="Address" name="newAddress" maxlength="200" value="<?php echo $row['user_address'] ?>" >
@@ -109,6 +111,91 @@ require_once "includes/csrf.php";
                     document.getElementById(previewId).src = originalSrc;
                 }
             }
+        }
+
+        // ------------- Global validity flags -------------
+        let isNameValid = false;
+        let isEmailValid = false;
+        let isPhoneValid = false;
+        let isPasswordValid = false;
+
+        const submit_btn = document.getElementById('submit_btn');
+        const nameInput  = document.getElementById('Username');
+        const emailInput = document.getElementById('Email');
+        const phoneInput = document.getElementById('Phone');
+
+        // ------------- Helper to control submit button -------------
+        function updateSubmitButton() {
+            if (isEmailValid && isPasswordValid) {
+                submit_btn.disabled = false;
+            } else {
+                submit_btn.disabled = true;
+            }
+        }
+
+        // ------------- Name validation -------------
+        function validateName() {
+            const name = nameInput.value.trim();
+            const error = document.getElementById('nameError');
+
+            // Letters, spaces, apostrophes, dots, hyphens; length 2–50
+            const nameRegex = /^[A-Za-z\s'.-]{2,50}$/;
+
+            if (name.length === 0) {
+                error.style.display = "none";
+                isNameValid = false;
+            } else if (nameRegex.test(name)) {
+                error.style.display = "none";
+                isNameValid = true;
+            } else {
+                error.style.display = "block";
+                isNameValid = false;
+            }
+
+            updateSubmitButton();
+        }
+
+        // ------------- Email validation -------------
+        function validateEmail() {
+            const error = document.getElementById('emailError');
+            const email = emailInput.value.trim();
+
+            if (email.length === 0) {
+                error.style.display = "none";
+                isEmailValid = false;
+            } else if (emailInput.validity.valid) {
+                error.style.display = "none";
+                isEmailValid = true;
+            } else {
+                error.style.display = "block";
+                isEmailValid = false;
+            }
+
+            updateSubmitButton();
+        }
+
+        // ------------- Malaysian phone validation -------------
+        function validatePhone() {
+            const phone = phoneInput.value.trim();
+            const error = document.getElementById('phoneError');
+
+            // Simple Malaysian format:
+            // - starts with 0
+            // - total 10 or 11 digits (e.g. 0123456789, 01234567890, 0421234567)
+            const phoneRegex = /^01\d{8,9}$/;
+
+            if (phone.length === 0) {
+                error.style.display = "none";
+                isPhoneValid = false;
+            } else if (phoneRegex.test(phone)) {
+                error.style.display = "none";
+                isPhoneValid = true;
+            } else {
+                error.style.display = "block";
+                isPhoneValid = false;
+            }
+
+            updateSubmitButton();
         }
 
         document.getElementById('newPassword').addEventListener('input', validatePassword);
@@ -194,6 +281,11 @@ require_once "includes/csrf.php";
         setupLimitWarning('Address', 'addressLimit', 200);
         setupLimitWarning('newPassword', 'newPwdLimit', 20);
         setupLimitWarning('confirmPassword', 'confirmPwdLimit', 20);
+
+        // ------------- Attach validation listeners -------------
+        nameInput.addEventListener('input', validateName);
+        emailInput.addEventListener('input', validateEmail);
+        phoneInput.addEventListener('input', validatePhone);
     </script>
 
 

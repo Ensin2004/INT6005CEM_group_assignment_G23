@@ -17,74 +17,114 @@ $ARGON_OPTS = [
     'threads'     => 1
 ];
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+/**
+ * Generic error handler for this page
+ * - Logs the error
+ * - Sends ERROR 500 status
+ * - Redirects to unified ERROR 500 page (no sensitive info to user)
+ */
+function handleErrorAndExit($message = 'Unexpected error during account update.') {
+    error_log('[ACCOUNT UPDATE ERROR] ' . $message);
+    http_response_code(500);
+    header("Location: ../errors/500.php");
+    exit;
+}
 
-    // Check CSRF token
-    if (!isset($_POST['csrfToken']) || !checkCSRFToken($_POST['csrfToken'])) {
-        die("<script> alert('Invalid or expired CSRF token. Please refresh the page and try again.'); window.history.go(-1); </script>");
-    }
+try {
 
-    // Collect form data
-    $name = htmlspecialchars(trim($_POST["newUsername"]));
-    $email = htmlspecialchars(trim($_POST["newEmail"]));
-    $phone = htmlspecialchars(trim($_POST["newPhone"]));
-    $address = htmlspecialchars(trim($_POST["newAddress"]));
-    $password = $_POST["newPassword"] ?? '';
-    $confirmPassword = $_POST["confirmPassword"] ?? '';
-    $img1 = $_FILES["accountimg"];
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // Database connection
-    if (!$conn) {
-        die("Database connection failed");
-    }
-
-    else{
-
-    // Prepare SQL statement to prevent SQL injection
-    $id = $_SESSION['ID'];
-
-    // If user typed a new password, validate + hash (Argon2id)
-    if (strlen($password) > 0 || strlen($confirmPassword) > 0) {
-
-        if ($password !== $confirmPassword) {
-            echo "<script>alert('Confirm password does not match'); window.history.back();</script>";
+        // Check CSRF token
+        if (!isset($_POST['csrfToken']) || !checkCSRFToken($_POST['csrfToken'])) {
+            echo "<script>alert('Invalid or expired CSRF token. Please refresh the page and try again.'); window.history.go(-1);</script>";
             exit;
         }
 
-        // Hash new password using Argon2id
-        $passwordHash = password_hash($password, PASSWORD_ARGON2ID, $ARGON_OPTS);
-    }
+        // Database connection
+        if (!$conn) {
+            handleErrorAndExit('Database connection failed.');
+        } else {
 
-    $oriImgPath = mysqli_fetch_assoc(mysqli_query($conn, "SELECT user_image FROM users WHERE id = $id;"));
-    $query = "UPDATE users SET user_name='$name', email='$email', phone='$phone', user_Address='$address' WHERE id = '$id'";
+            // Collect form data
+            $name           = htmlspecialchars(trim($_POST["newUsername"]));
+            $email          = htmlspecialchars(trim($_POST["newEmail"]));
+            $phone          = htmlspecialchars(trim($_POST["newPhone"]));
+            $address        = htmlspecialchars(trim($_POST["newAddress"]));
+            $password       = $_POST["newPassword"] ?? '';
+            $confirmPassword= $_POST["confirmPassword"] ?? '';
+            $img1           = $_FILES["accountimg"];
+            $id             = $_SESSION['ID'];
 
-    // Only update password if user actually typed one
-    if (!empty($password)) {
-        mysqli_query($conn, "UPDATE users SET pwd='$passwordHash' WHERE id='$id'");
-    }
+            // If user typed a new password, validate + hash (Argon2id)
+            if (strlen($password) > 0 || strlen($confirmPassword) > 0) {
 
-    if (mysqli_query($conn, $query)) {
-        // Update image if there are changes
-        if (!empty($img1["name"])) {
-            $img1_file_name = uniqid("", true) . "." . pathinfo($img1["name"], PATHINFO_EXTENSION);
-            $query = "UPDATE users SET user_image = '$img1_file_name' WHERE id = $id;";
-            if (mysqli_query($conn, $query)) {
-                move_uploaded_file($img1["tmp_name"], "../image/" . $img1_file_name);
-                if ($oriImgPath["accountimg"] != "") {
-                    $file = "../image/" . $oriImgPath["accountimg"];
-                    if (file_exists($file)) {
-                        unlink($file);
-                    }
+                if ($password !== $confirmPassword) {
+                    echo "<script>alert('Confirm password does not match'); window.history.back();</script>";
+                    exit;
                 }
-            } else {
-                echo "<script>alert('Account updated unsuccessful'); window.location.href='../editAccountForm.php';</script>";
-            }
-        }
 
-        echo "<script>alert('Account update successfully'); window.location.href='../accountPage.php';</script>";
-    } else {
-        echo "<script>alert('Account update failed'); window.location.href='../editAccountForm.php';</script>";
+                // Hash new password using Argon2id
+                $passwordHash = password_hash($password, PASSWORD_ARGON2ID, $ARGON_OPTS);
+                if ($passwordHash === false) {
+                    handleErrorAndExit('Password hashing failed.');
+                }
+            }
+
+            // Get original image path
+            $oriResult = mysqli_query($conn, "SELECT user_image FROM users WHERE id = $id;");
+            if (!$oriResult) {
+                handleErrorAndExit('Failed to fetch existing user image.');
+            }
+            $oriImgPath = mysqli_fetch_assoc($oriResult);
+
+            // Update basic info
+            $query = "UPDATE users SET user_name='$name', email='$email', phone='$phone', user_Address='$address' WHERE id = '$id'";
+
+            $updateInfo = mysqli_query($conn, $query);
+            if (!$updateInfo) {
+                handleErrorAndExit('Failed to update user profile details.');
+            }
+
+            // Only update password if user actually typed one
+            if (!empty($password)) {
+                $pwdUpdate = mysqli_query($conn, "UPDATE users SET pwd='$passwordHash' WHERE id='$id'");
+                if (!$pwdUpdate) {
+                    handleErrorAndExit('Failed to update user password.');
+                }
+            }
+
+            // Update image if there are changes
+            if (!empty($img1["name"])) {
+                $img1_file_name = uniqid("", true) . "." . pathinfo($img1["name"], PATHINFO_EXTENSION);
+                $imgQuery = "UPDATE users SET user_image = '$img1_file_name' WHERE id = $id;";
+
+                $imgUpdate = mysqli_query($conn, $imgQuery);
+                if ($imgUpdate) {
+                    // Move new file
+                    move_uploaded_file($img1["tmp_name"], "../image/" . $img1_file_name);
+
+                    // Delete old file if exists
+                    // NOTE: column is user_image, not accountimg
+                    if (!empty($oriImgPath["user_image"])) {
+                        $file = "../image/" . $oriImgPath["user_image"];
+                        if (file_exists($file)) {
+                            unlink($file);
+                        }
+                    }
+                } else {
+                    // Application-level failure (no sensitive details)
+                    echo "<script>alert('Account updated unsuccessful'); window.location.href='../editAccountForm.php';</script>";
+                    exit;
+                }
+            }
+
+            // All done
+            echo "<script>alert('Account update successfully'); window.location.href='../accountPage.php';</script>";
+        }
     }
-}
+
+} catch (Throwable $e) {
+    // Catch any unexpected PHP error/exception (including mysqli exceptions if enabled)
+    handleErrorAndExit($e->getMessage());
 }
 ?>

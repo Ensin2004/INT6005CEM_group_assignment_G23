@@ -170,6 +170,13 @@
   display: none;
 }
 
+.validation-error {
+    display: none;
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: rgb(255, 52, 52);
+}
+
 /* ------ pop up ----- */
 
 /* .popup {
