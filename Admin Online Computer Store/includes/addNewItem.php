@@ -51,6 +51,13 @@ try {
         $img4        = $_FILES["image4"];
         $img5        = $_FILES["image5"];
 
+        // Default values to avoid "undefined variable" warnings
+        $img1_file_name = '';
+        $img2_file_name = '';
+        $img3_file_name = '';
+        $img4_file_name = '';
+        $img5_file_name = '';
+
         // New file names (unique)
         if (!empty($img1["name"])) {
             $img1_file_name = uniqid("", true) . "." . pathinfo($img1["name"], PATHINFO_EXTENSION);
@@ -75,12 +82,21 @@ try {
         $insert = mysqli_query($conn, $query);
 
         if ($insert) {
-            // Move images (same behaviour as original)
-            move_uploaded_file($img1["tmp_name"], "../../Image/" . $img1_file_name);
-            move_uploaded_file($img2["tmp_name"], "../../Image/" . $img2_file_name);
-            move_uploaded_file($img3["tmp_name"], "../../Image/" . $img3_file_name);
-            move_uploaded_file($img4["tmp_name"], "../../Image/" . $img4_file_name);
-            move_uploaded_file($img5["tmp_name"], "../../Image/" . $img5_file_name);
+            if (!empty($img1["name"]) && $img1_file_name !== '') {
+                move_uploaded_file($img1["tmp_name"], "../../Image/" . $img1_file_name);
+            }
+            if (!empty($img2["name"]) && $img2_file_name !== '') {
+                move_uploaded_file($img2["tmp_name"], "../../Image/" . $img2_file_name);
+            }
+            if (!empty($img3["name"]) && $img3_file_name !== '') {
+                move_uploaded_file($img3["tmp_name"], "../../Image/" . $img3_file_name);
+            }
+            if (!empty($img4["name"]) && $img4_file_name !== '') {
+                move_uploaded_file($img4["tmp_name"], "../../Image/" . $img4_file_name);
+            }
+            if (!empty($img5["name"]) && $img5_file_name !== '') {
+                move_uploaded_file($img5["tmp_name"], "../../Image/" . $img5_file_name);
+            }
 
             $after = [
             'category_id'=>$category,'item_name'=>$name,'price'=>$price,'stock_qty'=>$stock,

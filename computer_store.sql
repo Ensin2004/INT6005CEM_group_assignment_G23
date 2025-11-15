@@ -80,7 +80,13 @@ INSERT INTO `audit_logs` (`id`, `actor_admin_id`, `actor_role`, `action`, `entit
 (4, NULL, NULL, 'login_failure', NULL, NULL, 'Admin login failed: name=admin, email=ensin2004@gmail.com', NULL, NULL, 'failure', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 00:14:57'),
 (5, 1, 'super_admin', 'login_failure', NULL, NULL, 'Wrong password for admin #1', NULL, NULL, 'failure', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 00:15:14'),
 (6, 1, 'super_admin', 'login_success', NULL, NULL, 'Admin logged in', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 00:15:25'),
-(7, 1, 'super_admin', 'logout', 'admins', 1, 'Admin logged out', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 01:14:18');
+(7, 1, 'super_admin', 'logout', 'admins', 1, 'Admin logged out', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 01:14:18'),
+(8, 1, 'super_admin', 'login_failure', NULL, NULL, 'Wrong password for admin #1', NULL, NULL, 'failure', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 02:56:08'),
+(9, 1, 'super_admin', 'login_success', NULL, NULL, 'Admin logged in', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 02:56:25'),
+(10, 1, 'super_admin', 'logout', 'admins', 1, 'Admin logged out', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 02:59:29'),
+(11, 1, 'super_admin', 'login_success', NULL, NULL, 'Admin logged in', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 16:52:33'),
+(12, 1, 'super_admin', 'logout', 'admins', 1, 'Admin logged out', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 16:54:29'),
+(13, 3, 'manager', 'login_success', NULL, NULL, 'Admin logged in', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 16:54:40');
 
 -- --------------------------------------------------------
 
@@ -329,7 +335,7 @@ INSERT INTO `users` (`id`, `user_name`, `email`, `secondary_email`, `phone`, `us
 (4, 'Cojean', 'P22014471@student.newinti.edu.my', NULL, '017-5807201', 'PISA Home Centre, Level 1, Car Park Complex PISA, Pulau Pinang', 'Cojean123@', 'no_profile_pic.png', 0, NULL),
 (5, 'Cincai', 'hzhsia603@gmail.com', NULL, '012-8888888', 'A123, Regency Height, Sungai Ara, Penang', 'Cincai123@', 'no_profile_pic.png', 0, NULL),
 (19, 'arief', 'qiqihutao919@gmail.com', '', '0123456789', '12345aaa', 'arief12345@', 'no_profile_pic.png', 0, NULL),
-(26, 'Junzo', 'junzobryan28@gmail.com', NULL, '012-3456789', 'bryan 123, at jalan bryan', '$argon2id$v=19$m=131072,t=3,p=1$U0RrZG8zT3ZnV0svLkRWUw$CzXPF5fKRoesN6YJHvBYWHHUzu2JMPjJpSjQiGaL7aQ', 'no_profile_pic.png', 0, NULL);
+(27, 'Junzo', 'junzobryan28@gmail.com', NULL, '0123456789', 'bryan 123, at jalan bryan', '$argon2id$v=19$m=131072,t=3,p=1$bDNaajQxOU5wV1pXZWdmZA$nCbYRyuvcMeBwUTrohC5RObVz5+1yNXC2R1pGg+i4/4', 'no_profile_pic.png', 0, NULL);
 
 --
 -- Indexes for dumped tables
@@ -432,7 +438,7 @@ ALTER TABLE `admins`
 -- AUTO_INCREMENT for table `audit_logs`
 --
 ALTER TABLE `audit_logs`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `cart`
@@ -486,7 +492,7 @@ ALTER TABLE `orderstatus`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- Constraints for dumped tables
