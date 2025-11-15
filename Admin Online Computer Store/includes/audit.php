@@ -1,5 +1,4 @@
 <?php
-// includes/audit.php
 function audit_log(
     mysqli $conn,
     ?int $actor_admin_id,

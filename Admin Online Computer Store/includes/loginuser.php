@@ -101,9 +101,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 "UPDATE admins SET wrong_pwd_count = '$wrong_pwd_count', lock_until = " . ($lock_until ? "'$lock_until'" : "NULL") . " WHERE id = '{$row['id']}'"
             );
 
-            audit_log($conn, $row['id'], $row['role'] ?? null, 'login_failure', null, null,
-          'Wrong password for admin #' . $row['id'],
-          null, null, 'failure');
+            // log for wrong password
+            audit_log(
+                $conn, 
+                $row['id'], 
+                $row['role'] ?? null, 
+                'login_failure', 
+                null,
+                null,
+                'Wrong password for admin #' . $row['id'],
+                null, 
+                null, 
+                'failure'
+            );
 
 
             // Display messages
@@ -126,8 +136,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION['role'] = $row['role'];
             $_SESSION['status'] = $row['account_status'];
 
-            audit_log($conn, $row['id'], $row['role'], 'login_success', null, null,
-          'Admin logged in');
+            // log for success login
+            audit_log(
+                $conn, 
+                $row['id'], 
+                $row['role'], 
+                'login_success', 
+                null, 
+                null,
+                'Admin logged in'
+            );
 
             // Display messages
             echo "<script> alert('Log in successfully'); window.location.href='../home.php'; </script>";
