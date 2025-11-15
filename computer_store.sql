@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 13, 2025 at 06:33 PM
+-- Generation Time: Nov 15, 2025 at 10:11 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -44,9 +44,49 @@ CREATE TABLE `admins` (
 --
 
 INSERT INTO `admins` (`id`, `admin_name`, `admin_email`, `admin_pwd`, `admin_image`, `role`, `account_status`, `wrong_pwd_count`, `lock_until`) VALUES
-(1, 'admin', 'kahtechpng@gmail.com', '$argon2id$v=19$m=131072,t=3,p=1$a1huckpNNS8vUFNOdkZSeg$A6jhDkD61WbjkwFopYvH9+SwVn1ehDnXovQ+7JMLxZE', 'no_profile_pic.png', 'super_admin', 'active', 1, NULL),
-(3, 'test', 'test@gmail.com', '$argon2id$v=19$m=131072,t=3,p=1$ZEV1T1ZCUktVQ1Q4aDhsMw$CvGEK5bUa7OksETTYJprCBEDFhYBGDwc14zoQpO7SK4', 'no_profile_pic.png', 'manager', 'active', 0, NULL),
-(4, 'Cojean', 'khorcojean@gmail.com', '$argon2id$v=19$m=131072,t=3,p=1$dXpJZXdGQ2Y2b2g3emFBNA$MACw8GRuKqBLeoEyhBgbvOZF7TLpYm2BCl8/Cq69nlQ', 'no_profile_pic.png', 'manager', 'active', 0, NULL);
+(1, 'admin', 'bryanyeoh681@gmail.com', '$argon2id$v=19$m=131072,t=3,p=1$N0M4SklPLzlZNE1BMGIySQ$3ZjBhBoTqZOxQtMb/GtwFvrSml9LbB6XoUdtZx3HlNI', 'no_profile_pic.png', 'super_admin', 'active', 0, NULL),
+(3, 'test', 'test@gmail.com', '$argon2id$v=19$m=131072,t=3,p=1$ZEV1T1ZCUktVQ1Q4aDhsMw$CvGEK5bUa7OksETTYJprCBEDFhYBGDwc14zoQpO7SK4', 'no_profile_pic.png', 'manager', 'active', 0, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `audit_logs`
+--
+
+CREATE TABLE `audit_logs` (
+  `id` bigint(20) NOT NULL,
+  `actor_admin_id` int(11) DEFAULT NULL,
+  `actor_role` enum('manager','super_admin') DEFAULT NULL,
+  `action` varchar(64) NOT NULL,
+  `entity_type` varchar(64) DEFAULT NULL,
+  `entity_id` int(11) DEFAULT NULL,
+  `summary` varchar(255) NOT NULL,
+  `before_json` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`before_json`)),
+  `after_json` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`after_json`)),
+  `outcome` enum('success','failure') NOT NULL DEFAULT 'success',
+  `ip_address` varchar(45) DEFAULT NULL,
+  `user_agent` varchar(255) DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `audit_logs`
+--
+
+INSERT INTO `audit_logs` (`id`, `actor_admin_id`, `actor_role`, `action`, `entity_type`, `entity_id`, `summary`, `before_json`, `after_json`, `outcome`, `ip_address`, `user_agent`, `created_at`) VALUES
+(1, 1, 'super_admin', 'login_success', NULL, NULL, 'Admin logged in', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 00:14:08'),
+(2, 1, 'super_admin', 'item_soft_delete', 'items', 1, 'Soft-deleted item #1', '{\"id\":\"1\",\"item_name\":\"Logitech G502 High Performance Gaming Mouse\",\"item_status\":\"Active\"}', '{\"id\":\"1\",\"item_name\":\"Logitech G502 High Performance Gaming Mouse\",\"item_status\":\"Deleted\"}', 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 00:14:28'),
+(3, 1, 'super_admin', 'logout', 'admins', 1, 'Admin logged out', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 00:14:37'),
+(4, NULL, NULL, 'login_failure', NULL, NULL, 'Admin login failed: name=admin, email=ensin2004@gmail.com', NULL, NULL, 'failure', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 00:14:57'),
+(5, 1, 'super_admin', 'login_failure', NULL, NULL, 'Wrong password for admin #1', NULL, NULL, 'failure', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 00:15:14'),
+(6, 1, 'super_admin', 'login_success', NULL, NULL, 'Admin logged in', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 00:15:25'),
+(7, 1, 'super_admin', 'logout', 'admins', 1, 'Admin logged out', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 01:14:18'),
+(8, 1, 'super_admin', 'login_failure', NULL, NULL, 'Wrong password for admin #1', NULL, NULL, 'failure', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 02:56:08'),
+(9, 1, 'super_admin', 'login_success', NULL, NULL, 'Admin logged in', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 02:56:25'),
+(10, 1, 'super_admin', 'logout', 'admins', 1, 'Admin logged out', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 02:59:29'),
+(11, 1, 'super_admin', 'login_success', NULL, NULL, 'Admin logged in', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 16:52:33'),
+(12, 1, 'super_admin', 'logout', 'admins', 1, 'Admin logged out', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 16:54:29'),
+(13, 3, 'manager', 'login_success', NULL, NULL, 'Admin logged in', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 16:54:40');
 
 -- --------------------------------------------------------
 
@@ -118,7 +158,7 @@ CREATE TABLE `homepage` (
 --
 
 INSERT INTO `homepage` (`id`, `aboutus_description`, `mission_description`, `whatwedo1`, `whatwedo2`, `whatwedo3`, `whatwedo4`, `image1`, `image2`, `image3`, `image4`, `image5`, `image6`, `image7`, `image8`, `image9`, `image10`) VALUES
-(1, 'At KAHTECH, we specialize in providing top-quality PCs tailored to your needs. Whether you&#039;re a gamer, a professional, or simply in need of a reliable machine, we&#039;ve got you covered. Our wide range of computers ensures you&#039;ll find the perfect match for your requirements. Experience the best in performance, quality, and customer service with KAHTECH. Not just that, We also offer delivery around Penang at the cheapest prices available, ensuring you get your dream PC without breaking the bank. Plus, we allow you to customize your own PC and make price comparisons to find the best deals. Shop with us today and elevate your computing experience.\r\n\r\nRemember Our Motto: &quot;We sell PCs but not Cars&quot;', 'At KAHTECH, our mission is to revolutionize the way you experience computing by providing top-quality PCs tailored to your unique needs. We are committed to delivering exceptional value, performance, and service to our customers. We strive to offer the best PCs at the most competitive prices, ensuring that cutting-edge technology is accessible to everyone. We empower you to customize your own PC, giving you the flexibility to build a machine that perfectly suits your requirements. We provide transparent price comparisons, helping you make informed decisions and get the best deals. We ensure prompt and affordable delivery across Penang, making it easier for you to receive your perfect PC right at your doorstep.\r\n', 'We deliver our top-quality PCs promptly and efficiently throughout Penang, ensuring you receive your orders with ease and convenience. ', 'Customize your PC to meet your specific needs. Choose your preferred components and configurations to create the perfect machine.', 'We offer flexible payment options including Touch &#039;n Go and Cash on Delivery, providing you with convenience and security.', 'Benefit from transparent price comparisons to find the best deals. We help you make informed decisions and maximize value.', '6676825acfb986.90923731.jpg', '6676825ad00075.79441267.jpg', '6676825ad03847.81452378.jpg', '6676825ad09968.35978741.jpg', '6676825ad0d3a8.52288149.jpg', '6676825ad10421.50951903.jpg', '6676825ad12f42.55160122.jpg', '6676825ad15693.53523597.jpg', '6676825ad17cc2.58044209.jpg', '6676825ad1a0a4.39169068.jpeg');
+(1, 'At KAHTECH, we specialize in providing top-quality PCs tailored to your needs. Whether you&#039;re a gamer, a professional, or simply in need of a reliable machine, we&#039;ve got you covered. Our wide range of computers ensures you&#039;ll find the perfect match for your requirements. Experience the best in performance, quality, and customer service with KAHTECH. Not just that, We also offer delivery around Penang at the cheapest prices available, ensuring you get your dream PC without breaking the bank. Plus, we allow you to customize your own PC and make price comparisons to find the best deals. Shop with us today and elevate your computing experience.\n\nRemember Our Motto: &quot;We sell PCs but not Cars&quot;', 'At KAHTECH, our mission is to revolutionize the way you experience computing by providing top-quality PCs tailored to your unique needs. We are committed to delivering exceptional value, performance, and service to our customers. We strive to offer the best PCs at the most competitive prices, ensuring that cutting-edge technology is accessible to everyone. We empower you to customize your own PC, giving you the flexibility to build a machine that perfectly suits your requirements. We provide transparent price comparisons, helping you make informed decisions and get the best deals. We ensure prompt and affordable delivery across Penang, making it easier for you to receive your perfect PC right at your doorstep.\r\n', 'We deliver our top-quality PCs promptly and efficiently throughout Penang, ensuring you receive your orders with ease and convenience.', 'Customize your PC to meet your specific needs. Choose your preferred components and configurations to create the perfect machine.', 'We offer flexible payment options including Touch &#039;n Go and Cash on Delivery, providing you with convenience and security.', 'Benefit from transparent price comparisons to find the best deals. We help you make informed decisions and maximize value.', '6676825acfb986.90923731.jpg', '6676825ad00075.79441267.jpg', '6676825ad03847.81452378.jpg', '6676825ad09968.35978741.jpg', '6676825ad0d3a8.52288149.jpg', '6676825ad10421.50951903.jpg', '6676825ad12f42.55160122.jpg', '6676825ad15693.53523597.jpg', '6676825ad17cc2.58044209.jpg', '6676825ad1a0a4.39169068.jpeg');
 
 -- --------------------------------------------------------
 
@@ -146,11 +186,11 @@ CREATE TABLE `items` (
 --
 
 INSERT INTO `items` (`id`, `category_id`, `item_name`, `price`, `stock_qty`, `description`, `image1`, `image2`, `image3`, `image4`, `image5`, `item_status`) VALUES
-(1, 1, 'Logitech G502 High Performance Gaming Mouse', 169.00, 100, 'PHYSICAL SPECIFICATIONS\r\nHeight: 132 mm\r\nWidth: 75 mm\r\nDepth: 40 mm\r\nWeight: 121 g, mouse only\r\nOptional extra weights: up to 18g (5x3.6g)\r\nCable length: 2.10 m\r\n\r\nTRACKING\r\nSensor: HERO 25K™\r\nResolution: 100 – 25,600 dpi\r\nZero smoothing/acceleration/filtering\r\nMax. acceleration: &gt; 40 G2Tested on Logitech G240 Gaming Mouse Pad\r\nMax. speed: &gt; 400 IPS3Tested on Logitech G240 Gaming Mouse Pad', '667685d118bca3.75405915.jpeg', '667685d118ef17.65019889.jpeg', '667685d1193414.12625631.jpeg', '667685d11974e3.37533744.jpeg', '667685d119b2c5.09377473.jpeg', 'Active'),
+(1, 1, 'Logitech G502 High Performance Gaming Mouse', 179.00, 0, 'PHYSICAL SPECIFICATIONS\r\nHeight: 132 mm\r\nWidth: 75 mm\r\nDepth: 40 mm\r\nWeight: 121 g, mouse only\r\nOptional extra weights: up to 18g (5x3.6g)\r\nCable length: 2.10 m\r\n\r\nTRACKING\r\nSensor: HERO 25K™\r\nResolution: 100 – 25,600 dpi\r\nZero smoothing/acceleration/filtering\r\nMax. acceleration: &gt; 40 G2Tested on Logitech G240 Gaming Mouse Pad\r\nMax. speed: &gt; 400 IPS3Tested on Logitech G240 Gaming Mouse Pad', '667685d118bca3.75405915.jpeg', '667685d118ef17.65019889.jpeg', '667685d1193414.12625631.jpeg', '667685d11974e3.37533744.jpeg', '667685d119b2c5.09377473.jpeg', 'Deleted'),
 (2, 1, 'Logitech Wireless Mouse 2.4GHz ', 55.00, 1, 'Compact Comfortable Mouse: With a comfortable and contoured shape, this ambidextrous wireless mouse feels great in either hand, and is far superior to a touchpad\r\n-Durable and Reliable: Enjoy a durable scroll wheel and up to 1 year of battery life with this USB wireless mouse, which comes with an AA battery and a smart sleep mode function\r\n-Universal Compatibility: Your Logitech mouse works with your Windows PC, Mac or laptop. That means no matter what type of computer you own today – or buy tomorrow – your mouse will be compatible\r\n-Plug and Play: This wireless computer mouse is super speedy to set up, so you won&#039;t have to fiddle around with technology. Just plug in the tiny nano receiver and you&#039;re in business\r\n-Advanced Wireless Connectivity: You get the same reliability of a corded mouse with wireless convenience and freedom-fast data transmission and virtually no delays or dropouts', '66768a918570e1.63090529.jpeg', '66768a918571c7.82675918.jpeg', '66768a918571d8.72096126.jpeg', '66768a918571e7.11286541.jpeg', '66768a918571f4.53283544.jpeg', 'Active'),
 (3, 1, 'Razer Basilisk V3 Customizable Wired Chroma RGB Gaming Mouse', 229.00, 4, 'ICONIC ERGONOMIC DESIGN WITH THUMB REST — PC gaming mouse favored by millions worldwide with a form factor that perfectly supports the hand while its buttons are optimally positioned for quick and easy access', '66768ba8988c02.84677764.jpeg', '66768ba8988cb6.51842439.jpeg', '66768ba8988cc0.70453718.jpeg', '66768ba8988cd7.41210901.jpeg', '66768ba8988ce2.04731329.jpeg', 'Active'),
-(4, 2, 'New RK ROYAL KLUDGE RKR75  Mechanical Keyboard', 180.39, 7, 'Specifications:\r\nBrand Name: Royal Kludge\r\nProduct Model: RKR75\r\nKeys Number: 80\r\nSwitch: K Silver Switch\r\nConnection Mode:Wired\r\nBacklit: RGB\r\nSystem: Windows/Android/Mac/IOS\r\nBattery Capacity: 3750mAh\r\nSize：323*142.3*41.63mm\r\nWeight:0.8kg', '66768c98512925.60012415.jpeg', '66768c98512ac3.08328175.jpeg', '66768c98512ad0.87681181.jpeg', '66768c98512ae0.76802359.jpeg', '66768c98512af7.23324482.jpeg', 'Active'),
-(5, 2, 'Logitech G713 TKL Mechanical Gaming Keyboard ', 612.00, 5, 'Part of the Aurora Collection, G713 Gaming Keyboard is a compact, comfy keyboard that delivers low-key vibes with high-key performance so you can express yourself and play your way. Float away with its dreamy white design and cloud-soft palm rest. A compact, tenkeyless layout, and adjustable height give that good game feeling, all-day long. Show off your playstyle with ethereal, zonal LIGHTSYNC RGB and four responsive Play Moods that reflect your state of play. Create and play your best with versatile and responsive USB-C cable connectivity. Customize your look with key caps and top plates in a variety of fun colours.', '66768d7599f360.73441858.jpeg', '66768d7599f411.60143506.jpeg', '66768d7599f425.08410537.jpeg', '66768d7599f446.34926952.jpeg', '66768d7599f456.61209373.jpeg', 'Active'),
+(4, 2, 'New RK ROYAL KLUDGE RKR75  Mechanical Keyboard', 180.39, 8, 'Specifications:\r\nBrand Name: Royal Kludge\r\nProduct Model: RKR75\r\nKeys Number: 80\r\nSwitch: K Silver Switch\r\nConnection Mode:Wired\r\nBacklit: RGB\r\nSystem: Windows/Android/Mac/IOS\r\nBattery Capacity: 3750mAh\r\nSize：323*142.3*41.63mm\r\nWeight:0.8kg', '66768c98512925.60012415.jpeg', '66768c98512ac3.08328175.jpeg', '66768c98512ad0.87681181.jpeg', '66768c98512ae0.76802359.jpeg', '66768c98512af7.23324482.jpeg', 'Active'),
+(5, 2, 'Logitech G713 TKL Mechanical Gaming Keyboard ', 612.00, 6, 'Part of the Aurora Collection, G713 Gaming Keyboard is a compact, comfy keyboard that delivers low-key vibes with high-key performance so you can express yourself and play your way. Float away with its dreamy white design and cloud-soft palm rest. A compact, tenkeyless layout, and adjustable height give that good game feeling, all-day long. Show off your playstyle with ethereal, zonal LIGHTSYNC RGB and four responsive Play Moods that reflect your state of play. Create and play your best with versatile and responsive USB-C cable connectivity. Customize your look with key caps and top plates in a variety of fun colours.', '66768d7599f360.73441858.jpeg', '66768d7599f411.60143506.jpeg', '66768d7599f425.08410537.jpeg', '66768d7599f446.34926952.jpeg', '66768d7599f456.61209373.jpeg', 'Active'),
 (6, 2, 'AKKO MOD007 PC Mechanical Keyboard Swappable Custom Keyboard ', 446.05, 5, 'Brand: AKKO\r\nModel: MOD 007 PC\r\nConnection mode: USB PS/2 Type-C USB\r\nNumber of connected devices: 1\r\nWired or not: No\r\nKey number: 82\r\nMechanical keyboard or not: Mechanical keyboard\r\nBacklight effect: RGB\r\nKeyboard polling rate: 1000HZ', '66768eb670b8b8.16104454.jpeg', '66768eb670b9f8.98613018.jpeg', '66768eb670ba12.45937219.jpeg', '66768eb670ba35.55814974.jpeg', '66768eb670ba53.19898649.jpeg', 'Active'),
 (7, 3, 'CER NITRO 180Hz 1Ms HDR10 FREE-SYNC PREMIUM GAMING MONITOR', 409.00, 7, 'SPECIFICATIONS :\r\n1. Model : ACER NITRO QG241Y S3\r\nTechnology : Free-Sync\r\nBrightness : 250 cd/m²\r\nContrast Ratio : 100mil:1 (ACM)\r\nResponse Time : 1ms(VRB)\r\nRefresh Rate : 180Hz\r\nDisplay Screen / Design / Resolution : 23.8&quot; FHD (1920 x 1080) VA, 72% NTSC\r\nInterface :2x HDMI(2.0)\r\n1x DisplayPort(1.2)\r\nSpeaker : N/A\r\nVesa Wall Mount : 100*100\r\nDimensions : (W x H x D): 540.2 mm x 411.7 mm x 220.7 mm (with stand)\r\nWeight : 3.85 kg\r\nWarranty : 3-Years Warranty By Acer Malaysia', '66768fe9695313.55455526.jpeg', '66768fe9695406.20401994.jpeg', '66768fe9695421.55122809.jpeg', '66768fe9695434.51966866.jpeg', '66768fe9695445.80081855.jpeg', 'Active'),
 (8, 3, 'EXPOSE Monitor PC 19-24 Inch Gaming Monitor 75HZ HDMI Lcd Monitor', 138.90, 5, 'Product details of  Monitor PC 19-24 Inch Gaming  Monitor 75HZ  HDMI Lcd Monitor\r\nWelcome to Expose TECH\r\n📢Follow the store to get more real-time data of store products  \r\n📢Please collect the coupon before placing an order\r\n🚚The store is near Selangor , we will ship within 24 hours. You will receive the express package within 3-4 days\r\n🔥Payment methods support COD and online payment\r\nOur store has wholesale business. Customers who need to order in large quantities can consult customer service to get more discounts. Please consult customer service for specific procedures that support customers’ self-pickup of products.', '667690de12df45.79112627.jpeg', '667690de12e4f7.33456417.jpeg', '667690de12e513.21655852.jpeg', '667690de12e524.16280648.jpeg', '667690de12e548.07537278.jpeg', 'Active'),
@@ -190,8 +230,7 @@ INSERT INTO `items` (`id`, `category_id`, `item_name`, `price`, `stock_qty`, `de
 (42, 8, 'Asus B550-F ROG STRIX GAMING WI-FI AMD AM4 Motherboard', 2935.00, 9, 'SPECIFICATION:\r\nCPU:AMD Ryzen™ 5000 Series/ 5000 G-Series/ 4000 G-Series/ 3000 Series Desktop Processors\r\n\r\n', '667f7d4c2b0311.78647972.jpeg', '667f7d4c2b03b3.41288990.jpeg', '667f7d4c2b03d8.87405807.jpeg', '667f7d4c2b03e0.26266597.jpeg', '667f7d4c2b03f3.21950594.jpeg', 'Active'),
 (43, 8, 'ASROCK B550M-HDV DDR4 / D4 AM4 MOTHERBOARD', 329.00, 9, 'B550M-HDV\r\nSupports AMD AM4 Socket Ryzen™ 3000, 3000 G-Series, 4000 G-Series, 5000 and 5000 G-Series Desktop Processors*\r\n6 Power Phase Design\r\nSupports DDR4 4733+ (OC)', '667f7dd8975656.17259427.jpeg', '667f7dd8975708.95556039.jpeg', '667f7dd8975724.57865914.jpeg', '667f7dd8975738.20586200.jpeg', '667f7dd8975744.93661002.jpeg', 'Active'),
 (44, 9, 'Original Kingses ATX-500W Power Supply Unit PSU', 45.98, 10, 'Specification :-\r\n- Total Max Power 500W\r\n- ATX 20+4pin x 1\r\n- ATX 12V CPU 4pin x 1\r\n- SATA Connector x 2\r\n- Molex (IDE) 4pin x 2\r\n- 12cm Fan', '667f82199a0ee1.25615801.jpeg', '667f82199a1062.98778378.jpeg', '667f82199a1091.22597733.jpeg', '667f82199a10b9.39311056.jpeg', '667f82199a10d7.33538159.jpeg', 'Active'),
-(45, 9, 'FSP Hydro PTM PRO ATX3.0 (PCIe5.0) 1200W PSU', 1128.00, 9, 'Hydro PTM PRO ATX3.0(PCIe5.0) 1200W\r\nComplies with ATX12V V3.0 &amp; EPS12V V2.92\r\nIntel Latest CPU ready\r\nGlobal Safety Approved', '667f82c30f30f2.51809196.jpeg', '667f82c30f31a1.06713651.jpeg', '667f82c30f31c1.50507798.jpeg', '667f82c30f31d1.72077185.jpeg', '667f82c30f31e2.50044782.jpeg', 'Active'),
-(46, 1, 'Testing', 1.00, 0, 'Testing', '', '', '', '', '', 'Active');
+(45, 9, 'FSP Hydro PTM PRO ATX3.0 (PCIe5.0) 1200W PSU', 1128.00, 9, 'Hydro PTM PRO ATX3.0(PCIe5.0) 1200W\r\nComplies with ATX12V V3.0 &amp; EPS12V V2.92\r\nIntel Latest CPU ready\r\nGlobal Safety Approved', '667f82c30f30f2.51809196.jpeg', '667f82c30f31a1.06713651.jpeg', '667f82c30f31c1.50507798.jpeg', '667f82c30f31d1.72077185.jpeg', '667f82c30f31e2.50044782.jpeg', 'Active');
 
 -- --------------------------------------------------------
 
@@ -212,14 +251,6 @@ CREATE TABLE `mylist` (
   `total_price` decimal(10,2) NOT NULL DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `mylist`
---
-
-INSERT INTO `mylist` (`id`, `list_name`, `user_id`, `cpu_id`, `motherboard_id`, `memory_id`, `gpu_id`, `psu_id`, `storage_id`, `total_price`) VALUES
-(11, 'aaa', 4, 13, 23, 18, 35, 26, 19, 4466.70),
-(12, 'aa', 4, 13, 23, 16, 34, 27, 20, 3670.80);
-
 -- --------------------------------------------------------
 
 --
@@ -233,14 +264,6 @@ CREATE TABLE `orderitems` (
   `item_price` decimal(10,2) NOT NULL,
   `order_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `orderitems`
---
-
-INSERT INTO `orderitems` (`id`, `qty`, `item_id`, `item_price`, `order_id`) VALUES
-(97, 1, 4, 180.39, 1059),
-(98, 1, 5, 612.00, 1060);
 
 -- --------------------------------------------------------
 
@@ -259,14 +282,6 @@ CREATE TABLE `orders` (
   `remarks` text DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `orders`
---
-
-INSERT INTO `orders` (`id`, `order_date`, `status_id`, `delivery_address`, `total_price`, `payment_type`, `screenshot`, `remarks`, `user_id`) VALUES
-(1059, '2025-11-13 21:16:14', 1, 'PISA Home Centre, Level 1, Car Park Complex PISA, Pulau Pinang', 190.39, 'COD', NULL, NULL, 4),
-(1060, '2025-11-13 21:16:35', 1, 'PISA Home Centre, Level 1, Car Park Complex PISA, Pulau Pinang', 622.00, 'TNG', '6915da33b934b9.95619972.jpg', NULL, 4);
 
 -- --------------------------------------------------------
 
@@ -316,11 +331,11 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `user_name`, `email`, `secondary_email`, `phone`, `user_address`, `pwd`, `user_image`, `wrong_pwd_count`, `lock_until`) VALUES
-(1, 'First', 'aimarief0919@gmail.com', 'peggywork812@gmail.com', '0123456789', 'Taman Seri Sari ', '$argon2id$v=19$m=131072,t=3,p=1$THJQNFBYSm4yanB6LmhZdQ$lJZmRTTKkiVJyrGzj8kh+kqSwel5cmKYcOfafah2tyE', 'no_profile_pic.png', 6, '2025-11-11 16:43:01'),
-(4, 'Cojean', 'P22014471@student.newinti.edu.my', NULL, '017-5807201', 'PISA Home Centre, Level 1, Car Park Complex PISA, Pulau Pinang', '$argon2id$v=19$m=131072,t=3,p=1$WFhTcHZQN0U5NVFTYjNLdA$N746znnPINm01oPTFZnuB04Jj1rxZ7KzX7+9EWWLR6E', 'no_profile_pic.png', 0, NULL),
+(1, 'First', 'aimarief0919@gmail.com', 'peggywork812@gmail.com', '0123456789', 'Taman Seri Sari ', '$argon2id$v=19$m=131072,t=3,p=1$THJQNFBYSm4yanB6LmhZdQ$lJZmRTTKkiVJyrGzj8kh+kqSwel5cmKYcOfafah2tyE', 'no_profile_pic.png', 0, NULL),
+(4, 'Cojean', 'P22014471@student.newinti.edu.my', NULL, '017-5807201', 'PISA Home Centre, Level 1, Car Park Complex PISA, Pulau Pinang', 'Cojean123@', 'no_profile_pic.png', 0, NULL),
 (5, 'Cincai', 'hzhsia603@gmail.com', NULL, '012-8888888', 'A123, Regency Height, Sungai Ara, Penang', 'Cincai123@', 'no_profile_pic.png', 0, NULL),
 (19, 'arief', 'qiqihutao919@gmail.com', '', '0123456789', '12345aaa', 'arief12345@', 'no_profile_pic.png', 0, NULL),
-(26, 'Junzo', 'junzobryan28@gmail.com', NULL, '012-3456789', 'bryan 123, at jalan bryan', '$argon2id$v=19$m=131072,t=3,p=1$U0RrZG8zT3ZnV0svLkRWUw$CzXPF5fKRoesN6YJHvBYWHHUzu2JMPjJpSjQiGaL7aQ', 'no_profile_pic.png', 0, NULL);
+(27, 'Junzo', 'junzobryan28@gmail.com', NULL, '0123456789', 'bryan 123, at jalan bryan', '$argon2id$v=19$m=131072,t=3,p=1$bDNaajQxOU5wV1pXZWdmZA$nCbYRyuvcMeBwUTrohC5RObVz5+1yNXC2R1pGg+i4/4', 'no_profile_pic.png', 0, NULL);
 
 --
 -- Indexes for dumped tables
@@ -331,6 +346,15 @@ INSERT INTO `users` (`id`, `user_name`, `email`, `secondary_email`, `phone`, `us
 --
 ALTER TABLE `admins`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `audit_logs`
+--
+ALTER TABLE `audit_logs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `ix_actor_time` (`actor_admin_id`,`created_at`),
+  ADD KEY `ix_action_time` (`action`,`created_at`),
+  ADD KEY `ix_entity` (`entity_type`,`entity_id`);
 
 --
 -- Indexes for table `cart`
@@ -408,13 +432,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `admins`
 --
 ALTER TABLE `admins`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `audit_logs`
+--
+ALTER TABLE `audit_logs`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=134;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=132;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -432,25 +462,25 @@ ALTER TABLE `homepage`
 -- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT for table `mylist`
 --
 ALTER TABLE `mylist`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `orderitems`
 --
 ALTER TABLE `orderitems`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1061;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1059;
 
 --
 -- AUTO_INCREMENT for table `orderstatus`
@@ -462,11 +492,17 @@ ALTER TABLE `orderstatus`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `audit_logs`
+--
+ALTER TABLE `audit_logs`
+  ADD CONSTRAINT `fk_audit_actor` FOREIGN KEY (`actor_admin_id`) REFERENCES `admins` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `cart`

@@ -45,6 +45,7 @@ require_once "includes/csrf.php";
                     <label for="adminName">Name :</label>
                     <input required type="text" id="adminName" name="newAdminName" maxlength="50" value="<?php echo $row['admin_name'] ?>">
                     <p class="limit-warning" id="nameLimit">Character limit reached (50)</p>
+                    <p class="validation-error" id="nameError">Please enter a valid name (letters only).</p>
 
                     <label for="adminEmail">Email :</label>
                     <input required type="email" id="adminEmail" name="newAdminEmail" value="<?php echo $row['admin_email'] ?>" readonly>
@@ -87,6 +88,44 @@ require_once "includes/csrf.php";
                     document.getElementById(previewId).src = originalSrc;
                 }
             }
+        }
+
+        // ------------- Global validity flags -------------
+        let isNameValid = false;
+        let isPasswordValid = false;
+
+        const submit_btn = document.getElementById('submit_btn');
+        const nameInput  = document.getElementById('adminName');
+
+        // ------------- Helper to control submit button -------------
+        function updateSubmitButton() {
+            if (isEmailValid && isPasswordValid) {
+                submit_btn.disabled = false;
+            } else {
+                submit_btn.disabled = true;
+            }
+        }
+
+        // ------------- Name validation -------------
+        function validateName() {
+            const name = nameInput.value.trim();
+            const error = document.getElementById('nameError');
+
+            // Letters, spaces, apostrophes, dots, hyphens; length 2–50
+            const nameRegex = /^[A-Za-z\s'.-]{2,50}$/;
+
+            if (name.length === 0) {
+                error.style.display = "none";
+                isNameValid = false;
+            } else if (nameRegex.test(name)) {
+                error.style.display = "none";
+                isNameValid = true;
+            } else {
+                error.style.display = "block";
+                isNameValid = false;
+            }
+
+            updateSubmitButton();
         }
 
         document.getElementById('adminPassword').addEventListener('input', validatePassword);
@@ -170,6 +209,9 @@ require_once "includes/csrf.php";
         setupLimitWarning('adminName', 'nameLimit', 50);
         setupLimitWarning('adminPassword', 'newPwdLimit', 20);
         setupLimitWarning('confirmPassword', 'confirmPwdLimit', 20);
+
+        // ------------- Attach validation listeners -------------
+        nameInput.addEventListener('input', validateName);
     </script>
 
     <script src="js/sessionTimeout.js"></script>

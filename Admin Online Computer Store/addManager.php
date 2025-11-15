@@ -30,6 +30,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'super_admin') {
                     <div class="input_wrapper">
                         <input type="text" id="admin_name" name="admin_name" maxlength="50" required placeholder="Manager Username">
                         <p class="limit-warning" id="nameLimit">Character limit reached (50)</p>
+                        <p class="validation-error" id="nameError">Please enter a valid name (letters only).</p>
                     </div>
                 </div>
             
@@ -39,6 +40,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'super_admin') {
                     <div class="input_wrapper">
                         <input type="email" id="admin_email" name="admin_email" maxlength="100" required placeholder="Manager Email">
                         <p class="limit-warning" id="emailLimit">Character limit reached (100)</p>
+                        <p class="validation-error" id="emailError">Please enter a valid email address.</p>
                     </div>
                 </div>
 
@@ -69,6 +71,65 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'super_admin') {
     <script src="js/sessionTimeout.js"></script>
 
     <script>
+        // ------------- Global validity flags -------------
+        let isNameValid = false;
+        let isEmailValid = false;
+        let isPasswordValid = false;
+
+        const submit_btn = document.getElementById('submit_btn');
+        const nameInput  = document.getElementById('Username');
+        const emailInput = document.getElementById('Email');
+
+        // ------------- Helper to control submit button -------------
+        function updateSubmitButton() {
+            if (isEmailValid && isPasswordValid) {
+                submit_btn.disabled = false;
+            } else {
+                submit_btn.disabled = true;
+            }
+        }
+
+        // ------------- Name validation -------------
+        function validateName() {
+            const name = nameInput.value.trim();
+            const error = document.getElementById('nameError');
+
+            // Letters, spaces, apostrophes, dots, hyphens; length 2–50
+            const nameRegex = /^[A-Za-z\s'.-]{2,50}$/;
+
+            if (name.length === 0) {
+                error.style.display = "none";
+                isNameValid = false;
+            } else if (nameRegex.test(name)) {
+                error.style.display = "none";
+                isNameValid = true;
+            } else {
+                error.style.display = "block";
+                isNameValid = false;
+            }
+
+            updateSubmitButton();
+        }
+
+        // ------------- Email validation -------------
+        function validateEmail() {
+            const error = document.getElementById('emailError');
+            const email = emailInput.value.trim();
+
+            if (email.length === 0) {
+                error.style.display = "none";
+                isEmailValid = false;
+            } else if (emailInput.validity.valid) {
+                error.style.display = "none";
+                isEmailValid = true;
+            } else {
+                error.style.display = "block";
+                isEmailValid = false;
+            }
+
+            updateSubmitButton();
+        }
+
         document.getElementById('admin_pwd').addEventListener('input', validatePassword);
 
         function validatePassword() {
