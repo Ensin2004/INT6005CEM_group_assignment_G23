@@ -200,6 +200,10 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'super_admin') {
         setupLimitWarning('admin_name', 'nameLimit', 50);
         setupLimitWarning('admin_email', 'emailLimit', 100);
         setupLimitWarning('admin_pwd', 'newPwdLimit', 20);
+
+        // ------------- Attach validation listeners -------------
+        nameInput.addEventListener('input', validateName);
+        emailInput.addEventListener('input', validateEmail);
     </script>
 </body>
 </html>

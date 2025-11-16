@@ -86,7 +86,10 @@ require_once "includes/crypto.php";
                     <p class="limit-warning" id="addressLimit">Character limit reached (200)</p>
                     
                     <label for="newPassword">New Password :</label>
-                    <input type="password" id="newPassword" name="newPassword" maxlength="20" placeholder="Enter new password">
+                    <div class="pwd-wrapper">
+                        <input required type="password" id="newPassword" name="newPassword" maxlength="20" placeholder="Enter New Password">
+                        <i class="fa-solid fa-eye-slash toggle-eye" onclick="togglePassword('newPassword', this)"></i>
+                    </div>
                     <p class="limit-warning" id="newPwdLimit">Character limit reached (20)</p>
                     <div class="pwd_validation_container" id="pwd_validation_container">
                         <p>Password requirements: </p>
@@ -98,7 +101,10 @@ require_once "includes/crypto.php";
                     </div>
                     
                     <label for="confirmPassword"> Confirm Password</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" maxlength="20" placeholder="Re-enter new password">
+                    <div class="pwd-wrapper">
+                        <input required type="password" id="confirmPassword" name="confirmPassword" maxlength="20" placeholder="Re-enter new password">
+                        <i class="fa-solid fa-eye-slash toggle-eye" onclick="togglePassword('confirmPassword', this)"></i>
+                    </div>
                     <p class="limit-warning" id="confirmPwdLimit">Character limit reached (20)</p>
                     <p class="pwd_confirmation" id="pwd_confirmation">Password not match</p>
                     
@@ -125,6 +131,20 @@ require_once "includes/crypto.php";
                     event.target.value = "";
                     document.getElementById(previewId).src = originalSrc;
                 }
+            }
+        }
+
+        function togglePassword(inputId, icon) {
+            const input = document.getElementById(inputId);
+
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            } else {
+                input.type = "password";
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
             }
         }
 
