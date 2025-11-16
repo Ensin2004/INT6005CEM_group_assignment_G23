@@ -42,7 +42,10 @@
                     <p class="limit-warning" id="addressLimit">Character limit reached (200)</p>
 
                     <label for="newPassword">New Password :</label>
-                    <input required type="password" id="newPassword" name="newPassword" maxlength="20" placeholder="Enter New Password">
+                    <div class="pwd-wrapper">
+                        <input required type="password" id="newPassword" name="newPassword" maxlength="20" placeholder="Enter New Password">
+                        <i class="fa-solid fa-eye-slash toggle-eye" onclick="togglePassword('newPassword', this)"></i>
+                    </div>
                     <p class="limit-warning" id="newPwdLimit">Character limit reached (20)</p>
                     <div class="pwd_validation_container" id="pwd_validation_container">
                         <p>Password requirements: </p>
@@ -54,7 +57,10 @@
                     </div>
 
                     <label for="confirmPassword">Confirm Password</label>
-                    <input required type="password" id="confirmPassword" name="confirmPassword" maxlength="20" placeholder="Confirm Password">
+                    <div class="pwd-wrapper">
+                        <input required type="password" id="confirmPassword" name="confirmPassword" maxlength="20" placeholder="Confirm Password">
+                        <i class="fa-solid fa-eye-slash toggle-eye" onclick="togglePassword('confirmPassword', this)"></i>
+                    </div>
                     <p class="limit-warning" id="confirmPwdLimit">Character limit reached (20)</p>
                     <p class="pwd_confirmation" id="pwd_confirmation">Password not match</p>
 
@@ -84,6 +90,20 @@
     <?php include 'footer.php'; ?>
 
     <script>
+        function togglePassword(inputId, icon) {
+            const input = document.getElementById(inputId);
+
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            } else {
+                input.type = "password";
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
+            }
+        }
+        
         // ------------- Global validity flags -------------
         let isNameValid = false;
         let isEmailValid = false;
@@ -152,7 +172,7 @@
 
             // Simple Malaysian format:
             // - starts with 0
-            // - total 10 or 11 digits (e.g. 0123456789, 01234567890, 0421234567)
+            // - total 10 or 11 digits
             const phoneRegex = /^01\d{8,9}$/;
 
             if (phone.length === 0) {

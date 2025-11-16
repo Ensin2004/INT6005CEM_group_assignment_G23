@@ -40,7 +40,10 @@ require_once "includes/csrf.php";
                     <p class="limit-warning" id="emailLimit">Character limit reached (100)</p>
 
                     <label for="Password">Password :</label>
-                    <input required type="password" id="Password" name="UserPassword" maxlength="20" placeholder="Password">
+                    <div class="pwd-wrapper">
+                        <input required type="password" id="Password" name="UserPassword" maxlength="20" placeholder="Password">
+                        <i class="fa-solid fa-eye-slash toggle-eye" onclick="togglePassword('Password', this)"></i>
+                    </div>
                     <p class="limit-warning" id="pwdLimit">Character limit reached (20)</p>
 
                     <p class="forgetPass"><a class="forgetPassBtn" href="forgetPassword.php">Forget Password?</a></p>
@@ -56,6 +59,20 @@ require_once "includes/csrf.php";
     <?php include 'footer.php';?>
 
     <script>
+        function togglePassword(inputId, icon) {
+            const input = document.getElementById(inputId);
+
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            } else {
+                input.type = "password";
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
+            }
+        }
+
         // Field Limit Warning
         function setupLimitWarning(inputId, warningId, max) {
             const input = document.getElementById(inputId);

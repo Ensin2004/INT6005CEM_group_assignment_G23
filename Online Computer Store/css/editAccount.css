@@ -281,3 +281,27 @@
     font-weight: 500;
     color: rgb(255, 52, 52);
 }
+
+.pwd-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.pwd-wrapper input {
+    width: 100%;
+    padding-right: 40px; /* space for eye icon */
+}
+
+.toggle-eye {
+    position: absolute;
+    right: 10px;
+    top: 35%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 14px;
+    color: #666;
+}
+
+.toggle-eye:hover {
+    color: #000;
+}
