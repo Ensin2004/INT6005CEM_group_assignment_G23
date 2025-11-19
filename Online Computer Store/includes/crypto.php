@@ -1,5 +1,4 @@
 <?php
-// includes/crypto.php
 
 // 32-byte encryption key 
 // Generate in keygen.php
