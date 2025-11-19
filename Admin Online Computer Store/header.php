@@ -27,8 +27,11 @@
             <?php 
             if (isset($_SESSION['role']) && $_SESSION['role'] === 'super_admin') {
                echo '<p class="admin">Admin</P>';
-            } else {
+            } else if (isset($_SESSION['role']) && $_SESSION['role'] === 'manager') {
                 echo '<p class="admin">Manager</p>';
+            }
+            else{
+                echo '<p class="admin">Admin/ Manager</p>';
             }
             ?>
 

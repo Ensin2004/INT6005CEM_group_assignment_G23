@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 15, 2025 at 10:36 AM
+-- Generation Time: Nov 19, 2025 at 07:42 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -86,7 +86,12 @@ INSERT INTO `audit_logs` (`id`, `actor_admin_id`, `actor_role`, `action`, `entit
 (10, 1, 'super_admin', 'logout', 'admins', 1, 'Admin logged out', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 02:59:29'),
 (11, 1, 'super_admin', 'login_success', NULL, NULL, 'Admin logged in', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 16:52:33'),
 (12, 1, 'super_admin', 'logout', 'admins', 1, 'Admin logged out', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 16:54:29'),
-(13, 3, 'manager', 'login_success', NULL, NULL, 'Admin logged in', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 16:54:40');
+(13, 3, 'manager', 'login_success', NULL, NULL, 'Admin logged in', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 16:54:40'),
+(14, 1, 'super_admin', 'login_success', NULL, NULL, 'Admin logged in', NULL, NULL, 'success', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 18:13:07'),
+(15, 3, 'manager', 'login_success', NULL, NULL, 'Admin logged in', NULL, NULL, 'success', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 18:13:37'),
+(16, 1, 'super_admin', 'login_success', NULL, NULL, 'Admin logged in', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-16 00:10:44'),
+(17, 1, 'super_admin', 'logout', 'admins', 1, 'Admin logged out', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-16 00:37:10'),
+(18, 3, 'manager', 'logout', 'admins', 3, 'Admin logged out', NULL, NULL, 'success', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-16 14:20:09');
 
 -- --------------------------------------------------------
 
@@ -335,7 +340,8 @@ INSERT INTO `users` (`id`, `user_name`, `email`, `secondary_email`, `phone`, `us
 (4, 'Cojean', 'P22014471@student.newinti.edu.my', NULL, '017-5807201', 'PISA Home Centre, Level 1, Car Park Complex PISA, Pulau Pinang', 'Cojean123@', 'no_profile_pic.png', 0, NULL),
 (5, 'Cincai', 'hzhsia603@gmail.com', NULL, '012-8888888', 'A123, Regency Height, Sungai Ara, Penang', 'Cincai123@', 'no_profile_pic.png', 0, NULL),
 (19, 'arief', 'qiqihutao919@gmail.com', '', '0123456789', '12345aaa', 'arief12345@', 'no_profile_pic.png', 0, NULL),
-(27, 'Junzo', 'junzobryan28@gmail.com', NULL, '0123456789', 'bryan 123, at jalan bryan', '$argon2id$v=19$m=131072,t=3,p=1$bDNaajQxOU5wV1pXZWdmZA$nCbYRyuvcMeBwUTrohC5RObVz5+1yNXC2R1pGg+i4/4', 'no_profile_pic.png', 0, NULL);
+(27, 'Junzo', 'junzobryan28@gmail.com', NULL, '0123456789', 'bryan 123, at jalan bryan', '$argon2id$v=19$m=131072,t=3,p=1$bDNaajQxOU5wV1pXZWdmZA$nCbYRyuvcMeBwUTrohC5RObVz5+1yNXC2R1pGg+i4/4', 'no_profile_pic.png', 0, NULL),
+(28, 'NwkWy+F+HZGiTUSl4alA+p0suRfWRDcCwztNU6n1CnAs', 'K5EWxjzEmBCd0yZb6R21IVD0QZ4N5LWLHRjXz6NTH8UHJbfU6rExN29FBtbH2Dw=', NULL, 'GoH5s1e/YLvvLql17sBbKqiVGwdLcnusalbGowtPDMd8QaDzRlE=', 'Ksy1nTg6peXQphszZ+z89OsD0PnY8rY8wEivhOwAbNR5Fc6fRM1vpIvM9w==', '$argon2id$v=19$m=131072,t=3,p=1$dC50UGZFaEw0ODlSdld6WQ$vwqE5XEFilX+bY00L01raFsetOnYezOzuf/d6Se4RP0', 'no_profile_pic.png', 0, NULL);
 
 --
 -- Indexes for dumped tables
@@ -438,7 +444,7 @@ ALTER TABLE `admins`
 -- AUTO_INCREMENT for table `audit_logs`
 --
 ALTER TABLE `audit_logs`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `cart`
@@ -492,7 +498,7 @@ ALTER TABLE `orderstatus`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- Constraints for dumped tables
