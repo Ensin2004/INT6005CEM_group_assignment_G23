@@ -34,13 +34,17 @@ $_SESSION['LastActivity'] = time();
  */
 function sanitize_basic(?string $s): string {
     if ($s === null) return '';
-    $s = trim(strip_tags($s));
-    // allow: a-z, A-Z, 0-9, space, dash, underscore, dot, comma
-    $s = preg_replace('/[^a-zA-Z0-9 \-\_\.\,]/u', '', $s);
+
+    $s = trim($s);                  // remove spaces at start/end
+    $s = strip_tags($s);            // remove any HTML tags
+    // allow a–z, A–Z, 0–9, space, dash, underscore, dot, comma
+    $s = preg_replace(pattern: '/[^a-zA-Z0-9 \-_\.,]/u', replacement: '', subject: $s);
     // collapse multiple spaces
-    $s = preg_replace('/\s+/u', ' ', $s);
+    $s = preg_replace(pattern: '/\s+/u', replacement: ' ', subject: $s);
+
     return $s;
 }
+
 
 /**
  * Escaping helper for legacy dynamic SQL (not needed for prepared statements)

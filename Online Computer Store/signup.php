@@ -64,9 +64,9 @@
                             <input type="checkbox" id="agree_terms" name="agree_terms" value="1" style="margin-top:3px;">
                             <span>
                             I confirm that I have read and agree to KAH TECH
-                            <a href="user-agreement.php" target="_blank" rel="noopener">User Agreement</a>
+                            <a href="userAgreement.php" target="_blank" rel="noopener">User Agreement</a>
                             and
-                            <a href="privacy-education.php" target="_blank" rel="noopener">Privacy &amp; User Education Policy</a>.
+                            <a href="privacyEducation.php" target="_blank" rel="noopener">Privacy &amp; User Education Policy</a>.
                             </span>
                         </label>
                         <p id="agree_error" style="display:none; color:#c0392b; margin-top:6px;">
