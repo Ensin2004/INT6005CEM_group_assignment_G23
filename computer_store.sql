@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 19, 2025 at 07:42 AM
+-- Generation Time: Nov 28, 2025 at 11:43 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -45,7 +45,8 @@ CREATE TABLE `admins` (
 
 INSERT INTO `admins` (`id`, `admin_name`, `admin_email`, `admin_pwd`, `admin_image`, `role`, `account_status`, `wrong_pwd_count`, `lock_until`) VALUES
 (1, 'admin', 'bryanyeoh681@gmail.com', '$argon2id$v=19$m=131072,t=3,p=1$N0M4SklPLzlZNE1BMGIySQ$3ZjBhBoTqZOxQtMb/GtwFvrSml9LbB6XoUdtZx3HlNI', 'no_profile_pic.png', 'super_admin', 'active', 0, NULL),
-(3, 'test', 'test@gmail.com', '$argon2id$v=19$m=131072,t=3,p=1$ZEV1T1ZCUktVQ1Q4aDhsMw$CvGEK5bUa7OksETTYJprCBEDFhYBGDwc14zoQpO7SK4', 'no_profile_pic.png', 'manager', 'active', 0, NULL);
+(3, 'test', 'test@gmail.com', '$argon2id$v=19$m=131072,t=3,p=1$ZEV1T1ZCUktVQ1Q4aDhsMw$CvGEK5bUa7OksETTYJprCBEDFhYBGDwc14zoQpO7SK4', 'no_profile_pic.png', 'manager', 'active', 0, NULL),
+(8, 'test2', 'test2@gmail.com', '$argon2id$v=19$m=131072,t=3,p=1$bWplekZwRlVlYjkvbkQzRw$0tpLrs/13+3i6mydv7eoDbrWtiDRa1Yp03owqtVdK1g', 'no_profile_pic.png', 'manager', 'banned', 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -87,11 +88,28 @@ INSERT INTO `audit_logs` (`id`, `actor_admin_id`, `actor_role`, `action`, `entit
 (11, 1, 'super_admin', 'login_success', NULL, NULL, 'Admin logged in', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 16:52:33'),
 (12, 1, 'super_admin', 'logout', 'admins', 1, 'Admin logged out', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 16:54:29'),
 (13, 3, 'manager', 'login_success', NULL, NULL, 'Admin logged in', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 16:54:40'),
-(14, 1, 'super_admin', 'login_success', NULL, NULL, 'Admin logged in', NULL, NULL, 'success', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 18:13:07'),
-(15, 3, 'manager', 'login_success', NULL, NULL, 'Admin logged in', NULL, NULL, 'success', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 18:13:37'),
-(16, 1, 'super_admin', 'login_success', NULL, NULL, 'Admin logged in', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-16 00:10:44'),
-(17, 1, 'super_admin', 'logout', 'admins', 1, 'Admin logged out', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-16 00:37:10'),
-(18, 3, 'manager', 'logout', 'admins', 3, 'Admin logged out', NULL, NULL, 'success', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-16 14:20:09');
+(14, NULL, NULL, 'login_failure', NULL, NULL, 'Admin login failed: name=admin, email=admin@gmail.com', NULL, NULL, 'failure', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 21:08:53'),
+(15, 1, 'super_admin', 'login_success', NULL, NULL, 'Admin logged in', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 21:09:14'),
+(16, 1, 'super_admin', 'login_success', NULL, NULL, 'Admin logged in', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 21:25:07'),
+(17, 1, 'super_admin', 'login_success', NULL, NULL, 'Admin logged in', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 21:28:37'),
+(18, 1, 'super_admin', 'logout', 'admins', 1, 'Admin logged out', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 21:57:50'),
+(19, 1, 'super_admin', 'login_success', NULL, NULL, 'Admin logged in', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-15 23:54:04'),
+(20, 1, 'super_admin', 'logout', 'admins', 1, 'Admin logged out', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-16 00:42:49'),
+(21, 3, 'manager', 'login_success', NULL, NULL, 'Admin logged in', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-28 02:07:11'),
+(22, 3, 'manager', 'logout', 'admins', 3, 'Admin logged out', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-28 02:07:19'),
+(23, 1, 'super_admin', 'login_success', NULL, NULL, 'Admin logged in', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-28 02:15:05'),
+(28, 1, 'super_admin', 'logout', 'admins', 1, 'Admin logged out', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-28 02:29:14'),
+(29, 1, 'super_admin', 'login_success', NULL, NULL, 'Admin logged in', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-28 02:29:43'),
+(30, 1, 'super_admin', 'logout', 'admins', 1, 'Admin logged out', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-28 02:45:22'),
+(31, 1, 'super_admin', 'login_success', NULL, NULL, 'Admin logged in', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-28 13:49:01'),
+(32, 1, 'super_admin', 'admin_create', 'admins', 8, 'Created manager \'test2\' <test2@gmail.com>', NULL, '{\"admin_name\":\"test2\",\"admin_email\":\"test2@gmail.com\",\"role\":\"manager\"}', 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-28 13:57:54'),
+(33, 1, 'super_admin', 'admin_ban', 'admins', 8, 'Banned admin #8', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-28 13:58:36'),
+(34, 1, 'super_admin', 'logout', 'admins', 1, 'Admin logged out', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-28 14:19:43'),
+(35, 1, 'super_admin', 'login_success', NULL, NULL, 'Admin logged in', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-28 14:20:08'),
+(36, 1, 'super_admin', 'login_success', NULL, NULL, 'Admin logged in', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-28 16:03:31'),
+(37, 1, 'super_admin', 'logout', 'admins', 1, 'Admin logged out', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-28 16:03:32'),
+(38, 1, 'super_admin', 'login_success', NULL, NULL, 'Admin logged in', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-28 16:03:49'),
+(39, 1, 'super_admin', 'logout', 'admins', 1, 'Admin logged out', NULL, NULL, 'success', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-28 16:10:53');
 
 -- --------------------------------------------------------
 
@@ -336,12 +354,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `user_name`, `email`, `secondary_email`, `phone`, `user_address`, `pwd`, `user_image`, `wrong_pwd_count`, `lock_until`) VALUES
-(1, 'First', 'aimarief0919@gmail.com', 'peggywork812@gmail.com', '0123456789', 'Taman Seri Sari ', '$argon2id$v=19$m=131072,t=3,p=1$THJQNFBYSm4yanB6LmhZdQ$lJZmRTTKkiVJyrGzj8kh+kqSwel5cmKYcOfafah2tyE', 'no_profile_pic.png', 6, '2025-11-11 16:43:01'),
-(4, 'Cojean', 'P22014471@student.newinti.edu.my', NULL, '017-5807201', 'PISA Home Centre, Level 1, Car Park Complex PISA, Pulau Pinang', 'Cojean123@', 'no_profile_pic.png', 0, NULL),
-(5, 'Cincai', 'hzhsia603@gmail.com', NULL, '012-8888888', 'A123, Regency Height, Sungai Ara, Penang', 'Cincai123@', 'no_profile_pic.png', 0, NULL),
-(19, 'arief', 'qiqihutao919@gmail.com', '', '0123456789', '12345aaa', 'arief12345@', 'no_profile_pic.png', 0, NULL),
-(27, 'Junzo', 'junzobryan28@gmail.com', NULL, '0123456789', 'bryan 123, at jalan bryan', '$argon2id$v=19$m=131072,t=3,p=1$bDNaajQxOU5wV1pXZWdmZA$nCbYRyuvcMeBwUTrohC5RObVz5+1yNXC2R1pGg+i4/4', 'no_profile_pic.png', 0, NULL),
-(28, 'NwkWy+F+HZGiTUSl4alA+p0suRfWRDcCwztNU6n1CnAs', 'K5EWxjzEmBCd0yZb6R21IVD0QZ4N5LWLHRjXz6NTH8UHJbfU6rExN29FBtbH2Dw=', NULL, 'GoH5s1e/YLvvLql17sBbKqiVGwdLcnusalbGowtPDMd8QaDzRlE=', 'Ksy1nTg6peXQphszZ+z89OsD0PnY8rY8wEivhOwAbNR5Fc6fRM1vpIvM9w==', '$argon2id$v=19$m=131072,t=3,p=1$dC50UGZFaEw0ODlSdld6WQ$vwqE5XEFilX+bY00L01raFsetOnYezOzuf/d6Se4RP0', 'no_profile_pic.png', 0, NULL);
+(29, 'r4oJqi06IExQLGptTyTviOq2qXPk1CVzm2/Jgqs+5PS0', 'bZhlDO5PqqUlcCRdTylWuaQq4TAPWQp7JUPfFHQIVti4IifO1pPyQstzBlTYzizwtKs=', NULL, 'a/lBvS8yIk8Uc7IrlF4zdBkDpguwD8bxYqB1/4Lj9urrBEcbu9o=', 'w/clSEGX26ge7ZLkCIZaX2a4bPF++n+ALL93AyOWcO6IN0EWuC1Cl9nGn7xTUHLNqBaP+RFhCEb7Lc4=', '$argon2id$v=19$m=131072,t=3,p=1$NkxTbjJWTktORjZEZE5Kbw$HI/rZQBEULzlF+3Y8KpgczH5z0VVUMBRYvGEWM8dfEg', 'no_profile_pic.png', 0, NULL),
+(30, 'Ky5H+UhU+HIbBBuH1IsWydY1FsGbNh1sl77FbeY+8QN0', 'XLInWpIFaqZXke16kGJmncQH0nFJxG8oYWRSqPXTeAVOY8YnMxXLTgeoz7yygt9dnT0=', NULL, 'QTiNLKYzUryOwRQCcRYmoZkmfc2iz7/5NaPPbYi0FmuKnGHy89E=', 'TPxm3kxKU020tJxTHyHdUhDqMziTG0aXUgbHj7hJMpmRlA0JwE4KA0lyjw==', '$argon2id$v=19$m=131072,t=3,p=1$TkVQUjlrdjR2UXZseXlKUw$4FljF0aay1eex6TE93rThg3Ga54XCOfHAzbxyF+SBa8', 'no_profile_pic.png', 0, NULL),
+(31, 'K2hqIJa/fg+6odvrjUHIGKW74QwYpKzD5GoKypxcPsQI', 'IdJyVTQKlbd928cBt+gbcWiBkI1/ObdAS8geK+VHgZIcxoCqxg9t5fXniLiwftY=', NULL, 'ryrY52jRjkl1i2HvA0lWB71x4fi+tsoMer0RiydDqRStE0daC0g=', '0C08CcafUrpcQWSmUCflHc8FuToSBNTbGOLVBjHeaemLE+8mTDM=', '$argon2id$v=19$m=131072,t=3,p=1$UEFLOTFoRDdEZG85SnlFZQ$t5i3cwVyyjj8Nbq9UgfDURwSyUiyeHcL25wBk9kCThQ', 'no_profile_pic.png', 0, NULL);
 
 --
 -- Indexes for dumped tables
@@ -438,13 +453,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `admins`
 --
 ALTER TABLE `admins`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `audit_logs`
 --
 ALTER TABLE `audit_logs`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `cart`
@@ -498,7 +513,7 @@ ALTER TABLE `orderstatus`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- Constraints for dumped tables
@@ -541,13 +556,6 @@ ALTER TABLE `mylist`
 ALTER TABLE `orderitems`
   ADD CONSTRAINT `orderitems_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `orderitems_ibfk_2` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `orders`
---
-ALTER TABLE `orders`
-  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`status_id`) REFERENCES `orderstatus` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

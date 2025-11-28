@@ -85,7 +85,6 @@
   <ul>
     <li>To create/manage your account, deliver core features, and provide support.</li>
     <li>To maintain service reliability, prevent fraud/abuse, and improve user experience.</li>
-    <li>To send important notices (policy updates, service alerts). Marketing messages are sent only with consent and can be opted-out at any time.</li>
   </ul>
 
   <h2 id="security">4) Security Measures</h2>

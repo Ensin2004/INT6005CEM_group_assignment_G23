@@ -69,21 +69,16 @@ try {
         handleErrorAndExit("Failed to insert manager into database.");
     }
   
-    if (mysqli_query($conn, $sql)) {
-        audit_log(
+    audit_log(
         $conn,
         $_SESSION['ID'], $_SESSION['role'] ?? null,
         'admin_create', 'admins', $conn->insert_id,
         "Created manager '{$name}' <{$email}>",
         null,
         ['admin_name'=>$name,'admin_email'=>$email,'role'=>'manager']
-        );
+    );
 
-        echo "<script>alert('Manager added successfully!'); window.location.href='../managers.php';</script>";
-    } else {
-        echo "<script>alert('Error adding manager: " . mysqli_error($conn) . "'); window.history.go(-1);</script>";
-    }
-  
+    echo "<script>alert('Manager added successfully!'); window.location.href='../managers.php';</script>";
     exit;
 
 } catch (Throwable $e) {

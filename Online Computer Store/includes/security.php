@@ -16,7 +16,7 @@ if(!isset($_SESSION['ID'])) {
 }
 
 /**
- * Basic sanitization only (no validation here):
+ * Basic sanitization only:
  * - trim
  * - strip HTML tags
  * - remove special symbols (keeps letters/numbers/space/-/_/./,)
